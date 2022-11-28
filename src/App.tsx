@@ -1,34 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React from 'react';
+import { Box, Container, Link, Paper, Stack, Typography } from '@mui/material';
+import Header from './components/Header';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <>
+      <Header />
+      <Container maxWidth="xl" sx={{ height: '100%', display: 'flex', p: 1, gap: 1 }}>
+        <Paper
+          sx={{
+            width: '80%',
+            p: 1,
+          }}>
+          задачи
+        </Paper>
+        <Paper
+          sx={{
+            marginLeft: 'auto',
+            width: '20%',
+            p: 1,
+            overflowY: 'auto',
+          }}>
+          <Typography>Список задач</Typography>
+          <Stack
+            sx={{
+              p: 1,
+            }}
+            spacing={1}>
+            {Array.from({ length: 50 }).map((_, i) => (
+              <Link href="#" key={i}>
+                Задача #{i}
+              </Link>
+            ))}
+          </Stack>
+        </Paper>
+      </Container>
+    </>
+  );
 }
 
-export default App
+export default App;
