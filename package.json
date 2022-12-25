@@ -1,0 +1,31 @@
+{
+  "name": "midis-testing-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.17"
+  },
+  "dependencies": {
+    "@fastify/autoload": "^5.6.0",
+    "@fastify/cookie": "^8.3.0",
+    "@fastify/cors": "^8.2.0",
+    "@fastify/env": "^4.2.0",
+    "@fastify/sensible": "^5.2.0",
+    "async-request": "^1.2.0",
+    "fastify": "^4.10.2",
+    "fastify-plugin": "^4.4.0",
+    "fluent-json-schema": "^4.0.0",
+    "mysql2": "^2.3.3",
+    "pino-pretty": "^9.1.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.11"
+  }
+}
