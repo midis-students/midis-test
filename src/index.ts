@@ -22,8 +22,6 @@ async function start() {
 
 	fastify.listen({port, host}, (err) => {
 		if (err) throw err;
-		fastify.log.info('Routes');
-		fastify.log.info('\n' + fastify.printRoutes());
 	});
 
 }
