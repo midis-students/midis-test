@@ -23,7 +23,7 @@ const app: FastifyPluginAsync = async (fastify, options) => {
 		dotenv: true
 	});
 	await fastify.register(Cors, {
-		origin: false
+		origin: '*'
 	});
 	await fastify.register(Sensible);
 

@@ -3,6 +3,7 @@ import fp from 'fastify-plugin';
 import {DataSource, EntitySchema} from 'typeorm';
 import fs from 'fs';
 import path from 'path';
+import {Colors} from '../lib/Colors';
 
 const DatabasePlugin: FastifyPluginAsync = async (fastify) => {
 
@@ -20,7 +21,7 @@ const DatabasePlugin: FastifyPluginAsync = async (fastify) => {
 		const module: ImportModule = await import(file);
 		Object.values(module).forEach(entity => {
 			entities.push(entity);
-			logger.info(`Entity '${entity.name}' loaded`);
+			logger.info(`Entity ${Colors.FgYellow + entity.name + Colors.FgCyan} loaded`);
 		});
 	}
 

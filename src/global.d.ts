@@ -1,12 +1,16 @@
-import type {MidisAPI} from './lib/midis';
+import {FastifyReply, FastifyRequest} from 'fastify';
 
 export {};
 
 declare module 'fastify' {
 	interface FastifyInstance {
 		config: NodeJS.ProcessEnv;
-		midis: MidisAPI;
 	}
+}
+
+
+declare global {
+	type FastifyAsyncHandler = (req: FastifyRequest, res: FastifyReply) => Promise<void>
 }
 
 declare global {

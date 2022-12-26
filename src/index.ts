@@ -9,10 +9,11 @@ async function start() {
 				target: 'pino-pretty',
 				options: {
 					translateTime: 'HH:MM:ss',
-					ignore: 'pid,hostname'
+					ignore: 'pid,hostname,reqId,res',
 				}
 			},
-		}
+		},
+		disableRequestLogging: true
 	});
 
 	await fastify.register(App);
