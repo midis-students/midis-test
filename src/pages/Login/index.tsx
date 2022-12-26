@@ -1,3 +1,4 @@
+import Page from '@/components/Page';
 import { Box, Button, Container, Divider, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,8 +10,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Container
-      maxWidth="xl"
+    <Page
       sx={{
         height: '100%',
         display: 'flex',
@@ -34,6 +34,6 @@ export default function LoginPage() {
           Войти
         </Button>
       </Box>
-    </Container>
+    </Page>
   );
 }

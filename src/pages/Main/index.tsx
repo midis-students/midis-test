@@ -1,3 +1,4 @@
+import React from 'react';
 import Header from '@/components/Header';
 import {
   Container,
@@ -11,55 +12,28 @@ import {
   CardContent,
   Divider,
 } from '@mui/material';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-
-type Exercise = {
-  name: string;
-  id: number;
-  tasks: number;
-  type: string;
-};
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { data } from '@/lib/data';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { setData } from '@/store/slices/Exercies';
+import Page from '@/components/Page';
 
 export default function MainPage() {
-  const [items, setItems] = React.useState<Exercise[]>([]);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const viewAs = searchParams.get('as');
+
+  const items = useAppSelector((state) => state.exercies.value);
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    setItems([
-      {
-        name: 'Условия',
-        id: 0,
-        tasks: 30,
-        type: 'Вводная',
-      },
-      {
-        name: 'Циклы',
-        id: 1,
-        tasks: 10,
-        type: 'Практическая',
-      },
-      {
-        name: 'Сортировка',
-        id: 2,
-        tasks: 15,
-        type: 'Самостаятельная',
-      },
-      {
-        name: 'Игры',
-        id: 3,
-        tasks: 5,
-        type: 'Дополнительная',
-      },
-    ]);
+    dispatch(setData(data));
   }, []);
 
   return (
     <>
       <Header />
-      <Container
-        maxWidth="xl"
-        sx={{ height: '100%', display: 'flex', p: 1, gap: 1, flexDirection: 'column', mt: 1 }}>
+      <Page>
         <Typography variant="h4">Алгоритмы</Typography>
         <Box
           sx={{
@@ -78,18 +52,24 @@ export default function MainPage() {
                 <Typography variant="h5" color="primary">
                   {item.name}
                 </Typography>
-                <Typography>Задач: {item.tasks}</Typography>
+                <Typography>Задач: {item.tasks.length}</Typography>
               </CardContent>
               <Divider />
               <CardActions sx={{ justifyContent: 'end', width: '100%' }}>
-                <Button size="small" onClick={() => navigate('/exercise/' + item.id)}>
-                  Открыть
-                </Button>
+                {viewAs == 'admin' ? (
+                  <Button size="small" color="warning" onClick={() => navigate('/edit/' + item.id)}>
+                    Редактировать
+                  </Button>
+                ) : (
+                  <Button size="small" onClick={() => navigate('/exercise/' + item.id)}>
+                    Открыть
+                  </Button>
+                )}
               </CardActions>
             </Card>
           ))}
         </Box>
-      </Container>
+      </Page>
     </>
   );
 }
