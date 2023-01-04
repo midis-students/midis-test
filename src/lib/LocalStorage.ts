@@ -4,6 +4,6 @@ export class LocalStorage {
   }
 
   static load<T extends object>(key: string): T | null {
-    return JSON.parse(localStorage.getItem(key) || '');
+    return JSON.parse(localStorage.getItem(key) || '{}');
   }
 }
