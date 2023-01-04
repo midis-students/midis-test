@@ -1,13 +1,13 @@
 export type Task = {
   id: number;
-  exercies: number;
+  exercise: number;
   name: string;
   query: string;
   type: number;
   data: object;
 };
 
-export type Exercies = {
+export type Exercise = {
   id: number;
   name: string;
   type: string;

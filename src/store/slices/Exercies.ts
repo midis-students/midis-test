@@ -1,21 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Exercies } from '@/lib/type';
+import { Exercise } from '@/lib/type';
 import { useAppSelector } from '../hooks';
 
-export interface ExerciesState {
-  value: Exercies[];
+export interface ExercisesState {
+  value: Exercise[];
 }
 
-const initialState: ExerciesState = {
+const initialState: ExercisesState = {
   value: [],
 };
 
-export const exerciesSlice = createSlice({
-  name: 'exercies',
+export const exercisesSlice = createSlice({
+  name: 'exercises',
   initialState,
   reducers: {
-    setData(state, action: PayloadAction<Exercies[]>) {
+    setData(state, action: PayloadAction<Exercise[]>) {
       return {
         ...state,
         value: action.payload,
@@ -24,8 +24,9 @@ export const exerciesSlice = createSlice({
   },
 });
 
-export const { setData } = exerciesSlice.actions;
+export const { setData } = exercisesSlice.actions;
 
-export const useExercies = (id: number) => useAppSelector((state) => state.exercies.value[id]);
+export const useExercise = (id: number) => useAppSelector((state) => state.exercises.value[id]);
+export const useExercises = () => useAppSelector((state) => state.exercises.value);
 
-export default exerciesSlice.reducer;
+export default exercisesSlice.reducer;

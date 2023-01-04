@@ -1,13 +1,13 @@
-import type { Exercies } from './type';
+import type { Exercise } from './type';
 
-export const data: Exercies[] = [
+export const data: Exercise[] = [
   {
     name: 'Условия',
     id: 0,
     tasks: [
       {
         data: {},
-        exercies: 0,
+        exercise: 0,
         id: 0,
         name: '',
         query: '',

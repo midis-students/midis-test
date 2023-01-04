@@ -15,7 +15,7 @@ import {
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { data } from '@/lib/data';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { setData } from '@/store/slices/Exercies';
+import {setData, useExercises} from '@/store/slices/Exercies';
 import Page from '@/components/Page';
 
 export default function MainPage() {
@@ -23,7 +23,7 @@ export default function MainPage() {
   const [searchParams] = useSearchParams();
   const viewAs = searchParams.get('as');
 
-  const items = useAppSelector((state) => state.exercies.value);
+  const items = useExercises();
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
