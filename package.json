@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "@fastify/autoload": "^5.6.0",
-    "@fastify/cookie": "^8.3.0",
     "@fastify/cors": "^8.2.0",
     "@fastify/env": "^4.2.0",
+    "@fastify/jwt": "^6.5.0",
     "@fastify/sensible": "^5.2.0",
     "async-request": "^1.2.0",
     "fastify": "^4.10.2",

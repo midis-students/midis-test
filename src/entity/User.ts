@@ -13,4 +13,9 @@ export class User extends BaseEntity {
 
 	@Column()
 	midis_id: number;
+
+	@Column()
+	midis_token: string;
 }
+
+

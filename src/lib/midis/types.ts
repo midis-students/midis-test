@@ -13,3 +13,7 @@ export type MidisProfile = {
     online: boolean;
     last_activity: number;
 };
+
+export interface MidisAPIBase {
+    login(login: string,password: string): Promise<UserToken>;
+}

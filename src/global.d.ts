@@ -8,17 +8,15 @@ declare module 'fastify' {
 	}
 }
 
-
 declare global {
+
 	type FastifyAsyncHandler = (req: FastifyRequest, res: FastifyReply) => Promise<void>
-}
 
-declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
 			NODE_ENV: 'development' | 'production';
 			PORT?: number;
-			COOKIE_SECRET: string;
+			SECRET: string;
 			MYSQL_HOST: string;
 			MYSQL_PORT: number;
 			MYSQL_USERNAME: string;

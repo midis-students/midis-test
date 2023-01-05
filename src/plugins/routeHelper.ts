@@ -6,13 +6,20 @@ const routeHelper: FastifyPluginAsync = async (fastify) => {
 
 	const logger = fastify.log.child({name: 'Route'});
 
-	const methodColor: Record<string, Colors> = {
-		'POST': Colors.FgMagenta,
-		'GET': Colors.FgGreen
+
+	const methodColor = (method: string) => {
+		switch (method) {
+			case 'POST':
+				return Colors.FgMagenta;
+			case 'GET':
+				return Colors.FgGreen;
+			default:
+				return '';
+		}
 	};
 
 	fastify.addHook('onRoute', route => {
-		const method = methodColor[route.method.toString()] + route.method + Colors.FgCyan;
+		const method = methodColor(route.method.toString()) + route.method + Colors.FgCyan;
 		logger.info(`${method} ${Colors.FgWhite + route.url}`);
 	});
 };

@@ -13,7 +13,7 @@ const app: FastifyPluginAsync = async (fastify, options) => {
 		schema: S.object()
 			.prop('NODE_ENV', S.string().required())
 			.prop('PORT', S.number())
-			.prop('COOKIE_SECRET', S.string().required())
+			.prop('SECRET', S.string().required())
 			.prop('MYSQL_HOST', S.string().required())
 			.prop('MYSQL_PORT', S.number().required())
 			.prop('MYSQL_USERNAME', S.string().required())
