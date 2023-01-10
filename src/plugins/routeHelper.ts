@@ -12,15 +12,17 @@ const routeHelper: FastifyPluginAsync = async (fastify) => {
 			case 'POST':
 				return Colors.FgMagenta;
 			case 'GET':
-				return Colors.FgGreen;
+				return Colors.FgCyan;
 			default:
 				return '';
 		}
 	};
 
 	fastify.addHook('onRoute', route => {
-		const method = methodColor(route.method.toString()) + route.method + Colors.FgCyan;
-		logger.info(`${method} ${Colors.FgWhite + route.url}`);
+		if (route.method === 'HEAD') return;
+		const isPrivate = route.onRequest === fastify.administratorOnly;
+		const method = methodColor(route.method.toString()) + route.method;
+		logger.info(`${method} ${(isPrivate ? Colors.FgRed : Colors.FgGreen)+ route.url}`);
 	});
 };
 
