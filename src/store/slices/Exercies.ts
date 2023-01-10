@@ -26,7 +26,9 @@ export const exercisesSlice = createSlice({
 
 export const { setData } = exercisesSlice.actions;
 
-export const useExercise = (id: number) => useAppSelector((state) => state.exercises.value[id]);
-export const useExercises = () => useAppSelector((state) => state.exercises.value);
+export const useExercise = (id: number) =>
+  useAppSelector((state) => state.exercises.value[id]);
+export const useExercises = () =>
+  useAppSelector((state) => state.exercises.value);
 
 export default exercisesSlice.reducer;

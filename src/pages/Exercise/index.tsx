@@ -18,12 +18,21 @@ export default function ExercisePage() {
   return (
     <>
       <Header />
-      <Page sx={{ height: '100%', display: 'flex', p: 1, gap: 1, flexDirection: 'row' }}>
+      <Page
+        sx={{
+          height: '100%',
+          display: 'flex',
+          p: 1,
+          gap: 1,
+          flexDirection: 'row',
+        }}
+      >
         <Paper
           sx={{
             width: '80%',
             p: 1,
-          }}>
+          }}
+        >
           <Task />
         </Paper>
         <Paper
@@ -32,20 +41,30 @@ export default function ExercisePage() {
             width: '20%',
             p: 1,
             overflowY: 'auto',
-          }}>
+          }}
+        >
           <Typography>Список задач</Typography>
           <Stack
             sx={{
               p: 1,
             }}
-            spacing={1}>
+            spacing={1}
+          >
             {tasks.map((task, i) => (
               <Link
                 key={i}
                 underline="hover"
                 onClick={() => navigate('?task=' + i)}
-                sx={{ cursor: 'pointer', alignItems: 'center', display: 'flex', gap: 1 }}
-                color={id == i ? '#9c27b0' : task.completed ? '#2e7d32' : 'primary'}>
+                sx={{
+                  cursor: 'pointer',
+                  alignItems: 'center',
+                  display: 'flex',
+                  gap: 1,
+                }}
+                color={
+                  id == i ? '#9c27b0' : task.completed ? '#2e7d32' : 'primary'
+                }
+              >
                 {task.name} {task.completed && <CheckIcon />}
               </Link>
             ))}

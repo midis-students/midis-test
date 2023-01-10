@@ -16,10 +16,30 @@ import { DragNode, DragNodeValue } from '../CustomNode/DragNode';
 import StartEndNode from '../CustomNode/StartEndNode';
 
 const initialNodes: Node[] = [
-  { id: 'start', data: { type: 'start' }, type: 'StartEndNode', position: { x: 0, y: -100 } },
-  { id: '1', data: { label: 'Node 1' }, position: { x: 5, y: 5 }, type: 'DragNode' },
-  { id: '2', data: { label: 'Node 2' }, position: { x: 0, y: 100 }, type: 'DragNode' },
-  { id: 'end', data: { type: 'end' }, type: 'StartEndNode', position: { x: 0, y: 200 } },
+  {
+    id: 'start',
+    data: { type: 'start' },
+    type: 'StartEndNode',
+    position: { x: 0, y: -100 },
+  },
+  {
+    id: '1',
+    data: { label: 'Node 1' },
+    position: { x: 5, y: 5 },
+    type: 'DragNode',
+  },
+  {
+    id: '2',
+    data: { label: 'Node 2' },
+    position: { x: 0, y: 100 },
+    type: 'DragNode',
+  },
+  {
+    id: 'end',
+    data: { type: 'end' },
+    type: 'StartEndNode',
+    position: { x: 0, y: 200 },
+  },
 ];
 
 const initialEdges: Edge[] = [
@@ -35,7 +55,11 @@ export default function FlowChart() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   React.useEffect(() => {
-    document.querySelector('div.react-flow__panel.react-flow__attribution.bottom.right')?.remove();
+    document
+      .querySelector(
+        'div.react-flow__panel.react-flow__attribution.bottom.right'
+      )
+      ?.remove();
   }, []);
 
   const onConnect = React.useCallback(
@@ -46,10 +70,10 @@ export default function FlowChart() {
             ...connection,
             type: 'step',
           },
-          eds,
-        ),
+          eds
+        )
       ),
-    [setEdges],
+    [setEdges]
   );
 
   return (
@@ -66,7 +90,8 @@ export default function FlowChart() {
         zoomOnScroll={false}
         style={{
           border: '1px solid #000',
-        }}>
+        }}
+      >
         <Background />
       </ReactFlow>
       <Box sx={{ width: '90%', p: 5 }}>

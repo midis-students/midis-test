@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { useAppSelector } from '../hooks';
-import { store as AppStore } from '@/store';
 import { startAppListening } from '@/store/listenerMiddleware';
 import { LocalStorage } from '@/lib/LocalStorage';
 
@@ -10,10 +8,13 @@ export interface SettingsState {
   requestDebug: boolean;
 }
 
-const initialState: SettingsState = Object.assign({
-  apiHost: '',
-  requestDebug: false,
-}, LocalStorage.load('app-settings'));
+const initialState: SettingsState = Object.assign(
+  {
+    apiHost: '',
+    requestDebug: false,
+  },
+  LocalStorage.load('app-settings')
+);
 
 export const settingsSlice = createSlice({
   name: 'settings',

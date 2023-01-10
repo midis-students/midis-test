@@ -1,21 +1,25 @@
 import React from 'react';
 import {
-  Autocomplete, Checkbox,
+  Autocomplete,
+  Checkbox,
   Dialog,
   DialogContent,
   DialogTitle,
   FormControlLabel,
   TextField,
-  FormGroup, Typography,
+  FormGroup,
+  Typography,
+  Button,
 } from '@mui/material';
 import TabsWrapper from '@/components/TabsWrapper';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { settingsActions } from '@/store/slices/Settings';
+import { authActions } from '@/store/slices/Auth';
 
 type SettingsDialogProps = {
   open: boolean;
   onClose: () => void;
-}
+};
 
 const Hosts = [
   'http://localhost:3000',
@@ -25,47 +29,70 @@ const Hosts = [
 ];
 
 export default function SettingsDialog(props: SettingsDialogProps) {
-
-  const settings = useAppSelector(select => select.settings);
+  const settings = useAppSelector((select) => select.settings);
   const dispatch = useAppDispatch();
 
-  const onHostSelect = (event: React.SyntheticEvent, value: string) => dispatch(settingsActions.setHost(value));
-  const onRequestDebugChange = (event: React.SyntheticEvent, value: boolean) => dispatch(settingsActions.setRequestDebug(value));
+  const onHostSelect = (event: React.SyntheticEvent, value: string) =>
+    dispatch(settingsActions.setHost(value));
+  const onRequestDebugChange = (event: React.SyntheticEvent, value: boolean) =>
+    dispatch(settingsActions.setRequestDebug(value));
 
-
-  return <Dialog open={props.open} onClose={props.onClose} fullWidth={true} maxWidth={'lg'}>
-    <DialogTitle>
-      <Typography>Настройки</Typography>
-    </DialogTitle>
-    <DialogContent>
-      <TabsWrapper tabs={
-        [
-          {
-            label: 'Основные',
-            element:
-              <>
-                Основные
-              </>,
-          },
-          {
-            label: 'Для разработчиков',
-            element:
-              <FormGroup>
-                <Autocomplete
-                  sx={{ width: 300 }}
-                  value={settings.apiHost}
-                  options={Hosts}
-                  disableClearable
-                  onChange={onHostSelect}
-                  renderInput={params => <TextField {...params} label={'API Host'} />}
-                />
-                <FormControlLabel
-                  control={<Checkbox checked={settings.requestDebug} onChange={onRequestDebugChange} />}
-                  label={'debug requests to console'} />
-              </FormGroup>,
-          },
-        ]
-      } />
-    </DialogContent>
-  </Dialog>;
+  return (
+    <Dialog
+      open={props.open}
+      onClose={props.onClose}
+      fullWidth={true}
+      maxWidth={'lg'}
+    >
+      <DialogTitle>
+        <Typography>Настройки</Typography>
+      </DialogTitle>
+      <DialogContent>
+        <TabsWrapper
+          orientation="vertical"
+          tabs={[
+            {
+              label: 'Основные',
+              element: (
+                <>
+                  <Button
+                    variant="contained"
+                    onClick={() => dispatch(authActions.logout())}
+                  >
+                    Выйти
+                  </Button>
+                </>
+              ),
+            },
+            {
+              label: 'Для разработчиков',
+              element: (
+                <FormGroup>
+                  <Autocomplete
+                    sx={{ width: 300 }}
+                    value={settings.apiHost}
+                    options={Hosts}
+                    disableClearable
+                    onChange={onHostSelect}
+                    renderInput={(params) => (
+                      <TextField {...params} label={'Services Host'} />
+                    )}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={settings.requestDebug}
+                        onChange={onRequestDebugChange}
+                      />
+                    }
+                    label={'debug requests to console'}
+                  />
+                </FormGroup>
+              ),
+            },
+          ]}
+        />
+      </DialogContent>
+    </Dialog>
+  );
 }
