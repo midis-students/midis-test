@@ -13,22 +13,29 @@ const LoginRoutes: FastifyPluginAsync = async (fastify) => {
 		if (req.body) {
 			const {login, password} = req.body;
 
-			const midisuser = await midis.login(login, password);
+			try {
 
-			let user = await User.findOne({where: {midis_id: midisuser.user_id}});
+				const midisUser = await midis.login(login, password);
 
-			if (!user) {
-				user = User.create({midis_id: midisuser.user_id});
+				let user = await User.findOne({where: {id: midisUser.id}});
+
+				if (!user) {
+					user = User.create({
+						id: midisUser.id,
+					});
+				}
+
+				user.name = midisUser.name;
+				user.group = midisUser.group;
+				user.midis_token = JSON.stringify(midisUser.token);
+
+				await user.save();
+
+				const token = jwt.sign({id: user.id});
+				return reply.send({status: 'ok', token,});
+			} catch (err: any) {
+				throw fastify.httpErrors.unauthorized(err.message);
 			}
-
-			user.name = login;
-			user.group = 'П-38';
-			user.midis_token = JSON.stringify({Cookie: midisuser.Cookie, sessid: midisuser.sessid});
-
-			await user.save();
-
-			const token = jwt.sign({id: user.id});
-			return reply.send({status: 'ok', token});
 		}
 		throw fastify.httpErrors.badRequest('login or password not specified');
 	});

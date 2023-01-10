@@ -1,13 +1,15 @@
 import fp from 'fastify-plugin';
-import JWT, {FastifyJWT} from '@fastify/jwt';
+import JWT from '@fastify/jwt';
 import {FastifyPluginAsync, FastifyReply, FastifyRequest} from 'fastify';
 import {MidisAPI, MidisMockAPI} from '../lib/midis';
-import {User} from '../entity/User';
+import {Role, User} from '../entity/User';
+import {MidisAPIBase} from '../lib/midis/types';
 
 declare module 'fastify' {
 	interface FastifyInstance {
-		midis: MidisAPI;
+		midis: MidisAPIBase;
 		authorize: FastifyAsyncHandler;
+		administratorOnly: FastifyAsyncHandler;
 	}
 }
 
@@ -30,12 +32,14 @@ const authorization: FastifyPluginAsync = async (fastify, options) => {
 	});
 
 	fastify.decorate('authorize', authorize);
+	fastify.decorate('administratorOnly', administratorOnly);
 
 
 	async function authorize(req: FastifyRequest, reply: FastifyReply) {
 		try {
 			await req.jwtVerify();
 			const user = await User.findOne({where: {id: req.user.id}});
+
 			if (user) {
 				return req.user = user;
 			}
@@ -43,6 +47,11 @@ const authorization: FastifyPluginAsync = async (fastify, options) => {
 		} catch (err) {
 			throw httpErrors.unauthorized('Bad jwt token');
 		}
+	}
+
+	async function administratorOnly(req: FastifyRequest, reply: FastifyReply) {
+		if (req.user.role === Role.Admin || req.user.role === Role.Teacher) return true;
+		throw httpErrors.forbidden();
 	}
 
 };

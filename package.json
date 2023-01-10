@@ -21,6 +21,7 @@
     "@fastify/jwt": "^6.5.0",
     "@fastify/sensible": "^5.2.0",
     "async-request": "^1.2.0",
+    "class-transformer": "^0.5.1",
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
     "fluent-json-schema": "^4.0.0",
