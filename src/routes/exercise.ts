@@ -1,40 +1,64 @@
-import {FastifyPluginAsync} from 'fastify';
-import {Exercise} from '../entity/Exercise';
-import {instanceToPlain} from 'class-transformer';
+import { FastifyPluginAsync } from "fastify";
+import { Exercise } from "../entity/Exercise";
+import { instanceToPlain } from "class-transformer";
 
-export const autoPrefix = '/exercise';
+export const autoPrefix = "/exercise";
 
 const ExerciseRoutes: FastifyPluginAsync = async (fastify) => {
+  const { midis, authorize, administratorOnly } = fastify;
 
-	const {midis, authorize, administratorOnly} = fastify;
+  fastify.addHook("onRequest", authorize);
 
-	fastify.addHook('onRequest', authorize);
+  fastify.get("/", async (req, res) => {
+    const list = await Exercise.find({
+      relations: {
+        tasks: true,
+      },
+    });
 
-	fastify.get('/', async (req, res) => {
+    return list.map((exercise) => instanceToPlain(exercise));
+  });
 
-		const list = await Exercise.find({
-			relations: {
-				tasks: true
-			}
-		});
+  type ExerciseCreateDTO = {
+    Body: {
+      name: string;
+    };
+  };
 
-		return list.map(exercise => instanceToPlain(exercise));
-	});
+  fastify.post<ExerciseCreateDTO>(
+    "/create",
+    { onRequest: administratorOnly },
+    async (req, res) => {
+      const { name } = req.body;
+      const exercise = await Exercise.create({ name });
+      await exercise.save();
 
-	type ExerciseCreateDTO = {
-		Body: {
-			name: string;
-		}
-	}
+      return instanceToPlain(exercise);
+    }
+  );
 
-	fastify.post<ExerciseCreateDTO>('/create', {onRequest: administratorOnly}, async (req, res) => {
-		const {name} = req.body;
-		const exercise = await Exercise.create({name});
-		await exercise.save();
+  type ExerciseUpdateDTO = {
+    Body: Partial<Exercise> & {
+      id: number;
+    };
+  };
 
-		return instanceToPlain(exercise);
-	});
+  fastify.post<ExerciseUpdateDTO>(
+    "/update",
+    { onRequest: administratorOnly },
+    async (req, res) => {
+      const { id, ...body } = req.body;
+      const exercise = await Exercise.findOne({ where: { id } });
+      if (exercise) {
+        Object.assign(exercise, body);
+        await exercise.save();
 
+        return exercise;
+      }
+
+      throw fastify.httpErrors.badRequest(`Exercise not found`);
+    }
+  );
 };
 
 export default ExerciseRoutes;
