@@ -3,7 +3,6 @@ import { useIsAdmin } from '@/store/slices/User';
 import { setData, useExercises } from '@/store/slices/Exercies';
 import { useAppDispatch } from '@/store/hooks';
 import React from 'react';
-import { data } from '@/lib/data';
 import {
   Box,
   Button,
@@ -13,8 +12,10 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
+import { useService } from '../../hooks/useService';
 
 export default function Exercises() {
+  const { data, fetch } = useService(window.api.getExercises, []);
   const navigate = useNavigate();
   const isAdmin = useIsAdmin();
 
@@ -22,8 +23,10 @@ export default function Exercises() {
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    dispatch(setData(data));
-  }, []);
+    if (data) {
+      dispatch(setData(data));
+    }
+  }, [data]);
 
   return (
     <>

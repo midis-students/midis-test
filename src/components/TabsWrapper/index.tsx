@@ -27,7 +27,10 @@ export default function TabsWrapper(props: TabsWrapperProps) {
         orientation={props.orientation}
         value={value}
         onChange={handleChange}
-        sx={{ borderRight: 1, borderColor: 'divider' }}
+        sx={{
+          borderRight: Number(props.orientation === 'vertical'),
+          borderColor: 'divider',
+        }}
       >
         {props.tabs.map((tab, i) => (
           <Tab

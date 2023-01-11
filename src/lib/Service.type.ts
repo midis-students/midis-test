@@ -15,11 +15,24 @@ export interface ApiProfileResponse {
   role: ProfileRole;
 }
 
+export interface ApiExerciseResponse {
+  id: number;
+  name: string;
+  type: string;
+  tasks: ApiTaskResponse[];
+}
+
+export interface ApiTaskResponse {
+  id: number;
+  name: string;
+  exercise: ApiExerciseResponse;
+}
+
 export type ApiResponse<T> =
-  {
-    data: T;
-    status: number;
-  }
+  | {
+      data: T;
+      status: number;
+    }
   | ApiError;
 
 export interface ApiError {

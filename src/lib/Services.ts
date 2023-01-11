@@ -1,5 +1,6 @@
 import type { store as Store } from '@/store';
 import {
+  ApiExerciseResponse,
   ApiLoginResponse,
   ApiProfileResponse,
   ApiResponse,
@@ -35,9 +36,23 @@ export class Services {
     });
   }
 
+  getExercises(query = {}) {
+    return this.request<ApiExerciseResponse[]>('exercise', {
+      method: 'GET',
+      query,
+    });
+  }
+
+  updateExercise(data: Partial<ApiExerciseResponse> & { id: number }) {
+    return this.request<ApiExerciseResponse>('exercise/update', {
+      method: 'POST',
+      body: data,
+    });
+  }
+
   private async request<T>(
     url: string,
-    config: RequestConfig,
+    config: RequestConfig
   ): Promise<ApiResponse<T>> {
     const { apiHost } = this.store.getState().settings;
     const { token } = this.store.getState().auth;

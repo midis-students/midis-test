@@ -9,7 +9,7 @@ type PageProps = {
 export default function Page(props: PageProps) {
   return (
     <Container
-      maxWidth='xl'
+      maxWidth="xl"
       sx={{
         height: '100%',
         display: 'flex',

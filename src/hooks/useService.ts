@@ -1,13 +1,16 @@
 import React from 'react';
 import { ApiResponse } from '@/lib/Service.type';
 
-export function useService<T extends (...args: any) => Promise<ApiResponse<any>>>(service: T, args: Parameters<T>) {
-
+export function useService<
+  T extends (...args: any) => Promise<ApiResponse<any>>
+>(service: T, args: Parameters<T>, auto = true) {
   type ServiceReturnType = Awaited<ReturnType<T>>;
 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [data, setData] = React.useState<ServiceReturnType['data'] | null>(null);
+  const [data, setData] = React.useState<ServiceReturnType['data'] | null>(
+    null
+  );
 
   const fetch = async (args: any[]) => {
     setLoading(true);
@@ -15,7 +18,6 @@ export function useService<T extends (...args: any) => Promise<ApiResponse<any>>
     setData(null);
     try {
       const response = await service.bind(window.api)(...args);
-      console.log(response);
       if ('error' in response) {
         setError(response.message);
       } else {
@@ -29,7 +31,7 @@ export function useService<T extends (...args: any) => Promise<ApiResponse<any>>
   };
 
   React.useEffect(() => {
-    if (!loading) {
+    if (!loading && auto) {
       fetch(args);
     }
   }, []);
