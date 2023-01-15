@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from "fastify";
-import { Exercise } from "../entity/Exercise";
 import { instanceToPlain } from "class-transformer";
+import { Exercise } from "../entity/Exercise";
 
 export const autoPrefix = "/exercise";
 
@@ -16,7 +16,11 @@ const ExerciseRoutes: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return list.map((exercise) => instanceToPlain(exercise));
+    return list.map((exercise) =>
+      instanceToPlain(exercise, {
+        enableCircularCheck: true,
+      })
+    );
   });
 
   type ExerciseCreateDTO = {

@@ -8,6 +8,7 @@ import {
   JoinTable,
   JoinColumn,
 } from "typeorm";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class Exercise extends BaseEntity {
@@ -37,12 +38,12 @@ export class Task extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: "" })
   query: string;
 
-  @Column()
+  @Column({ default: "" })
   type: string;
 
-  @Column()
+  @Column({ default: "{}" })
   data: string;
 }
