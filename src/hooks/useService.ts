@@ -12,12 +12,12 @@ export function useService<
     null
   );
 
-  const fetch = async (args: any[]) => {
+  const fetch = async (fetchArgs: any[] = args) => {
     setLoading(true);
     setError(null);
     setData(null);
     try {
-      const response = await service.bind(window.api)(...args);
+      const response = await service.bind(window.api)(...fetchArgs);
       if ('error' in response) {
         setError(response.message);
       } else {

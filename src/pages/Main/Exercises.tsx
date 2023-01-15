@@ -15,7 +15,7 @@ import {
 import { useService } from '../../hooks/useService';
 
 export default function Exercises() {
-  const { data, fetch } = useService(window.api.getExercises, []);
+  const { data } = useService(window.api.getExercises, []);
   const navigate = useNavigate();
   const isAdmin = useIsAdmin();
 

@@ -50,6 +50,15 @@ export class Services {
     });
   }
 
+  createTask(exercise_id: number) {
+    return this.request('task/create', {
+      method: 'POST',
+      body: {
+        exercise_id,
+      },
+    });
+  }
+
   private async request<T>(
     url: string,
     config: RequestConfig
