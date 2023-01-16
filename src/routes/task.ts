@@ -44,6 +44,8 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
       });
     }
   );
+
+  
 };
 
 export default TaskRoute;
