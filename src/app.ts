@@ -23,6 +23,7 @@ const app: FastifyPluginAsync = async (fastify, options) => {
   });
   await fastify.register(Cors, {
     origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
   });
   await fastify.register(Sensible);
 
