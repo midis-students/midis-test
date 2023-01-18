@@ -10,7 +10,7 @@ export interface SettingsState {
 
 const initialState: SettingsState = Object.assign(
   {
-    apiHost: '',
+    apiHost: process.env.NODE_ENV === "development"  ? "localhost:3000" : 'https://midis-test.iky.su',
     requestDebug: false,
   },
   LocalStorage.load('app-settings')

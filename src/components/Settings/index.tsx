@@ -26,6 +26,7 @@ const Hosts = [
   'http://ip.damirlut.online:3000',
   'https://midis-test-api.damirlut.online',
   'https://midis-test.iky.su',
+  
 ];
 
 export default function SettingsDialog(props: SettingsDialogProps) {
