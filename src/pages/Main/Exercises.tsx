@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useIsAdmin } from '@/store/slices/User';
-import { setData, useExercises } from '@/store/slices/Exercies';
+import {
+  addExercise,
+  setExercises,
+  useExercises,
+} from '@/store/slices/Exercies';
 import { useAppDispatch } from '@/store/hooks';
 import React from 'react';
 import {
@@ -12,7 +16,9 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { useService } from '../../hooks/useService';
+import { useService } from '@/hooks/useService';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function Exercises() {
   const { data } = useService(window.api.getExercises, []);
@@ -24,9 +30,17 @@ export default function Exercises() {
 
   React.useEffect(() => {
     if (data) {
-      dispatch(setData(data));
+      dispatch(setExercises(data));
     }
   }, [data]);
+
+  const createNew = async () => {
+    const { data } = await window.api.createExercise('Новая тема');
+    if (data?.id) {
+      dispatch(addExercise(data));
+      navigate('/edit/' + data.id);
+    }
+  };
 
   return (
     <>
@@ -40,6 +54,23 @@ export default function Exercises() {
           gridTemplateRows: 'repeat(auto-fill, 256px)',
         }}
       >
+        <Card>
+          <CardContent
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <IconButton
+              color="primary"
+              style={{ marginTop: '33%' }}
+              onClick={createNew}
+            >
+              <AddIcon style={{ fontSize: 48 }} />
+            </IconButton>
+          </CardContent>
+        </Card>
         {items.map((item) => (
           <Card
             key={item.id}

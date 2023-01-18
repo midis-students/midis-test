@@ -8,7 +8,11 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { EditorProps } from '@/pages/Edit/editors/index';
-import { setData, useExercise, useExercises } from '@/store/slices/Exercies';
+import {
+  setExercises,
+  useExercise,
+  useExercises,
+} from '@/store/slices/Exercies';
 import { useService } from '@/hooks/useService';
 import { useAppDispatch } from '@/store/hooks';
 import React from 'react';
@@ -20,7 +24,7 @@ export default function EditorTasks({ id }: EditorProps) {
 
   React.useEffect(() => {
     if (data) {
-      dispatch(setData(data));
+      dispatch(setExercises(data));
     }
   }, [data]);
 

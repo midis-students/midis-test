@@ -36,6 +36,15 @@ export class Services {
     });
   }
 
+  createExercise(name: string){
+    return this.request<ApiExerciseResponse>('exercise/create', {
+      method:"POST",
+      body: {
+        name
+      }
+    })
+  }
+
   getExercises(query = {}) {
     return this.request<ApiExerciseResponse[]>('exercise', {
       method: 'GET',
