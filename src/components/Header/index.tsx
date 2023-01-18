@@ -6,8 +6,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsDialog from '@/components/Settings';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { getUser } from '@/store/slices/User';
+import { useAppSelector } from '@/store/hooks';
 import { Skeleton } from '@mui/material';
 
 export default function Header() {
@@ -21,7 +20,7 @@ export default function Header() {
   const handleSettingsClose = () => setSettingsOpen(false);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, position: 'sticky', top: 0, zIndex: 100 }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

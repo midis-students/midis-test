@@ -42,70 +42,79 @@ export default function Exercises() {
     }
   };
 
+  const size = '256px';
+
   return (
     <>
       <Typography variant="h4">Список тем</Typography>
-      <Box
-        sx={{
-          height: '100%',
-          display: 'grid',
-          gap: 2,
-          gridTemplateColumns: 'repeat(auto-fill, 256px)',
-          gridTemplateRows: 'repeat(auto-fill, 256px)',
-        }}
-      >
-        <Card>
-          <CardContent
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <IconButton
-              color="primary"
-              style={{ marginTop: '33%' }}
-              onClick={createNew}
+      <Box sx={{ overflow: 'auto', maxHeight: '80vh' }}>
+        <Box
+          sx={{
+            height: '100%',
+            display: 'grid',
+            gap: 2,
+            gridTemplateColumns: `repeat(auto-fill, ${size})`,
+            gridTemplateRows: `repeat(auto-fill, ${size})`,
+          }}
+        >
+          <Card sx={{ width: size, height: size }}>
+            <CardContent
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
             >
-              <AddIcon style={{ fontSize: 48 }} />
-            </IconButton>
-          </CardContent>
-        </Card>
-        {items.map((item) => (
-          <Card
-            key={item.id}
-            sx={{ p: 1, position: 'relative', height: '100%' }}
-          >
-            <CardContent sx={{ height: '85%' }}>
-              <Typography color="text.secondary" gutterBottom>
-                {item.type}
-              </Typography>
-              <Typography variant="h5" color="primary">
-                {item.name}
-              </Typography>
-              <Typography>Задач: {item.tasks.length}</Typography>
+              <IconButton
+                color="primary"
+                style={{ marginTop: '33%' }}
+                onClick={createNew}
+              >
+                <AddIcon style={{ fontSize: 48 }} />
+              </IconButton>
             </CardContent>
-            <Divider />
-            <CardActions sx={{ justifyContent: 'end', width: '100%' }}>
-              {isAdmin ? (
-                <Button
-                  size="small"
-                  color="warning"
-                  onClick={() => navigate('/edit/' + item.id)}
-                >
-                  Редактировать
-                </Button>
-              ) : (
-                <Button
-                  size="small"
-                  onClick={() => navigate('/exercise/' + item.id)}
-                >
-                  Открыть
-                </Button>
-              )}
-            </CardActions>
           </Card>
-        ))}
+          {items.map((item) => (
+            <Card
+              key={item.id}
+              sx={{
+                p: 1,
+                position: 'relative',
+                width: size,
+                height: size,
+              }}
+            >
+              <CardContent sx={{ height: '85%' }}>
+                <Typography color="text.secondary" gutterBottom>
+                  {item.type}
+                </Typography>
+                <Typography variant="h5" color="primary">
+                  {item.name}
+                </Typography>
+                <Typography>Задач: {item.tasks.length}</Typography>
+              </CardContent>
+              <Divider />
+              <CardActions sx={{ justifyContent: 'end', width: '100%' }}>
+                {isAdmin ? (
+                  <Button
+                    size="small"
+                    color="warning"
+                    onClick={() => navigate('/edit/' + item.id)}
+                  >
+                    Редактировать
+                  </Button>
+                ) : (
+                  <Button
+                    size="small"
+                    onClick={() => navigate('/exercise/' + item.id)}
+                  >
+                    Открыть
+                  </Button>
+                )}
+              </CardActions>
+            </Card>
+          ))}
+        </Box>
       </Box>
     </>
   );
