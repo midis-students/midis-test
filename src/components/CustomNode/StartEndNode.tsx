@@ -12,7 +12,8 @@ export default function StartEndNode({ data }: StartEndProps) {
         border: '1px solid gray',
         borderRadius: '50%',
         p: 1,
-      }}>
+      }}
+    >
       <Typography>{data.type == 'start' ? 'Начало' : 'Конец'}</Typography>
       <Handle
         type={data.type == 'start' ? 'source' : 'target'}

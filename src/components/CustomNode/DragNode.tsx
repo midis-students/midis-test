@@ -24,7 +24,8 @@ export function DragNode() {
         border: '1px solid gray',
         width: '128px',
         textAlign: 'center',
-      }}>
+      }}
+    >
       <Handle type="target" position={Position.Top} />
       {text}
       <Handle type="source" position={Position.Bottom} />

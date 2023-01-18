@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Exercise } from '@/lib/type';
 import { useAppSelector } from '../hooks';
+import { ApiExerciseResponse } from '@/lib/Service.type';
 
 export interface ExercisesState {
-  value: Exercise[];
+  value: ApiExerciseResponse[];
 }
 
 const initialState: ExercisesState = {
@@ -15,7 +15,7 @@ export const exercisesSlice = createSlice({
   name: 'exercises',
   initialState,
   reducers: {
-    setData(state, action: PayloadAction<Exercise[]>) {
+    setData(state, action: PayloadAction<ApiExerciseResponse[]>) {
       return {
         ...state,
         value: action.payload,
@@ -26,7 +26,11 @@ export const exercisesSlice = createSlice({
 
 export const { setData } = exercisesSlice.actions;
 
-export const useExercise = (id: number) => useAppSelector((state) => state.exercises.value[id]);
-export const useExercises = () => useAppSelector((state) => state.exercises.value);
+export const useExercise = (id: number) =>
+  useAppSelector(
+    (state) => state.exercises.value.find((exercise) => exercise.id === id)!
+  );
+export const useExercises = () =>
+  useAppSelector((state) => state.exercises.value);
 
 export default exercisesSlice.reducer;

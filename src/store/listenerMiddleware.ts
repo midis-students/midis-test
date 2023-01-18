@@ -6,6 +6,10 @@ import { AppDispatch, RootState } from '@/store/index';
 export const listenerMiddleware = createListenerMiddleware();
 export type AppStartListening = TypedStartListening<RootState, AppDispatch>;
 
-export const startAppListening = listenerMiddleware.startListening as AppStartListening;
+export const startAppListening =
+  listenerMiddleware.startListening as AppStartListening;
 
-export const addAppListener = addListener as TypedAddListener<RootState, AppDispatch>;
+export const addAppListener = addListener as TypedAddListener<
+  RootState,
+  AppDispatch
+>;

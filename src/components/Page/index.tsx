@@ -1,4 +1,5 @@
-import { Container, SxProps } from '@mui/material';
+import React from 'react';
+import { Container, SxProps, CircularProgress } from '@mui/material';
 
 type PageProps = {
   children: React.ReactNode;
@@ -17,8 +18,13 @@ export default function Page(props: PageProps) {
         flexDirection: 'column',
         mt: 1,
         ...props.sx,
-      }}>
-      {props.children}
+      }}
+    >
+      <React.Suspense
+        fallback={<CircularProgress sx={{ margin: 'auto' }} size={64} />}
+      >
+        {props.children}
+      </React.Suspense>
     </Container>
   );
 }
