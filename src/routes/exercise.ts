@@ -1,68 +1,88 @@
-import { FastifyPluginAsync } from "fastify";
-import { instanceToPlain } from "class-transformer";
-import { Exercise } from "../entity/Exercise";
+import {FastifyPluginAsync} from 'fastify';
+import {instanceToPlain} from 'class-transformer';
+import {Exercise} from '../entity/Exercise';
 
-export const autoPrefix = "/exercise";
+export const autoPrefix = '/exercise';
 
 const ExerciseRoutes: FastifyPluginAsync = async (fastify) => {
-  const { midis, authorize, administratorOnly } = fastify;
+	const {midis, authorize, administratorOnly} = fastify;
 
-  fastify.addHook("onRequest", authorize);
+	fastify.addHook('onRequest', authorize);
 
-  fastify.get("/", async (req, res) => {
-    const list = await Exercise.find({
-      relations: {
-        tasks: true,
-      },
-    });
+	type ExerciseGetDTO = {
+		Querystring: {
+			id?: number;
+		}
+	}
 
-    return list.map((exercise) =>
-      instanceToPlain(exercise, {
-        enableCircularCheck: true,
+	fastify.get<ExerciseGetDTO>('/', async (req, res) => {
+
+		const {id} = req.query;
+		if (id) {
+			const exercise = await Exercise.findOne({
+				where: {id},
+				relations: {
+					tasks: true
+				}
+			});
+      return instanceToPlain(exercise, {
+        enableCircularCheck: true
       })
-    );
-  });
+		}
 
-  type ExerciseCreateDTO = {
-    Body: {
-      name: string;
-    };
-  };
+		const list = await Exercise.find({
+			relations: {
+				tasks: true,
+			},
+		});
 
-  fastify.post<ExerciseCreateDTO>(
-    "/create",
-    { onRequest: administratorOnly },
-    async (req, res) => {
-      const { name } = req.body;
-      const exercise = await Exercise.create({ name });
-      await exercise.save();
+		return list.map((exercise) =>
+			instanceToPlain(exercise, {
+				enableCircularCheck: true,
+			})
+		);
+	});
 
-      return instanceToPlain(exercise);
-    }
-  );
+	type ExerciseCreateDTO = {
+		Body: {
+			name: string;
+		};
+	};
 
-  type ExerciseUpdateDTO = {
-    Body: Partial<Exercise> & {
-      id: number;
-    };
-  };
+	fastify.post<ExerciseCreateDTO>(
+		'/create',
+		{onRequest: administratorOnly},
+		async (req, res) => {
+			const {name} = req.body;
+			const exercise = await Exercise.create({name, tasks: []});
+			await exercise.save();
 
-  fastify.post<ExerciseUpdateDTO>(
-    "/update",
-    { onRequest: administratorOnly },
-    async (req, res) => {
-      const { id, ...body } = req.body;
-      const exercise = await Exercise.findOne({ where: { id } });
-      if (exercise) {
-        Object.assign(exercise, body);
-        await exercise.save();
+			return instanceToPlain(exercise);
+		}
+	);
 
-        return exercise;
-      }
+	type ExerciseUpdateDTO = {
+		Body: Partial<Exercise> & {
+			id: number;
+		};
+	};
 
-      throw fastify.httpErrors.badRequest(`Exercise not found`);
-    }
-  );
+	fastify.post<ExerciseUpdateDTO>(
+		'/update',
+		{onRequest: administratorOnly},
+		async (req, res) => {
+			const {id, ...body} = req.body;
+			const exercise = await Exercise.findOne({where: {id}});
+			if (exercise) {
+				Object.assign(exercise, body);
+				await exercise.save();
+
+				return exercise;
+			}
+
+			throw fastify.httpErrors.badRequest(`Exercise not found`);
+		}
+	);
 };
 
 export default ExerciseRoutes;

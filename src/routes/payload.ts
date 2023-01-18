@@ -1,6 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
 import { instanceToPlain } from "class-transformer";
-import { Exercise, Task } from "../entity/Exercise";
 import { Payload, PayloadType } from "../entity/Payload";
 
 export const autoPrefix = "/payload";
