@@ -41,7 +41,7 @@ export default function LoginPage() {
   return (
     <Page
       sx={{
-        height: '100%',
+        height: '100vh',
         display: 'flex',
         p: 1,
 

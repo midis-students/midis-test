@@ -47,7 +47,7 @@ export default function Exercises() {
   return (
     <>
       <Typography variant="h4">Список тем</Typography>
-      <Box sx={{ overflow: 'auto', maxHeight: '80vh' }}>
+      <Box sx={{ overflow: 'auto', maxHeight: '80vh', p: 1 }}>
         <Box
           sx={{
             height: '100%',

@@ -16,25 +16,23 @@ import {
 import { useService } from '@/hooks/useService';
 import { useAppDispatch } from '@/store/hooks';
 import React from 'react';
+import TaskCreator from '@/pages/Edit/editors/TaskCreator';
 
 export default function EditorTasks({ id }: EditorProps) {
   const { tasks } = useExercise(id);
-  const { data, fetch } = useService(window.api.getExercises, [], false);
-  const dispatch = useAppDispatch();
-
-  React.useEffect(() => {
-    if (data) {
-      dispatch(setExercises(data));
-    }
-  }, [data]);
+  const [dialogVisible, setDialogVisible] = React.useState(false);
 
   const createTask = async () => {
-    await window.api.createTask(id);
-    await fetch();
+    setDialogVisible(true);
   };
 
   return (
     <>
+      <TaskCreator
+        open={dialogVisible}
+        onClose={() => setDialogVisible(false)}
+        exerciseId={id}
+      />
       <Typography variant={'h4'}>Задачи</Typography>
       <Button
         variant={'contained'}
