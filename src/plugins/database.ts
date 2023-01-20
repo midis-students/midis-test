@@ -45,6 +45,8 @@ const DatabasePlugin: FastifyPluginAsync = async (fastify) => {
   await dataSource.initialize();
   if (dataSource.isInitialized) {
     logger.info("MySQL connected");
+  }else{
+    throw Error(`Can't connect to MySQL server`);
   }
 };
 
