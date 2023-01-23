@@ -10,6 +10,7 @@ editor.meta = {
   img: metaImage,
   description: 'Выбор одного варианта',
   title: 'Radio кнопки',
+  
 };
 
 export default editor;

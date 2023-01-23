@@ -26,6 +26,7 @@ export interface ApiTaskResponse {
   id: number;
   name: string;
   exercise: ApiExerciseResponse;
+  type: string;
 }
 
 export type ApiResponse<T> =

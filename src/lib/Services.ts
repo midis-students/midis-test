@@ -4,6 +4,7 @@ import {
   ApiLoginResponse,
   ApiProfileResponse,
   ApiResponse,
+  ApiTaskResponse,
 } from '@/lib/Service.type';
 
 type RequestConfig = {
@@ -36,13 +37,13 @@ export class Services {
     });
   }
 
-  createExercise(name: string){
+  createExercise(name: string) {
     return this.request<ApiExerciseResponse>('exercise/create', {
-      method:"POST",
+      method: 'POST',
       body: {
-        name
-      }
-    })
+        name,
+      },
+    });
   }
 
   getExercises(query = {}) {
@@ -59,11 +60,12 @@ export class Services {
     });
   }
 
-  createTask(exercise_id: number) {
-    return this.request('task/create', {
+  createTask(exercise_id: number, type: string) {
+    return this.request<ApiTaskResponse>('task/create', {
       method: 'POST',
       body: {
         exercise_id,
+        type,
       },
     });
   }

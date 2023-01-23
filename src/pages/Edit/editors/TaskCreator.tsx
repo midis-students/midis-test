@@ -22,13 +22,14 @@ export interface TaskCreatorEditor {
 
 type TaskCreatorDialogProps = {
   open: boolean;
-  onClose: () => void;
+  onClose: (taskId: number) => void;
   exerciseId: number;
 };
 
 export default function TaskCreator(props: TaskCreatorDialogProps) {
-  const create = async () => {
-    await window.api.createTask(props.exerciseId);
+  const create = async (meta: TaskCreatorEditor['meta']) => {
+    const { data } = await window.api.createTask(props.exerciseId, meta.type);
+    if (data) props.onClose(data.id);
   };
 
   const cardSize = '192px';
@@ -52,6 +53,7 @@ export default function TaskCreator(props: TaskCreatorDialogProps) {
                     height: cardSize,
                     p: 1,
                   }}
+                  onClick={() => create(editor.meta)}
                 >
                   <Typography variant={'h5'}>{editor.meta.title}</Typography>
                   <Typography
