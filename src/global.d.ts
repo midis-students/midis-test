@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
-export {};
+export { };
 
 declare module "fastify" {
   interface FastifyInstance {
