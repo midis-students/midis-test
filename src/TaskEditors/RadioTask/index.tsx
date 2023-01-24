@@ -2,7 +2,7 @@ import { TaskCreatorEditor } from '@/pages/Edit/editors/TaskCreator';
 import metaImage from './image.png';
 
 const editor: TaskCreatorEditor = () => {
-  return <></>;
+  return <>Task editor</>;
 };
 
 editor.meta = {
@@ -10,7 +10,6 @@ editor.meta = {
   img: metaImage,
   description: 'Выбор одного варианта',
   title: 'Radio кнопки',
-  
 };
 
 export default editor;

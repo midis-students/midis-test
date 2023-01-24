@@ -60,6 +60,12 @@ export class Services {
     });
   }
 
+  getTask(query = {}) {
+    return this.request<ApiTaskResponse>('task', {
+      method: 'GET',
+      query,
+    });
+  }
   createTask(exercise_id: number, type: string) {
     return this.request<ApiTaskResponse>('task/create', {
       method: 'POST',

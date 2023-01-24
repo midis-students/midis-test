@@ -12,7 +12,10 @@ export function useService<
     null
   );
 
-  const fetch = async (fetchArgs: any[] = args) => {
+  const fetch = async (
+    fetchArgs: any[] = args,
+    callback?: (data: ServiceReturnType['data']) => void
+  ) => {
     setLoading(true);
     setError(null);
     setData(null);
@@ -22,6 +25,7 @@ export function useService<
         setError(response.message);
       } else {
         setData(response.data);
+        if (callback) callback(response.data);
       }
     } catch (e: any) {
       setError(e.message);
@@ -36,5 +40,5 @@ export function useService<
     }
   }, []);
 
-  return { loading, error, data, fetch };
+  return { loading, error, data, fetch, args };
 }

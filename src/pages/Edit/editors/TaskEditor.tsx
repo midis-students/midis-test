@@ -3,6 +3,7 @@ import {
   AppBar,
   Button,
   CircularProgress,
+  Container,
   Dialog,
   IconButton,
   Slide,
@@ -12,6 +13,7 @@ import {
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
 import { useService } from '@/hooks/useService';
+import taskEditors from '@/TaskEditors';
 
 type TaskEditorProps = {
   taskId: number;
@@ -28,19 +30,28 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function TaskEditor(props: TaskEditorProps) {
-  const { data, loading, fetch } = useService(
-    window.api.getExercises,
-    [{ id: props.taskId }],
-    false
-  );
+  const {
+    data: task,
+    loading,
+    fetch,
+    args,
+  } = useService(window.api.getTask, [{ id: props.taskId }], false);
+
+  const [Editor, setEditor] = React.useState<JSX.Element | null>(null);
 
   React.useEffect(() => {
     if (props.taskId > -1) {
-      fetch();
+      fetch(args, (data) => {
+        if (data) {
+          taskEditors.forEach((taskEditor) => {
+            if (taskEditor.meta.type === data.type) {
+              setEditor(taskEditor());
+            }
+          });
+        }
+      });
     }
   }, [props.taskId]);
-
-  const task = data?.at(0) as NonNullable<typeof data>[0];
 
   return (
     <Dialog
@@ -50,7 +61,15 @@ export default function TaskEditor(props: TaskEditorProps) {
       TransitionComponent={Transition}
     >
       {loading || !task ? (
-        <CircularProgress />
+        <Container
+          maxWidth="xl"
+          sx={{
+            height: '100%',
+            display: 'flex',
+          }}
+        >
+          <CircularProgress sx={{ margin: 'auto' }} size={64} />
+        </Container>
       ) : (
         <>
           <AppBar sx={{ position: 'relative' }}>
@@ -71,6 +90,7 @@ export default function TaskEditor(props: TaskEditorProps) {
               </Button>
             </Toolbar>
           </AppBar>
+          <Container>{Editor}</Container>
         </>
       )}
     </Dialog>
