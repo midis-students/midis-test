@@ -8,6 +8,7 @@ import {
   CardActionArea,
 } from '@mui/material';
 import TaskEditorsList from '@/TaskEditors';
+import { ApiTaskResponse } from '@/lib/Service.type';
 
 export interface TaskCreatorEditor {
   (): JSX.Element;

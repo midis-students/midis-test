@@ -57,23 +57,26 @@ export default function Exercises() {
             gridTemplateRows: `repeat(auto-fill, ${size})`,
           }}
         >
-          <Card sx={{ width: size, height: size }}>
-            <CardContent
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <IconButton
-                color="primary"
-                style={{ marginTop: '33%' }}
-                onClick={createNew}
+          {isAdmin && (
+            <Card sx={{ width: size, height: size }}>
+              <CardContent
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
               >
-                <AddIcon style={{ fontSize: 48 }} />
-              </IconButton>
-            </CardContent>
-          </Card>
+                <IconButton
+                  color="primary"
+                  style={{ marginTop: '33%' }}
+                  onClick={createNew}
+                >
+                  <AddIcon style={{ fontSize: 48 }} />
+                </IconButton>
+              </CardContent>
+            </Card>
+          )}
+
           {items.map((item) => (
             <Card
               key={item.id}

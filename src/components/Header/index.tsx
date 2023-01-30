@@ -21,7 +21,7 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1, position: 'sticky', top: 0, zIndex: 100 }}>
-      <AppBar position="static">
+      <AppBar position="relative">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {loading ? <Skeleton variant="text" width={250} /> : user.name}

@@ -3,6 +3,7 @@ import exercisesReducer from './slices/Exercies';
 import settingsReducer from './slices/Settings';
 import authReducer from './slices/Auth';
 import userReducer from './slices/User';
+import taskReducer from './slices/Task';
 import { listenerMiddleware } from '@/store/listenerMiddleware';
 import { Services } from '@/lib/Services';
 
@@ -12,6 +13,7 @@ export const store = configureStore({
     settings: settingsReducer,
     auth: authReducer,
     user: userReducer,
+    task: taskReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(listenerMiddleware.middleware),

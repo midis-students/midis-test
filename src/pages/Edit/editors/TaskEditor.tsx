@@ -9,11 +9,15 @@ import {
   Slide,
   Toolbar,
   Typography,
+  Divider,
+  Box,
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import CloseIcon from '@mui/icons-material/Close';
 import { useService } from '@/hooks/useService';
 import taskEditors from '@/TaskEditors';
+import { taskActions } from '@/store/slices/Task';
+import { useAppDispatch } from '@/store/hooks';
 
 type TaskEditorProps = {
   taskId: number;
@@ -36,16 +40,17 @@ export default function TaskEditor(props: TaskEditorProps) {
     fetch,
     args,
   } = useService(window.api.getTask, [{ id: props.taskId }], false);
-
-  const [Editor, setEditor] = React.useState<JSX.Element | null>(null);
+  const [editor, setEditor] = React.useState<JSX.Element | null>(null);
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     if (props.taskId > -1) {
       fetch(args, (data) => {
         if (data) {
-          taskEditors.forEach((taskEditor) => {
-            if (taskEditor.meta.type === data.type) {
-              setEditor(taskEditor());
+          taskEditors.forEach((TaskEditor) => {
+            if (TaskEditor.meta.type === data.type) {
+              dispatch(taskActions.setDraftTask(data));
+              setEditor(<TaskEditor />);
             }
           });
         }
@@ -90,7 +95,13 @@ export default function TaskEditor(props: TaskEditorProps) {
               </Button>
             </Toolbar>
           </AppBar>
-          <Container>{Editor}</Container>
+          <Container>
+            <Box sx={{ mt: 2 }}>{editor}</Box>
+            <Divider sx={{ mt: 1, mb: 1 }} />
+            <Button color="error" variant="contained">
+              Удалить
+            </Button>
+          </Container>
         </>
       )}
     </Dialog>

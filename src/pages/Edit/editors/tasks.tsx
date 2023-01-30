@@ -27,7 +27,7 @@ export default function EditorTasks({ id }: EditorProps) {
       <TaskCreator
         open={dialogVisible}
         onClose={(id) => {
-          setCurrentTaskEdit(id);
+          if (typeof id === 'number') setCurrentTaskEdit(id);
           setDialogVisible(false);
         }}
         exerciseId={id}
@@ -47,7 +47,7 @@ export default function EditorTasks({ id }: EditorProps) {
       <List sx={{ bgcolor: 'background.paper' }}>
         {tasks.map((task) => (
           <ListItem key={task.id} disablePadding divider>
-            <ListItemButton onClick={()=>setCurrentTaskEdit(task.id)}>
+            <ListItemButton onClick={() => setCurrentTaskEdit(task.id)}>
               <ListItemText>{task.name}</ListItemText>
             </ListItemButton>
           </ListItem>

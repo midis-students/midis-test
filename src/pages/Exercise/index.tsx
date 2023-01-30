@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import Task from '@/components/Task';
-import { Container, Paper, Typography, Stack, Link } from '@mui/material';
+import { Paper, Typography, Stack, Link } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import Page from '@/components/Page';
@@ -20,7 +20,6 @@ export default function ExercisePage() {
       <Header />
       <Page
         sx={{
-          height: '100%',
           display: 'flex',
           p: 1,
           gap: 1,
