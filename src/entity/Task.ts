@@ -1,7 +1,8 @@
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {Exercise} from './Exercise';
 
-type DataRadio = {
+interface DataCheckBox extends Data {
+	subtype: "checkbox" | "radio";
 	options:[
 		{
 			text:string;
@@ -10,7 +11,7 @@ type DataRadio = {
 	]
 }
 
-type DataText = {
+interface DataInput extends Data {
 	placeholder: string;
 	answer: string;
 	eqmode: 0 | 1 | 2 | 3; // RegEx | Без арфографии | Может немного ошибится, но получит пол бала | Точный ввод
@@ -20,6 +21,10 @@ type DataText = {
 		width: number;
 		height: number;
 	}
+}
+
+interface Data {
+	type: string;
 }
 
 @Entity()
@@ -34,33 +39,12 @@ export class Task extends BaseEntity {
 	@Column()
 	name: string;
 
+	@Column()
+	type: string;
+
 	@Column({ default: "" })
 	query: string;
+
+	@Column({ type: "json" })
+	data: Record<string, DataInput | DataCheckBox>
 }
-
-/*
-
-Пример Query:
-
-const query = `
-1. Ввести {{options:[{text:"Стороны прямоугольника",id:1},{text:"Стороны прямоугольника",id:2}]}}
-2. Включить 2+2={{text:{placeholder:"5?", id:3}}} // 2+2=5?
-`
-
-
-Пример Answers:
-{
-	id1:{
-		score: 2
-	},
-	id2:{
-		score:0
-	},
-	id3:{
-		answer: "4";
-		eqmode: 0 | 1 | 2 | 3; // RegEx | Без арфографии | Может немного ошибится, но получит пол бала | Точный ввод
-	}
-}
-
-
-*/

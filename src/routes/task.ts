@@ -44,7 +44,46 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 		const task = Task.create({
 			exercise,
 			name: 'Задача #' + ((await Task.count()) + 1),
-			type
+			query: "Тест радио {{1}}\n2. Тест чекбокса\n{{2}}",
+			type,
+			data: {
+				"1":{
+					type:"CheckBox",
+					subtype: "radio",
+					options:[
+						{
+							text:"В1 (1)",
+							score: 1
+						},
+						{
+							text:"В2 (2)",
+							score: 2
+						},
+						{
+							text:"В3 (0)",
+							score: 0
+						}
+					]
+				},
+				"2":{
+					type:"CheckBox",
+					subtype: "checkbox",
+					options:[
+						{
+							text:"В1 (1)",
+							score: 1
+						},
+						{
+							text:"В2 (1)",
+							score: 1
+						},
+						{
+							text:"В3 (0)",
+							score: 0
+						}
+					]
+				}
+			}
 		});
 		await task.save();
 
