@@ -48,9 +48,9 @@ export default function TaskEditor(props: TaskEditorProps) {
       fetch(args, (data) => {
         if (data) {
           taskEditors.forEach((TaskEditor) => {
-            if (TaskEditor.meta.type === data.type) {
+            if (TaskEditor.type === data.type) {
               dispatch(taskActions.setDraftTask(data));
-              setEditor(<TaskEditor />);
+              setEditor(<TaskEditor.Editor />);
             }
           });
         }

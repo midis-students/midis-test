@@ -1,7 +1,6 @@
-import EditorMain from '@/pages/Edit/editors/main';
-import EditorTasks from '@/pages/Edit/editors/tasks';
-import EditorResult from '@/pages/Edit/editors/results';
-import React from 'react';
+import EditorMain from './main';
+import EditorTasks from './tasks';
+import EditorResult from './results';
 import TabsWrapper from '@/components/TabsWrapper';
 
 export type EditorProps = {
