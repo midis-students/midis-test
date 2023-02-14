@@ -1,62 +1,46 @@
 import React from 'react';
-import {
-  AppBar,
-  Button,
-  CircularProgress,
-  Container,
-  Dialog,
-  IconButton,
-  Slide,
-  Toolbar,
-  Typography,
-  Divider,
-  Box,
-} from '@mui/material';
-import { TransitionProps } from '@mui/material/transitions';
-import CloseIcon from '@mui/icons-material/Close';
+import { Dialog } from '@mui/material';
+
 import { useService } from '@/hooks/useService';
 import taskEditors from '@/TaskEditors';
-import { taskActions } from '@/store/slices/Task';
-import { useAppDispatch } from '@/store/hooks';
+import { taskActions, useDraftTask } from '@/store/slices/Task';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import Transition from '@/components/Transition';
+import Loader from '@/components/Loader';
+import Editor from './task/editor';
 
 type TaskEditorProps = {
   taskId: number;
   onClose: () => void;
 };
 
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 export default function TaskEditor(props: TaskEditorProps) {
-  const {
-    data: task,
-    loading,
-    fetch,
-    args,
-  } = useService(window.api.getTask, [{ id: props.taskId }], false);
+  const service = useService(window.api.getTask, [{ id: props.taskId }], false);
   const [editor, setEditor] = React.useState<JSX.Element | null>(null);
+  const isForceJson = useAppSelector(
+    (selector) => selector.settings.forceJsonEditor
+  );
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     if (props.taskId > -1) {
-      fetch(args, (data) => {
+      service.fetch(service.args, (data) => {
         if (data) {
-          taskEditors.forEach((TaskEditor) => {
-            if (TaskEditor.type === data.type) {
+          for (const TaskEditor of taskEditors) {
+            const type = isForceJson ? 'json' : data.type;
+            if (TaskEditor.type === type) {
               dispatch(taskActions.setDraftTask(data));
               setEditor(<TaskEditor.Editor />);
+              return;
             }
-          });
+          }
         }
       });
     }
   }, [props.taskId]);
+
+  const serviceLoading = service.loading || !service.data;
+  const task = service.data as NonNullable<typeof service.data>;
 
   return (
     <Dialog
@@ -65,44 +49,10 @@ export default function TaskEditor(props: TaskEditorProps) {
       fullScreen
       TransitionComponent={Transition}
     >
-      {loading || !task ? (
-        <Container
-          maxWidth="xl"
-          sx={{
-            height: '100%',
-            display: 'flex',
-          }}
-        >
-          <CircularProgress sx={{ margin: 'auto' }} size={64} />
-        </Container>
+      {serviceLoading ? (
+        <Loader />
       ) : (
-        <>
-          <AppBar sx={{ position: 'relative' }}>
-            <Toolbar>
-              <IconButton
-                edge="start"
-                color="inherit"
-                onClick={props.onClose}
-                aria-label="close"
-              >
-                <CloseIcon />
-              </IconButton>
-              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                {task.name}
-              </Typography>
-              <Button autoFocus color="inherit" onClick={props.onClose}>
-                Сохранить
-              </Button>
-            </Toolbar>
-          </AppBar>
-          <Container>
-            <Box sx={{ mt: 2 }}>{editor}</Box>
-            <Divider sx={{ mt: 1, mb: 1 }} />
-            <Button color="error" variant="contained">
-              Удалить
-            </Button>
-          </Container>
-        </>
+        <Editor onClose={props.onClose} task={task} editor={editor!} />
       )}
     </Dialog>
   );

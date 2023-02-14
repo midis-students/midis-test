@@ -75,6 +75,15 @@ export class Services {
       },
     });
   }
+  updateTask(task_id: number, data: ApiTaskResponse) {
+    return this.request('task/update', {
+      method: 'POST',
+      body: {
+        task_id,
+        data,
+      },
+    });
+  }
 
   private async request<T>(
     url: string,

@@ -31,7 +31,7 @@ export default function TaskCreator(props: TaskCreatorDialogProps) {
         <Typography variant={'h4'}>Выберите вид задачи</Typography>
       </DialogTitle>
       <DialogContent>
-        <Grid container>
+        <Grid container gap={1}>
           {TaskEditorsList.map((editor) => (
             <Grid item key={editor.type}>
               <Card>
@@ -57,11 +57,7 @@ export default function TaskCreator(props: TaskCreatorDialogProps) {
                   >
                     {editor.description}
                   </Typography>
-                  <img
-                    src={editor.img}
-                    width={64}
-                    alt={editor.type}
-                  />
+                  <img src={editor.img} width={64} alt={editor.type} />
                 </CardActionArea>
               </Card>
             </Grid>

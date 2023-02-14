@@ -33,8 +33,8 @@ export default function SettingsDialog(props: SettingsDialogProps) {
 
   const onHostSelect = (event: React.SyntheticEvent, value: string) =>
     dispatch(settingsActions.setHost(value));
-  const onRequestDebugChange = (event: React.SyntheticEvent, value: boolean) =>
-    dispatch(settingsActions.setRequestDebug(value));
+  const onForceJsonEditor = (event: React.SyntheticEvent, value: boolean) =>
+    dispatch(settingsActions.setForceJsonEditor(value));
 
   return (
     <Dialog
@@ -80,11 +80,11 @@ export default function SettingsDialog(props: SettingsDialogProps) {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={settings.requestDebug}
-                        onChange={onRequestDebugChange}
+                        checked={settings.forceJsonEditor}
+                        onChange={onForceJsonEditor}
                       />
                     }
-                    label={'debug requests to console'}
+                    label={'Force Json Editor'}
                   />
                 </FormGroup>
               ),
