@@ -11,12 +11,13 @@ export default function Page(props: PageProps) {
     <Container
       maxWidth="xl"
       sx={{
-        height: '100%',
         display: 'flex',
         p: 1,
         gap: 1,
         flexDirection: 'column',
         mt: 1,
+        overflow: 'auto',
+        height: '90vh',
         ...props.sx,
       }}
     >

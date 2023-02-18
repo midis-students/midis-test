@@ -7,6 +7,7 @@ import { useIsAdmin } from '@/store/slices/User';
 
 const Exercises = React.lazy(() => import('./Exercises'));
 const Students = React.lazy(() => import('./Students'));
+const Payloads = React.lazy(() => import('./Payload'));
 
 export default function MainPage() {
   const isAdmin = useIsAdmin();
@@ -22,7 +23,11 @@ export default function MainPage() {
     tabs.push({
       label: 'Студенты',
       element: <Students />,
-    });
+    },{
+      label: "Список файлов",
+      element: <Payloads />
+    }
+    );
   }
 
   return (

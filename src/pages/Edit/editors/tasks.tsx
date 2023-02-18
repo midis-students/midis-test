@@ -8,29 +8,34 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { EditorProps } from '@/pages/Edit/editors/index';
-import { setData, useExercise, useExercises } from '@/store/slices/Exercies';
-import { useService } from '@/hooks/useService';
-import { useAppDispatch } from '@/store/hooks';
+import { useExercise } from '@/store/slices/Exercies';
 import React from 'react';
+import TaskCreator from './TaskCreator';
+import TaskEditor from './TaskEditor';
 
 export default function EditorTasks({ id }: EditorProps) {
   const { tasks } = useExercise(id);
-  const { data, fetch } = useService(window.api.getExercises, [], false);
-  const dispatch = useAppDispatch();
-
-  React.useEffect(() => {
-    if (data) {
-      dispatch(setData(data));
-    }
-  }, [data]);
+  const [dialogVisible, setDialogVisible] = React.useState(false);
+  const [currentTaskEdit, setCurrentTaskEdit] = React.useState(-1);
 
   const createTask = async () => {
-    await window.api.createTask(id);
-    await fetch();
+    setDialogVisible(true);
   };
 
   return (
     <>
+      <TaskCreator
+        open={dialogVisible}
+        onClose={(id) => {
+          if (typeof id === 'number') setCurrentTaskEdit(id);
+          setDialogVisible(false);
+        }}
+        exerciseId={id}
+      />
+      <TaskEditor
+        taskId={currentTaskEdit}
+        onClose={() => setCurrentTaskEdit(-1)}
+      />
       <Typography variant={'h4'}>Задачи</Typography>
       <Button
         variant={'contained'}
@@ -42,7 +47,7 @@ export default function EditorTasks({ id }: EditorProps) {
       <List sx={{ bgcolor: 'background.paper' }}>
         {tasks.map((task) => (
           <ListItem key={task.id} disablePadding divider>
-            <ListItemButton>
+            <ListItemButton onClick={() => setCurrentTaskEdit(task.id)}>
               <ListItemText>{task.name}</ListItemText>
             </ListItemButton>
           </ListItem>

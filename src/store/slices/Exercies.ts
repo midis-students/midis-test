@@ -15,7 +15,17 @@ export const exercisesSlice = createSlice({
   name: 'exercises',
   initialState,
   reducers: {
-    setData(state, action: PayloadAction<ApiExerciseResponse[]>) {
+    addExercise(state, action: PayloadAction<ApiExerciseResponse>) {
+      const prevIndex = state.value.findIndex(
+        (val) => val.id === action.payload.id
+      );
+      if (prevIndex > -1) {
+        state.value.splice(prevIndex, 1);
+      }
+      state.value.push(action.payload);
+      return state;
+    },
+    setExercises(state, action: PayloadAction<ApiExerciseResponse[]>) {
       return {
         ...state,
         value: action.payload,
@@ -24,7 +34,7 @@ export const exercisesSlice = createSlice({
   },
 });
 
-export const { setData } = exercisesSlice.actions;
+export const { setExercises, addExercise } = exercisesSlice.actions;
 
 export const useExercise = (id: number) =>
   useAppSelector(

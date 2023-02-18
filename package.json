@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.15",
     "@reduxjs/toolkit": "^1.9.1",
+    "jsoneditor": "^9.9.2",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
@@ -24,6 +25,7 @@
     "reactflow": "^11.3.0"
   },
   "devDependencies": {
+    "@types/jsoneditor": "^9.9.0",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",

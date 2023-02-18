@@ -5,13 +5,16 @@ import { LocalStorage } from '@/lib/LocalStorage';
 
 export interface SettingsState {
   apiHost: string;
-  requestDebug: boolean;
+  forceJsonEditor: boolean;
 }
 
 const initialState: SettingsState = Object.assign(
   {
-    apiHost: '',
-    requestDebug: false,
+    apiHost:
+      process.env.NODE_ENV === 'development'
+        ? 'localhost:3000'
+        : 'https://midis-test.iky.su',
+    forceJsonEditor: false,
   },
   LocalStorage.load('app-settings')
 );
@@ -26,10 +29,10 @@ export const settingsSlice = createSlice({
         apiHost: action.payload,
       };
     },
-    setRequestDebug: (state, action: PayloadAction<boolean>) => {
+    setForceJsonEditor: (state, action: PayloadAction<boolean>) => {
       return {
         ...state,
-        requestDebug: action.payload,
+        forceJsonEditor: action.payload,
       };
     },
   },
