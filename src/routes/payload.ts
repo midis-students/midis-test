@@ -18,7 +18,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
   };
 
   fastify.post<CreatePayloadDto>(
-    "/create",
+    "/",
     { onRequest: administratorOnly },
     async (req, res) => {
       const { blob, type } = req.body;
@@ -42,7 +42,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
   };
 
   fastify.get<ReadPayloadDto>(
-    "/get",
+    "/",
     { onRequest: administratorOnly },
     async (req, res) => {
       const { id } = req.query;
@@ -64,8 +64,8 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
     };
   };
 
-  fastify.post<UpdatePayloadDto>(
-    "/update",
+  fastify.patch<UpdatePayloadDto>(
+    "/",
     { onRequest: administratorOnly },
     async (req, res) => {
       const { id, blob } = req.body;
@@ -88,8 +88,8 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
     };
   };
 
-  fastify.post<DeletePayloadDto>(
-    "/delete",
+  fastify.delete<DeletePayloadDto>(
+    "/",
     { onRequest: administratorOnly },
     async (req, res) => {
       const { id } = req.body;
