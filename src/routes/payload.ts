@@ -29,7 +29,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
       })
       await payload.save();
 
-      return instanceToPlain(payload);
+      return instanceToPlain(payload, {enableCircularCheck: true});
     }
   );
 
@@ -51,7 +51,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
         where: {id}
       })
 
-      return instanceToPlain(payload);
+      return instanceToPlain(payload, {enableCircularCheck: true});
     }
   );
 
@@ -76,7 +76,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
         blob
       })
 
-      return instanceToPlain(payload);
+      return instanceToPlain(payload, {enableCircularCheck: true});
     }
   );
 
@@ -98,7 +98,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
         id
       })
 
-      return instanceToPlain(payload);
+      return instanceToPlain(payload, {enableCircularCheck: true});
     }
   );
 

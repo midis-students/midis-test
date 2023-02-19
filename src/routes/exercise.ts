@@ -39,7 +39,7 @@ const ExerciseRoutes: FastifyPluginAsync = async (fastify) => {
 
 	fastify.get<ExerciseGetDTO>('/', async (req, res) => {
 
-		const {id} = req.query;
+		const {id}: any = req.query;
 		if (id) { // Если не указан, то получаем список
 			const exercise = await Exercise.findOne({
 				where: {id},
@@ -83,7 +83,9 @@ const ExerciseRoutes: FastifyPluginAsync = async (fastify) => {
 				Object.assign(exercise, body);
 				await exercise.save();
 
-				return exercise;
+				return instanceToPlain(exercise, {
+					enableCircularCheck: true,
+				})
 			}
 
 			throw fastify.httpErrors.badRequest(`Exercise not found`);

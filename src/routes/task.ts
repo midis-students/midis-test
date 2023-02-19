@@ -19,7 +19,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 		};
 	};
 
-	fastify.post<CreateTaskDto>('/create', {onRequest: administratorOnly}, async (req, res) => {
+	fastify.post<CreateTaskDto>('/', {onRequest: administratorOnly}, async (req, res) => {
 		const {exercise_id, type} = req.body;
 
 		const exercise = await Exercise.findOne({
@@ -81,8 +81,11 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 	// ===================================
 
 	type UpdateTaskDto = {
-		Body: Partial<Task> & {
+		Body: {
 			id: number;
+			name?: string;
+			query?: string;
+			data?: DataInput | DataCheckBox | DataRaw;
 		};
 	}
 
@@ -93,7 +96,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 			Object.assign(task, body);
 			await task.save();
 
-			return task;
+			return instanceToPlain(task, {enableCircularCheck: true});
 		}
 
 		throw fastify.httpErrors.badRequest(`Task not found`);
