@@ -1,24 +1,20 @@
-import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Task} from './Task';
+import { User } from './User';
 
 @Entity()
 export class Answer extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@ManyToOne(() => Exercise, (exercise) => exercise.tasks)
+	@OneToMany(() => Task, (task) => task)
 	@JoinColumn()
 	task: Task;
 
-	@Column()
-	name: string;
+  @OneToMany(()=> User, (user)=> user)
+  @JoinColumn()
+  user: User;
 
 	@Column()
-	type: string;
-
-	@Column({ default: "" })
-	query: string;
-
-	@Column({ type: "json" })
-	data: DataInput | DataCheckBox | DataRaw
+	isTrue: boolean
 }
