@@ -1,12 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-import { useIsAdmin } from '@/store/slices/User';
-import {
-  addExercise,
-  setExercises,
-  useExercises,
-} from '@/store/slices/Exercies';
-import { useAppDispatch } from '@/store/hooks';
-import React from 'react';
+import Loader from '@/components/Loader';
+import { useAllExerciseQuery } from '@/hooks/query/exercise';
+import { Exercise } from '@/lib/api/type';
+import { useUser } from '@/store/user';
 import {
   Box,
   Button,
@@ -14,38 +9,37 @@ import {
   CardActions,
   CardContent,
   Divider,
+  TextField,
   Typography,
 } from '@mui/material';
-import { useService } from '@/hooks/useService';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Exercises() {
-  const { data } = useService(window.api.getExercises, []);
+const size = '256px';
+
+export default function ExercisesList() {
+  const [taskInput, setTaskInput] = useState(0);
+  const { data, isLoading, isSuccess } = useAllExerciseQuery();
   const navigate = useNavigate();
-  const isAdmin = useIsAdmin();
 
-  const items = useExercises();
-  const dispatch = useAppDispatch();
-
-  React.useEffect(() => {
-    if (data) {
-      dispatch(setExercises(data));
-    }
-  }, [data]);
-
-  const createNew = async () => {
-    const { data } = await window.api.createExercise('Новая тема');
-    if (data?.id) {
-      dispatch(addExercise(data));
-      navigate('/edit/' + data.id);
-    }
+  const goToTask = () => {
+    navigate('/task/' + taskInput);
   };
-
-  const size = '256px';
 
   return (
     <>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <TextField
+          id="outlined-controlled"
+          label="№ Задачи"
+          variant="outlined"
+          size="small"
+          type="number"
+          value={taskInput}
+          onChange={(e) => setTaskInput(+e.target.value)}
+        />
+        <Button onClick={goToTask}>Перейти</Button>
+      </Box>
       <Typography variant="h4">Список тем</Typography>
       <Box sx={{ overflow: 'auto', maxHeight: '80vh', p: 1 }}>
         <Box
@@ -57,68 +51,59 @@ export default function Exercises() {
             gridTemplateRows: `repeat(auto-fill, ${size})`,
           }}
         >
-          {isAdmin && (
-            <Card sx={{ width: size, height: size }}>
-              <CardContent
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <IconButton
-                  color="primary"
-                  style={{ marginTop: '33%' }}
-                  onClick={createNew}
-                >
-                  <AddIcon style={{ fontSize: 48 }} />
-                </IconButton>
-              </CardContent>
-            </Card>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            isSuccess &&
+            data.map((item) => <ExerciseCard key={item.id} item={item} />)
           )}
-
-          {items.map((item) => (
-            <Card
-              key={item.id}
-              sx={{
-                p: 1,
-                position: 'relative',
-                width: size,
-                height: size,
-              }}
-            >
-              <CardContent sx={{ height: '85%' }}>
-                <Typography color="text.secondary" gutterBottom>
-                  {item.type}
-                </Typography>
-                <Typography variant="h5" color="primary">
-                  {item.name}
-                </Typography>
-                <Typography>Задач: {item.tasks.length}</Typography>
-              </CardContent>
-              <Divider />
-              <CardActions sx={{ justifyContent: 'end', width: '100%' }}>
-                {isAdmin ? (
-                  <Button
-                    size="small"
-                    color="warning"
-                    onClick={() => navigate('/edit/' + item.id)}
-                  >
-                    Редактировать
-                  </Button>
-                ) : (
-                  <Button
-                    size="small"
-                    onClick={() => navigate('/exercise/' + item.id)}
-                  >
-                    Открыть
-                  </Button>
-                )}
-              </CardActions>
-            </Card>
-          ))}
         </Box>
       </Box>
     </>
+  );
+}
+
+type ExerciseCardProps = {
+  item: Exercise;
+};
+
+function ExerciseCard({ item }: ExerciseCardProps) {
+  const navigate = useNavigate();
+  const isAdmin = useUser((select) => select.isAdmin());
+
+  const onClick = () => {
+    const url = isAdmin ? '/edit/' : '/exercise/';
+    navigate(url + item.id);
+  };
+
+  return (
+    <Card
+      sx={{
+        p: 1,
+        position: 'relative',
+        width: size,
+        height: size,
+      }}
+    >
+      <CardContent sx={{ height: '85%' }}>
+        <Typography color="text.secondary" gutterBottom>
+          {item.type}
+        </Typography>
+        <Typography variant="h5" color="primary">
+          {item.name}
+        </Typography>
+        <Typography>Задач: {item.tasks.length}</Typography>
+      </CardContent>
+      <Divider />
+      <CardActions sx={{ justifyContent: 'end', width: '100%' }}>
+        <Button
+          size="small"
+          color={isAdmin ? 'warning' : 'primary'}
+          onClick={onClick}
+        >
+          {isAdmin ? 'Редактировать' : 'Открыть'}
+        </Button>
+      </CardActions>
+    </Card>
   );
 }

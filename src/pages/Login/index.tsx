@@ -1,10 +1,9 @@
 import React from 'react';
+import { useIsAuth } from '@/store/authorization';
 import { useNavigate } from 'react-router-dom';
+import { Api } from '@/lib/api';
 import { Box, Button, Divider, TextField, Typography } from '@mui/material';
 import Page from '@/components/Page';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { loginUser } from '@/store/slices/Auth';
-import { getUser } from '@/store/slices/User';
 
 export default function LoginPage() {
   const [form, setForm] = React.useState({
@@ -12,9 +11,8 @@ export default function LoginPage() {
     password: '',
   });
   const [error, setError] = React.useState('');
-  const isAuth = !!useAppSelector((select) => select.auth.token);
+  const isAuth = useIsAuth();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     if (isAuth) {
@@ -24,17 +22,21 @@ export default function LoginPage() {
 
   const onClick = async () => {
     try {
-      await dispatch(loginUser(form)).unwrap();
+      await Api.instance.login(form.login, form.password);
       navigate('/');
-    } catch (error: any) {
-      setError(error);
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
+      }
     }
   };
 
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const key = event.target.name.replace('midis-', '');
+    const value = event.target.value;
     setForm((prev) => ({
       ...prev,
-      [event.target.name.replace('midis-', '')]: event.target.value,
+      [key]: value,
     }));
   };
 
@@ -57,7 +59,7 @@ export default function LoginPage() {
           width: '33%',
         }}
       >
-        <img src="/splash.png" alt="баннер" />
+        <img src="./splash.png" alt="баннер" />
         {error != '' ? <Typography color="red">{error}</Typography> : null}
         <TextField label="Логин" name="midis-login" onChange={onInput} />
         <TextField
