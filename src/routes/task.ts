@@ -29,6 +29,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 		if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
 
 		var data: DataCheckBox | DataInput | DataRaw | DataDragAndDrop = {
+			type: "raw",
 			text: "",
 			objects:{},
 			payloads:[]
@@ -37,6 +38,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 		switch (type) {
 			case "radio":
 				data = {
+					type,
 					subtype: "radio",
 					options:[],
 					payloads:[]
@@ -44,6 +46,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 				break;
 			case "input":
 				data = {
+					type,
 					placeholder: "type some text",
 					answer:"answer",
 					payloads:[]
@@ -51,6 +54,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 				break;
 			case "dnd":
 				data = {
+					type,
 					blocks:[
 						{
 							text:"True",

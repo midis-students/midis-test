@@ -27,12 +27,13 @@ export interface DataDragAndDrop extends Data {
 
 
 export interface DataRaw extends Data {
-	text: string,
-	objects: Record<string, DataInput | DataCheckBox | DataDragAndDrop>
+	text: string;
+	objects: Record<string, DataInput | DataCheckBox | DataDragAndDrop>;
 }
 
 export interface Data {
-	payloads:Array<number>
+	type: "radio" | "input" | "raw" | "dnd";
+	payloads?:Array<number>;
 }
 
 
@@ -55,5 +56,5 @@ export class Task extends BaseEntity {
 	query: string;
 
 	@Column({ type: "json" })
-	data: DataInput | DataCheckBox | DataRaw | DataDragAndDrop
+	data: DataInput | DataCheckBox | DataRaw | DataDragAndDrop;
 }
