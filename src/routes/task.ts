@@ -24,6 +24,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 
 		const exercise = await Exercise.findOne({
 			where: {id: exercise_id},
+			relations: {tasks: true},
 		});
 
 		if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
