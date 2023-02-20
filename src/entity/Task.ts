@@ -2,7 +2,7 @@ import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColum
 import {Exercise} from './Exercise';
 
 export interface DataCheckBox extends Data {
-	subtype: "checkbox" | "radio";
+	subtype: "checkbox" | "radio" | "select";
 	options:Array<
 		{
 			text:string;
