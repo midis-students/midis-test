@@ -15,7 +15,14 @@ export interface DataCheckBox extends Data {
 export interface DataInput extends Data {
 	placeholder: string;
 	answer: string;
-	eqmode: 0 | 1 | 2 | 3; // RegEx | Без арфографии | Может немного ошибится, но получит пол бала | Точный ввод
+}
+
+
+export interface DataDragAndDrop extends Data {
+	blocks:Array<{
+		text:string;
+		answer: boolean
+	}>
 }
 
 
