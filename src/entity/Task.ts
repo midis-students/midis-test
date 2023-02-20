@@ -21,19 +21,20 @@ export interface DataInput extends Data {
 export interface DataDragAndDrop extends Data {
 	blocks:Array<{
 		text:string;
-		answer: boolean
+		answer: boolean;
 	}>
 }
 
 
 export interface DataRaw extends Data {
 	text: string,
-	objects: Record<string, DataInput | DataCheckBox>
+	objects: Record<string, DataInput | DataCheckBox | DataDragAndDrop>
 }
 
-interface Data {
-	type: string;
+export interface Data {
+	payloads:Array<number>
 }
+
 
 @Entity()
 export class Task extends BaseEntity {
@@ -54,5 +55,5 @@ export class Task extends BaseEntity {
 	query: string;
 
 	@Column({ type: "json" })
-	data: DataInput | DataCheckBox | DataRaw
+	data: DataInput | DataCheckBox | DataRaw | DataDragAndDrop
 }
