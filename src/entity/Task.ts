@@ -42,9 +42,8 @@ export class Task extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@ManyToOne(() => Exercise, (exercise) => exercise.tasks)
-	@JoinColumn()
-	exercise: Exercise;
+	@Column()
+	exercise: number;
 
 	@Column()
 	name: string;

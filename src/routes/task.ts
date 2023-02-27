@@ -72,7 +72,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 		}
 
 		const task: Task = Task.create({
-			exercise,
+			exercise:exercise.id,
 			type,
 			name: "Задача #" + ((await Task.count()) + 1),
 			query: "Описание задачи",

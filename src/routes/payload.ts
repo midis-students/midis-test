@@ -43,7 +43,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 
   fastify.get<ReadPayloadDto>(
     "/",
-    { onRequest: administratorOnly },
+    // { onRequest: administratorOnly },
     async (req, res) => {
       const { id } = req.query;
 
@@ -51,7 +51,11 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
         where: {id}
       })
 
-      return instanceToPlain(payload, {enableCircularCheck: true});
+      const query = instanceToPlain(payload, {enableCircularCheck: true});
+
+      console.log(query)
+
+      return {ok:true};
     }
   );
 
