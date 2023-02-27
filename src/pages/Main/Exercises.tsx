@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 const size = '256px';
 
 export default function ExercisesList() {
-  const [taskInput, setTaskInput] = useState(0);
+  const [taskInput, setTaskInput] = useState<number>();
   const { data, isLoading, isSuccess } = useAllExerciseQuery();
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ export default function ExercisesList() {
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <TextField
           id="outlined-controlled"
-          label="№ Задачи"
+          label="К задаче №"
           variant="outlined"
           size="small"
           type="number"

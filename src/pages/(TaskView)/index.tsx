@@ -1,36 +1,39 @@
 import Loader from '@/components/Loader';
 import { useTaskQuery } from '@/hooks/query/task';
-import { Api } from '@/lib/api';
 import { Task } from '@/lib/api/type';
 import { useSettings } from '@/store/settings';
-import { Box, Typography, Button, Stack, Divider, Chip } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Box, Typography, Button, Stack, Divider } from '@mui/material';
+import ViewPayload from '@/components/PayloadView';
 
 type TaskViewId = {
   id: number;
 };
 
 export default function TaskView(props: TaskViewId) {
-  const [payloads, setPayloads] = useState<string[]>([]);
   const { data, isLoading, isSuccess } = useTaskQuery(props.id);
-  const viewRawTask = useSettings((select) => select.viewRawTask);
 
-  useEffect(() => {
-    const fetchPayloads = async () => {
-      setPayloads([]);
-      if (isSuccess) {
-        for (const payload of data.data.payloads) {
-          Api.instance.payload
-            .getImage(payload)
-            .then((image) => setPayloads((prev) => [...prev, image]));
-        }
-      }
-    };
-    fetchPayloads();
-  }, [props.id]);
+  const Payloads = () => {
+    if (!isSuccess) return null;
+    if (data.data.payloads.length === 0) return null;
+
+    return (
+      <Stack direction="row" spacing={1} sx={{ maxHeight: '64vh' }}>
+        {data.data.payloads.map((payload) => (
+          <>
+            <ViewPayload
+              key={payload}
+              payload={payload}
+              width={(1 / data.data.payloads.length) * 100 + '%'}
+              height="auto"
+            />
+          </>
+        ))}
+      </Stack>
+    );
+  };
 
   return (
-    <Box sx={{ p: 1 }}>
+    <Box sx={{ p: 1, whiteSpace: 'pre-wrap', overflow: 'auto' }}>
       {isLoading ? (
         <Loader />
       ) : (
@@ -40,21 +43,11 @@ export default function TaskView(props: TaskViewId) {
               {data.name}
             </Typography>
             <Typography>{data.query}</Typography>
-            {payloads.length ? (
-              <Stack direction="row" spacing={1}>
-                {payloads.map((payload, index) => (
-                  <img
-                    src={payload}
-                    key={index}
-                    width={(1 / data.data.payloads.length) * 100 + '%'}
-                  />
-                ))}
-              </Stack>
-            ) : null}
+            <Payloads />
             <Button variant="contained" color="success">
               Проверить
             </Button>
-            {viewRawTask ? <RawTask task={data} /> : null}
+            <RawTask task={data} />
           </Box>
         )
       )}
@@ -63,6 +56,10 @@ export default function TaskView(props: TaskViewId) {
 }
 
 function RawTask({ task }: { task: Task }) {
+  const viewRawTask = useSettings((select) => select.viewRawTask);
+
+  if (!viewRawTask) return null;
+
   return (
     <>
       <Divider sx={{ mt: 2, mb: 2 }} />

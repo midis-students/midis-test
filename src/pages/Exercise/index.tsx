@@ -1,9 +1,8 @@
 import Header from '@/components/Header';
 import Page from '@/components/Page';
 import { useExerciseQuery } from '@/hooks/query/exercise';
-import { Task } from '@/lib/api/type';
 import { Paper, Typography, Stack, Link } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   Navigate,
   useNavigate,
