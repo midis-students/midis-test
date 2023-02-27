@@ -42,8 +42,9 @@ export class Task extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column()
-	exercise: number;
+	@ManyToOne(() => Exercise, (exercise) => exercise.tasks)
+	@JoinColumn()
+	exercise: Exercise;
 
 	@Column()
 	name: string;
@@ -54,6 +55,10 @@ export class Task extends BaseEntity {
 	@Column({ default: "" })
 	query: string;
 
-	@Column({ type: "json" })
-	data: DataInput | DataCheckBox | DataRaw | DataDragAndDrop;
+	@Column({ type: "text" })
+	data: string;
+	
+	get json(): DataInput | DataCheckBox | DataRaw | DataDragAndDrop{
+		return JSON.parse(this.data);
+	};
 }

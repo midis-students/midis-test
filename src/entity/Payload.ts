@@ -28,10 +28,10 @@ export class Payload extends BaseEntity {
 
 	@Column({
 		type: "blob",
-		transformer:{
-			to: (value: string) => Buffer.from(value),
-			from: (value: Buffer) => value.toString(),
-		}
+		// transformer:{
+		// 	to: (value: string) => Buffer.from(value),
+		// 	from: (value: Buffer) => value.toString(),
+		// }
 	})
-	blob: string;
+	blob: Blob;
 }

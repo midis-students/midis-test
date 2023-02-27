@@ -5,6 +5,10 @@ import {DataCheckBox, DataDragAndDrop, DataInput, DataRaw, Task} from '../entity
 
 export const autoPrefix = '/task';
 
+export function toJson(task: Task) {
+	return {...task, data:task?.json ?? {}}
+}
+
 const TaskRoute: FastifyPluginAsync = async (fastify) => {
 	const {authorize, administratorOnly} = fastify;
 
@@ -72,11 +76,11 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 		}
 
 		const task: Task = Task.create({
-			exercise:exercise.id,
+			exercise,
 			type,
 			name: "Задача #" + ((await Task.count()) + 1),
 			query: "Описание задачи",
-			data
+			data:JSON.stringify(data)
 		});
 		await task.save();
 
@@ -101,7 +105,9 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 
 		const task = await Task.findOne({where: {id}});
 
-		return instanceToPlain(task, {enableCircularCheck: true});
+		if(!task) return fastify.httpErrors.notFound("Task not found");
+
+		return instanceToPlain(toJson(task), {enableCircularCheck: true});
 	});
 
 	// ===================================
@@ -122,7 +128,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 			Object.assign(task, body);
 			await task.save();
 
-			return instanceToPlain(task, {enableCircularCheck: true});
+			return instanceToPlain(toJson(task), {enableCircularCheck: true});
 		}
 
 		throw fastify.httpErrors.badRequest(`Task not found`);

@@ -7,7 +7,7 @@ export const autoPrefix = "/payload";
 const TaskRoute: FastifyPluginAsync = async (fastify) => {
   const { authorize, administratorOnly } = fastify;
 
-  fastify.addHook("onRequest", authorize);
+  //fastify.addHook("onRequest", authorize);
 
   
   type CreatePayloadDto = {
@@ -51,11 +51,16 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
         where: {id}
       })
 
+      if(!payload) return fastify.httpErrors.notFound("Payload not found");
+
       const query = instanceToPlain(payload, {enableCircularCheck: true});
 
-      console.log(query)
+      res.headers({
+        "X-Payload-ID": query.id,
+        "X-Payload-Type": query.type,
+      })
 
-      return {ok:true};
+      return query.blob;
     }
   );
 
