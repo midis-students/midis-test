@@ -3,6 +3,7 @@ import { useAuth } from '@/store/authorization';
 import { ExerciseModule } from './module/exercize';
 import { TaskModule } from './module/task';
 import { PayloadModule } from './module/payload';
+import { ProfileModule } from './module/profile';
 
 type RequestConfig = {
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE';
@@ -17,6 +18,7 @@ export class Api {
   readonly exercise = new ExerciseModule(this);
   readonly task = new TaskModule(this);
   readonly payload = new PayloadModule(this);
+  readonly profile = new ProfileModule(this);
 
   private constructor() {
     this.token = useAuth.getState().token;

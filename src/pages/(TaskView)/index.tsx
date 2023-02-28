@@ -4,6 +4,7 @@ import { Task } from '@/lib/api/type';
 import { useSettings } from '@/store/settings';
 import { Box, Typography, Button, Stack, Divider } from '@mui/material';
 import ViewPayload from '@/components/PayloadView';
+import { TaskResponse } from './response';
 
 type TaskViewId = {
   id: number;
@@ -38,12 +39,13 @@ export default function TaskView(props: TaskViewId) {
         <Loader />
       ) : (
         isSuccess && (
-          <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography variant="h4" color="primary">
               {data.name}
             </Typography>
             <Typography>{data.query}</Typography>
             <Payloads />
+            <TaskResponse task={data} />
             <Button variant="contained" color="success">
               Проверить
             </Button>

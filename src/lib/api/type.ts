@@ -1,3 +1,5 @@
+import { Modules } from '@/modules';
+
 export enum Roles {
   Student = 'STUDENTS',
   Teacher = 'TEACHERS',
@@ -22,7 +24,7 @@ export interface Task {
   id: number;
   name: string;
   exercise: Exercise;
-  type: string;
+  type: keyof typeof Modules;
   query: string;
   data: TaskData;
 }

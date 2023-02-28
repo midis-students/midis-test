@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,8 +7,10 @@ import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Skeleton } from '@mui/material';
 import SettingsDialog from './Settings';
+import { useUser } from '@/store/user';
 
 export default function Header() {
+  const user = useUser((select) => select.current);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleSettingsClick = () => setSettingsOpen(true);
@@ -19,9 +21,9 @@ export default function Header() {
       <AppBar position="relative">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Skeleton variant="text" width={250} />
+            {user ? user.name : <Skeleton variant="text" width={250} />}
             <Typography>
-              <Skeleton variant="text" width={200} />
+              {user ? user.group : <Skeleton variant="text" width={200} />}
             </Typography>
           </Typography>
           <IconButton color="inherit" onClick={handleSettingsClick}>

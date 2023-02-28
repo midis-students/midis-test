@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthOutlet } from '@/components/Outlets';
 import LoginPage from '@/pages/Login';
@@ -6,9 +6,18 @@ import MainPage from '@/pages/Main';
 import TaskPage from './pages/Task';
 import ExercisePage from './pages/Exercise';
 import Settings from './components/Settings';
+import { useAuth } from './store/authorization';
+import { Api } from './lib/api';
 
 function App() {
   const navigate = useNavigate();
+  const token = useAuth((select) => select.token);
+
+  useEffect(() => {
+    if (token) {
+      Api.instance.profile.get();
+    }
+  }, [token]);
 
   return (
     <Routes>
