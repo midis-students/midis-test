@@ -16,5 +16,5 @@ export class Answer extends BaseEntity {
   user: User;
 
 	@Column()
-	isTrue: boolean
+	isCorrect: boolean
 }

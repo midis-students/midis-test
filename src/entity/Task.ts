@@ -1,40 +1,40 @@
+import { Expose } from 'class-transformer';
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {Exercise} from './Exercise';
 
-export interface DataCheckBox extends Data {
-	subtype: "checkbox" | "radio" | "select";
-	options:Array<
-		{
-			text:string;
-			score: number;
-		}
-	>
+export class Data {
+	type: "radio" | "input" | "richtext";
+	payloads?:Array<number>;
 }
 
+export class DataCheckBoxAnswer {
+	text:string;
+	score: number;
+}
 
-export interface DataInput extends Data {
+export class DataCheckBox extends Data {
+	subtype: "checkbox" | "radio" | "select";
+	options:Array<DataCheckBoxAnswer>
+}
+
+export class DataInput extends Data {
 	placeholder: string;
 	answer: string;
 }
 
 
-export interface DataDragAndDrop extends Data {
-	blocks:Array<{
-		text:string;
-		answer: boolean;
-	}>
-}
+// export class DataDragAndDrop extends Data {
+// 	blocks:Array<{
+// 		text:string;
+// 		answer: boolean;
+// 	}>
+// }
 
-
-export interface DataRaw extends Data {
+export class DataRichText extends Data {
 	text: string;
-	objects: Record<string, DataInput | DataCheckBox | DataDragAndDrop>;
+	objects: Record<string, Data>;
 }
 
-export interface Data {
-	type: "radio" | "input" | "raw" | "dnd";
-	payloads?:Array<number>;
-}
 
 
 @Entity()
@@ -58,7 +58,7 @@ export class Task extends BaseEntity {
 	@Column({ type: "text" })
 	data: string;
 	
-	get json(): DataInput | DataCheckBox | DataRaw | DataDragAndDrop{
+	get json(): Data {
 		return JSON.parse(this.data);
 	};
 }

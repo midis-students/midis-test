@@ -1,7 +1,8 @@
 import {FastifyPluginAsync} from 'fastify';
 import {instanceToPlain} from 'class-transformer';
 import {Exercise} from '../entity/Exercise';
-import {DataCheckBox, DataDragAndDrop, DataInput, DataRaw, Task} from '../entity/Task';
+import {DataCheckBox, DataInput, DataRichText, Task} from '../entity/Task';
+import { Modules } from '../modules';
 
 export const autoPrefix = '/task';
 
@@ -19,7 +20,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 	type CreateTaskDto = {
 		Body: {
 			exercise_id: number;
-			type: "radio" | "input" | "raw" | "dnd";
+			type: keyof typeof Modules;
 		};
 	};
 
@@ -33,8 +34,8 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 
 		if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
 
-		var data: DataCheckBox | DataInput | DataRaw | DataDragAndDrop = {
-			type: "raw",
+		var data: DataCheckBox | DataInput | DataRichText = {
+			type: "richtext",
 			text: "",
 			objects:{},
 			payloads:[]
@@ -54,22 +55,6 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 					type,
 					placeholder: "type some text",
 					answer:"answer",
-					payloads:[]
-				}
-				break;
-			case "dnd":
-				data = {
-					type,
-					blocks:[
-						{
-							text:"True",
-							answer:true
-						},
-						{
-							text:"ne True",
-							answer:false
-						}
-					],
 					payloads:[]
 				}
 				break;
@@ -117,7 +102,7 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 			id: number;
 			name?: string;
 			query?: string;
-			data?: DataInput | DataCheckBox | DataRaw | DataDragAndDrop;
+			data?: unknown;
 		};
 	}
 
