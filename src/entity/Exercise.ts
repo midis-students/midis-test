@@ -2,11 +2,9 @@ import {
 	BaseEntity,
 	Column,
 	Entity,
-	ManyToOne,
 	OneToMany,
 	PrimaryGeneratedColumn,
 	JoinTable,
-	JoinColumn,
 } from 'typeorm';
 import {Exclude} from 'class-transformer';
 import {Task} from './Task';

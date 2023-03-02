@@ -10,7 +10,7 @@ const ProfileRoute: FastifyPluginAsync = async (fastify) => {
   fastify.addHook("onRequest", authorize);
 
   fastify.get("/", async (req, res) => {
-    const user = req.user;
+    const user: User = req.user;
 
     return instanceToPlain(user);
   });

@@ -1,134 +1,139 @@
-import { FastifyPluginAsync } from "fastify";
-import { instanceToPlain } from "class-transformer";
-import { Exercise } from "../entity/Exercise";
-import { DataCheckBox, DataInput, DataRaw, Task } from "../entity/Task";
+import {FastifyPluginAsync} from 'fastify';
+import {instanceToPlain} from 'class-transformer';
+import {Exercise} from '../entity/Exercise';
+import {DataCheckBox, DataInput, DataRichText, Task} from '../entity/Task';
+import { Modules } from '../modules';
 
-export const autoPrefix = "/task";
+export const autoPrefix = '/task';
+
+export function toJson(task: Task) {
+	return {...task, data:task?.json ?? {}}
+}
 
 const TaskRoute: FastifyPluginAsync = async (fastify) => {
-  const { authorize, administratorOnly } = fastify;
+	const {authorize, administratorOnly} = fastify;
 
-  fastify.addHook("onRequest", authorize);
+	fastify.addHook('onRequest', authorize);
 
-  // ===================================
+	// ===================================
 
-  type CreateTaskDto = {
-    Body: {
-      exercise_id: number;
-      type: "radio" | "raw";
-    };
-  };
+	type CreateTaskDto = {
+		Body: {
+			exercise_id: number;
+			type: keyof typeof Modules;
+		};
+	};
 
-  fastify.post<CreateTaskDto>(
-    "/",
-    { onRequest: administratorOnly },
-    async (req, res) => {
-      const { exercise_id, type } = req.body;
+	fastify.post<CreateTaskDto>('/', {onRequest: administratorOnly}, async (req, res) => {
+		const {exercise_id, type} = req.body;
 
-      const exercise = await Exercise.findOne({
-        where: { id: exercise_id },
-        relations: { tasks: true },
-      });
+		const exercise = await Exercise.findOne({
+			where: {id: exercise_id},
+			relations: {tasks: true},
+		});
 
-      if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
+		if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
 
-      let data: DataCheckBox | DataInput | DataRaw = {
-        type: "raw",
-        text: "",
-        objects: {},
-      };
+		var data: DataCheckBox | DataInput | DataRichText = {
+			type: "richtext",
+			text: "",
+			objects:{},
+			payloads:[]
+		};
 
-      switch (type) {
-        case "radio":
-          data = {
-            type,
-            subtype: "radio",
-            options: [],
-          };
-          break;
-      }
+		switch (type) {
+			case "radio":
+				data = {
+					type,
+					subtype: "radio",
+					options:[],
+					payloads:[]
+				}
+				break;
+			case "input":
+				data = {
+					type,
+					placeholder: "type some text",
+					answer:"answer",
+					payloads:[]
+				}
+				break;
+		}
 
-      const task: Task = Task.create({
-        exercise,
-        type,
-        name: "Задача #" + ((await Task.count()) + 1),
-        query: "Описание задачи",
-        data,
-      });
-      await task.save();
+		const task: Task = Task.create({
+			exercise,
+			type,
+			name: "Задача #" + ((await Task.count()) + 1),
+			query: "Описание задачи",
+			data:JSON.stringify(data)
+		});
+		await task.save();
 
-      exercise.tasks.push(task);
-      await exercise.save();
+		exercise.tasks.push(task);
+		await exercise.save();
 
-      return instanceToPlain(task, {
-        enableCircularCheck: true,
-      });
-    }
-  );
+		return instanceToPlain(task, {
+			enableCircularCheck: true,
+		});
+	});
 
-  // ===================================
+	// ===================================
 
-  type GetTaskDto = {
-    Querystring: {
-      id: number;
-    };
-  };
+	type GetTaskDto = {
+		Querystring: {
+			id: number;
+		}
+	}
 
-  fastify.get<GetTaskDto>("/", async (req, res) => {
-    const { id } = req.query;
+	fastify.get<GetTaskDto>('/', async (req, res) => {
+		const {id} = req.query;
 
-    const task = await Task.findOne({ where: { id } });
+		const task = await Task.findOne({where: {id}});
 
-    return instanceToPlain(task, { enableCircularCheck: true });
-  });
+		if(!task) return fastify.httpErrors.notFound("Task not found");
 
-  // ===================================
+		return instanceToPlain(toJson(task), {enableCircularCheck: true});
+	});
 
-  type UpdateTaskDto = {
-    Body: {
-      id: number;
-      name?: string;
-      query?: string;
-      data?: DataInput | DataCheckBox | DataRaw;
-    };
-  };
+	// ===================================
 
-  fastify.patch<UpdateTaskDto>(
-    "/",
-    { onRequest: administratorOnly },
-    async (req, res) => {
-      const { id, ...body } = req.body;
-      const task = await Task.findOne({ where: { id } });
-      if (task) {
-        Object.assign(task, body);
-        await task.save();
+	type UpdateTaskDto = {
+		Body: {
+			id: number;
+			name?: string;
+			query?: string;
+			data?: unknown;
+		};
+	}
 
-        return instanceToPlain(task, { enableCircularCheck: true });
-      }
+	fastify.patch<UpdateTaskDto>('/', {onRequest: administratorOnly}, async (req, res) => {
+		const {id, ...body} = req.body;
+		const task = await Task.findOne({where: {id}});
+		if (task) {
+			Object.assign(task, body);
+			await task.save();
 
-      throw fastify.httpErrors.badRequest(`Task not found`);
-    }
-  );
+			return instanceToPlain(toJson(task), {enableCircularCheck: true});
+		}
 
-  // ===================================
+		throw fastify.httpErrors.badRequest(`Task not found`);
+	});
 
-  type DeleteTaskDto = {
-    Body: {
-      id: number;
-    };
-  };
+	// ===================================
 
-  fastify.delete<DeleteTaskDto>(
-    "/",
-    { onRequest: administratorOnly },
-    async (req, res) => {
-      const { id } = req.body;
+	type DeleteTaskDto = {
+		Body: {
+			id: number;
+		}
+	}
 
-      const task = await Task.delete({ id });
+	fastify.delete<DeleteTaskDto>('/', {onRequest: administratorOnly}, async (req, res) => {
+		const {id} = req.body;
 
-      return instanceToPlain(task, { enableCircularCheck: true });
-    }
-  );
+		const task = await Task.delete({id});
+
+		return instanceToPlain(task, {enableCircularCheck: true});
+	});
 };
 
 export default TaskRoute;

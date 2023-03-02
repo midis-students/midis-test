@@ -2,13 +2,8 @@ import {
     BaseEntity,
     Column,
     Entity,
-    ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
-    JoinTable,
-    JoinColumn,
   } from "typeorm";
-  import { Exclude } from "class-transformer";
 
 export enum PayloadType {
     Image = "IMAGE",
@@ -26,12 +21,13 @@ export class Payload extends BaseEntity {
   })
   type: PayloadType;
 
+  @Column({
+    type:"text"
+  })
+  description: string;
+
 	@Column({
-		type: "blob",
-		transformer:{
-			to: (value: string) => Buffer.from(value),
-			from: (value: Buffer) => value.toString(),
-		}
+		type: "mediumblob",
 	})
-	blob: string;
+	blob: Blob;
 }

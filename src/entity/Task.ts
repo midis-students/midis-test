@@ -1,32 +1,41 @@
+import { Expose } from 'class-transformer';
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {Exercise} from './Exercise';
 
-export interface DataCheckBox extends Data {
-	subtype: "checkbox" | "radio";
-	options:Array<
-		{
-			text:string;
-			score: number;
-		}
-	>
+export class Data {
+	type: "radio" | "input" | "richtext";
+	payloads?:Array<number>;
 }
 
+export class DataCheckBoxAnswer {
+	text:string;
+	score: number;
+}
 
-export interface DataInput extends Data {
+export class DataCheckBox extends Data {
+	subtype: "checkbox" | "radio" | "select";
+	options:Array<DataCheckBoxAnswer>
+}
+
+export class DataInput extends Data {
 	placeholder: string;
 	answer: string;
-	eqmode: 0 | 1 | 2 | 3; // RegEx | Без арфографии | Может немного ошибится, но получит пол бала | Точный ввод
 }
 
 
-export interface DataRaw extends Data {
-	text: string,
-	objects: Record<string, DataInput | DataCheckBox>
+// export class DataDragAndDrop extends Data {
+// 	blocks:Array<{
+// 		text:string;
+// 		answer: boolean;
+// 	}>
+// }
+
+export class DataRichText extends Data {
+	text: string;
+	objects: Record<string, Data>;
 }
 
-interface Data {
-	type: string;
-}
+
 
 @Entity()
 export class Task extends BaseEntity {
@@ -46,6 +55,10 @@ export class Task extends BaseEntity {
 	@Column({ default: "" })
 	query: string;
 
-	@Column({ type: "json" })
-	data: DataInput | DataCheckBox | DataRaw
+	@Column({ type: "text" })
+	data: string;
+	
+	get json(): Data {
+		return JSON.parse(this.data);
+	};
 }
