@@ -1,18 +1,9 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-} from "typeorm";
-import { Exclude } from "class-transformer";
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 export enum Role {
-  Student = "STUDENT",
-  Teacher = "TEACHER",
-  Admin = "ADMIN",
+  Student = 'STUDENT',
+  Teacher = 'TEACHER',
+  Admin = 'ADMIN',
 }
 
 @Entity()
@@ -27,12 +18,8 @@ export class User extends BaseEntity {
   @Column()
   group: string;
 
-  @Exclude()
-  @Column()
-  midis_token: string;
-
   @Column({
-    type: "varchar",
+    type: 'varchar',
     default: Role.Student,
   })
   role: Role;

@@ -1,35 +1,32 @@
-import { FastifyPluginAsync } from "fastify";
-import { instanceToPlain } from "class-transformer";
-import { Payload, PayloadType } from "../entity/Payload";
+import { FastifyPluginAsync } from 'fastify';
+import { instanceToPlain } from 'class-transformer';
+import { Payload, PayloadType } from '@/entity/Payload';
 
-export const autoPrefix = "/payload";
+export const autoPrefix = '/payload';
 
-const TaskRoute: FastifyPluginAsync = async (fastify) => {
-  const { authorize, administratorOnly } = fastify;
+const TaskRoute: FastifyPluginAsync = async fastify => {
+  const { administratorOnly } = fastify;
 
-  //fastify.addHook("onRequest", authorize);
-
-  
   type CreatePayloadDto = {
     Body: {
-    	blob: string;
+      blob: string;
       type: PayloadType;
     };
   };
 
   fastify.post<CreatePayloadDto>(
-    "/",
+    '/',
     { onRequest: administratorOnly },
-    async (req, res) => {
+    async req => {
       const { blob, type } = req.body;
 
       const payload = Payload.create({
         blob,
-        type
-      })
+        type,
+      });
       await payload.save();
 
-      return instanceToPlain(payload, {enableCircularCheck: true});
+      return instanceToPlain(payload, { enableCircularCheck: true });
     }
   );
 
@@ -37,55 +34,54 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 
   type ReadPayloadDto = {
     Querystring: {
-    	id: number;
+      id: number;
     };
   };
 
-  fastify.get<ReadPayloadDto>(
-    "/",
-    // { onRequest: administratorOnly },
-    async (req, res) => {
-      const { id } = req.query;
+  fastify.get<ReadPayloadDto>('/', async (req, res) => {
+    const { id } = req.query;
 
-      const payload = await Payload.findOne({
-        where: {id}
-      })
+    const payload = await Payload.findOne({
+      where: { id },
+    });
 
-      if(!payload) return fastify.httpErrors.notFound("Payload not found");
+    if (!payload) return fastify.httpErrors.notFound('Payload not found');
 
-      const query = instanceToPlain(payload, {enableCircularCheck: true});
+    const query = instanceToPlain(payload, { enableCircularCheck: true });
 
-      res.headers({
-        "X-Payload-ID": query.id,
-        "X-Payload-Type": query.type,
-      })
+    res.headers({
+      'X-Payload-ID': query.id,
+      'X-Payload-Type': query.type,
+    });
 
-      return query.blob;
-    }
-  );
+    return query.blob;
+  });
 
   // ===================================
 
   type UpdatePayloadDto = {
     Body: {
-    	id: number;
+      id: number;
       blob: string;
     };
   };
 
   fastify.patch<UpdatePayloadDto>(
-    "/",
+    '/',
     { onRequest: administratorOnly },
-    async (req, res) => {
+    async req => {
       const { id, blob } = req.body;
 
-      const payload = await Payload.update({
-        id
-      }, {
-        blob
-      })
+      const payload = await Payload.update(
+        {
+          id,
+        },
+        {
+          blob,
+        }
+      );
 
-      return instanceToPlain(payload, {enableCircularCheck: true});
+      return instanceToPlain(payload, { enableCircularCheck: true });
     }
   );
 
@@ -93,25 +89,23 @@ const TaskRoute: FastifyPluginAsync = async (fastify) => {
 
   type DeletePayloadDto = {
     Body: {
-    	id: number;
+      id: number;
     };
   };
 
   fastify.delete<DeletePayloadDto>(
-    "/",
+    '/',
     { onRequest: administratorOnly },
-    async (req, res) => {
+    async req => {
       const { id } = req.body;
 
       const payload = await Payload.delete({
-        id
-      })
+        id,
+      });
 
-      return instanceToPlain(payload, {enableCircularCheck: true});
+      return instanceToPlain(payload, { enableCircularCheck: true });
     }
   );
-
-  
 };
 
 export default TaskRoute;

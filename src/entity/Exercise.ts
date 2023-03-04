@@ -1,26 +1,25 @@
 import {
-	BaseEntity,
-	Column,
-	Entity,
-	OneToMany,
-	PrimaryGeneratedColumn,
-	JoinTable,
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  JoinTable,
 } from 'typeorm';
-import {Exclude} from 'class-transformer';
-import {Task} from './Task';
+import { Task } from './Task';
 
 @Entity()
 export class Exercise extends BaseEntity {
-	@PrimaryGeneratedColumn()
-	id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-	@Column()
-	name: string;
+  @Column()
+  name: string;
 
-	@Column({default: ''})
-	type: string;
+  @Column({ default: '' })
+  type: string;
 
-	@OneToMany(() => Task, (task) => task.exercise)
-	@JoinTable()
-	tasks: Task[];
+  @OneToMany(() => Task, task => task.exercise)
+  @JoinTable()
+  tasks: Task[];
 }

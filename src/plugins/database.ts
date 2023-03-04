@@ -1,26 +1,27 @@
-import { FastifyPluginAsync } from "fastify";
-import fp from "fastify-plugin";
-import { BaseEntity, DataSource, EntitySchema } from "typeorm";
-import fs from "fs";
-import path from "path";
-import { Colors } from "../lib/Colors";
+import { FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
+import { BaseEntity, DataSource, EntitySchema } from 'typeorm';
+import fs from 'fs';
+import path from 'path';
+import { Colors } from '@/lib/Colors';
+import * as process from 'process';
 
-const DatabasePlugin: FastifyPluginAsync = async (fastify) => {
-  const logger = fastify.log.child({ name: "Database" });
+const DatabasePlugin: FastifyPluginAsync = async fastify => {
+  const logger = fastify.log.child({ name: 'Database' });
 
   type EntityClass = { new (): EntitySchema };
   type ImportModule = Record<string, EntityClass>;
 
   const entities: EntityClass[] = [];
 
-  const entityPath = path.resolve("src/entity");
+  const entityPath = path.resolve('src/entity');
   const files = fs
     .readdirSync(entityPath)
-    .map((file) => path.join(entityPath, file));
+    .map(file => path.join(entityPath, file));
 
   for (const file of files) {
     const module: ImportModule = await import(file);
-    Object.values(module).forEach((entity) => {
+    Object.values(module).forEach(entity => {
       if (entity.prototype instanceof BaseEntity) {
         entities.push(entity);
         logger.info(
@@ -31,7 +32,7 @@ const DatabasePlugin: FastifyPluginAsync = async (fastify) => {
   }
 
   const dataSource = new DataSource({
-    type: "mysql",
+    type: 'mysql',
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT,
     username: process.env.MYSQL_USERNAME,
@@ -44,8 +45,8 @@ const DatabasePlugin: FastifyPluginAsync = async (fastify) => {
 
   await dataSource.initialize();
   if (dataSource.isInitialized) {
-    logger.info("MySQL connected");
-  }else{
+    logger.info('MySQL connected to ' + process.env.MYSQL_HOST);
+  } else {
     throw Error(`Can't connect to MySQL server`);
   }
 };
