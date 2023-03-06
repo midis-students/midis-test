@@ -1,4 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Blob } from 'buffer';
 
 export enum PayloadType {
   Image = 'IMAGE',

@@ -1,40 +1,41 @@
 import { TesterModule } from '@/lib/test-system/module';
 import { Variant } from '@/lib/test-system/Variant';
 
+type VariantExt = Variant<number>;
+
 type ModuleContainer = {
-  variants: Variant<number>[];
+  variants: VariantExt[];
 };
 
 type RadioAcceptBody = {
-  id: string;
-};
-
-export class Radio extends TesterModule<ModuleContainer> {
-  assert(body: RadioAcceptBody): boolean {
-    const variant = this.container.variants.find(
-      variant => variant.id === body.id
-    );
-    if (!variant) return false;
-    return variant.value === 1;
-  }
-
-  create(): ModuleContainer {
-    this.container.variants = [];
-    return this.container;
-  }
-}
-
-type CheckboxAcceptBody = {
   list: string[];
 };
 
-export class Checkbox extends TesterModule<ModuleContainer> {
+export class Radio extends TesterModule<ModuleContainer> {
+  type: 'radio' | 'checkbox';
+
+  constructor() {
+    super();
+    this.container = {
+      variants: [],
+    };
+  }
+
   create(): ModuleContainer {
-    this.container.variants = [];
     return this.container;
   }
 
-  assert(body: CheckboxAcceptBody): boolean {
+  setType(type: 'radio' | 'checkbox') {
+    this.type = type;
+    return this;
+  }
+
+  addVariants(...variants: VariantExt[]) {
+    this.container.variants.push(...variants);
+    return this;
+  }
+
+  assert(body: RadioAcceptBody): boolean {
     let isCorrect = false;
 
     for (const value of body.list) {

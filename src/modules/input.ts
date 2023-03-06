@@ -1,19 +1,27 @@
 import { TesterModule } from '@/lib/test-system/module';
-import { Variant } from '@/lib/test-system/Variant';
 
-type ModuleContainer = Variant<string>;
+type ModuleContainer = string;
 
 type InputAcceptBody = {
   value: string;
 };
 
 export class Input extends TesterModule<ModuleContainer> {
+  constructor() {
+    super();
+    this.container = '';
+  }
+
   create(): ModuleContainer {
-    this.container.value = '';
     return this.container;
   }
 
+  setValue(value: string) {
+    this.container = value;
+    return this;
+  }
+
   assert(body: InputAcceptBody): boolean {
-    return this.container.value === body.value;
+    return this.container === body.value;
   }
 }

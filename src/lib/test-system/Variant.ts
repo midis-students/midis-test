@@ -6,4 +6,18 @@ export class Variant<T> {
   @Expose({ groups: [Role.Teacher, Role.Admin] })
   value: T;
   label = '';
+
+  constructor() {
+    this.id = Math.floor(Math.random() * 0xffff).toString(36);
+  }
+
+  setValue(value: T) {
+    this.value = value;
+    return this;
+  }
+
+  setLabel(label: string) {
+    this.label = label;
+    return this;
+  }
 }

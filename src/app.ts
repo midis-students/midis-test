@@ -7,6 +7,8 @@ import AutoLoad from '@fastify/autoload';
 import { resolve } from 'path';
 import S from 'fluent-json-schema';
 
+import './scripts/taskGenerator';
+
 const app: FastifyPluginAsync = async (fastify, options) => {
   await fastify.register(Env, {
     schema: S.object()
