@@ -1,23 +1,23 @@
-import fp from "fastify-plugin";
-import { FastifyPluginAsync } from "fastify";
-import { Colors } from "../lib/Colors";
+import fp from 'fastify-plugin';
+import { FastifyPluginAsync } from 'fastify';
+import { Colors } from '@/lib/Colors';
 
-const routeHelper: FastifyPluginAsync = async (fastify) => {
-  const logger = fastify.log.child({ name: "Route" });
+const routeHelper: FastifyPluginAsync = async fastify => {
+  const logger = fastify.log.child({ name: 'Route' });
 
   const methodColor = (method: string) => {
     switch (method) {
-      case "POST":
+      case 'POST':
         return Colors.FgMagenta;
-      case "GET":
+      case 'GET':
         return Colors.FgCyan;
       default:
-        return "";
+        return '';
     }
   };
 
-  fastify.addHook("onRoute", (route) => {
-    if (route.method === "HEAD") return;
+  fastify.addHook('onRoute', route => {
+    if (route.method === 'HEAD') return;
     const isPrivate = route.onRequest === fastify.administratorOnly;
     const method = methodColor(route.method.toString()) + route.method;
     logger.info(

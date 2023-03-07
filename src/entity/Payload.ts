@@ -1,13 +1,9 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-  } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Blob } from 'buffer';
 
 export enum PayloadType {
-    Image = "IMAGE",
-    File = "FILE",
+  Image = 'IMAGE',
+  File = 'FILE',
 }
 
 @Entity()
@@ -16,18 +12,18 @@ export class Payload extends BaseEntity {
   id: number;
 
   @Column({
-    type: "varchar",
+    type: 'varchar',
     default: PayloadType.File,
   })
   type: PayloadType;
 
   @Column({
-    type:"text"
+    type: 'text',
   })
   description: string;
 
-	@Column({
-		type: "mediumblob",
-	})
-	blob: Blob;
+  @Column({
+    type: 'mediumblob',
+  })
+  blob: Blob;
 }

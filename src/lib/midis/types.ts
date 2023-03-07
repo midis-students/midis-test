@@ -2,7 +2,7 @@ export type ApiConfig = {
   secret: string;
 };
 
-export type UserToken = { Cookie: string; sessid: string };
+export type UserToken = { Cookie: string; sessid: string; user_id: number };
 
 export type MidisClient = MidisProfile & {
   token: UserToken;
