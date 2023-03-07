@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { Colors } from '@/lib/Colors';
 import * as process from 'process';
+import { loadToDatabase } from '@/scripts/taskGenerator';
 
 const DatabasePlugin: FastifyPluginAsync = async fastify => {
   const logger = fastify.log.child({ name: 'Database' });
@@ -24,9 +25,6 @@ const DatabasePlugin: FastifyPluginAsync = async fastify => {
     Object.values(module).forEach(entity => {
       if (entity.prototype instanceof BaseEntity) {
         entities.push(entity);
-        logger.info(
-          `Entity ${Colors.FgYellow + entity.name + Colors.FgCyan} loaded`
-        );
       }
     });
   }
@@ -46,6 +44,16 @@ const DatabasePlugin: FastifyPluginAsync = async fastify => {
   await dataSource.initialize();
   if (dataSource.isInitialized) {
     logger.info('MySQL connected to ' + process.env.MYSQL_HOST);
+
+    for (const entity of entities) {
+      logger.info(
+        `Entity ${Colors.FgYellow + entity.name + Colors.FgCyan} loaded`
+      );
+    }
+
+    await loadToDatabase(logger.child({ name: 'Script' })).catch(e =>
+      logger.error(e)
+    );
   } else {
     throw Error(`Can't connect to MySQL server`);
   }
