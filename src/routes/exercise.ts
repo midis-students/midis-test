@@ -37,6 +37,10 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
     };
   };
 
+  type ExerciseOutput = Exercise & {
+    tasks: number;
+  };
+
   fastify.get<ExerciseGetDTO>('/', async req => {
     const { id } = req.query;
     if (id) {
@@ -46,12 +50,13 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
           tasks: true,
         },
       });
+
       return instanceToPlain(exercise, {
         enableCircularCheck: true,
       });
     }
 
-    const list = await Exercise.find({
+    const list: Exercise[] | ExerciseOutput[] = await Exercise.find({
       relations: {
         tasks: true,
       },

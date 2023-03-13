@@ -1,71 +1,73 @@
 import { Exercise } from '@/entity/Exercise';
 import { Task } from '@/entity/Task';
-import { ExerciseModule } from '@/lib/test-system/ExerciseModule';
-import { TaskModule } from '@/lib/test-system/TaskModule';
-import { Variant } from '@/lib/test-system/Variant';
-import { Input } from '@/modules/input';
-import { Radio } from '@/modules/radio';
 import { FastifyBaseLogger } from 'fastify';
 
-const exercises = [
-  new ExerciseModule()
-    .setTitle('Первая глава')
-    .setType('Тестовый')
-    .addTasks(
-      new TaskModule()
-        .setTitle('Title input')
-        .setQuery('Query input')
-        .setTester(new Input().setValue('value')),
-      new TaskModule()
-        .setTitle('Title radio')
-        .setQuery('Query input')
-        .setTester(
-          new Radio().addVariants(
-            new Variant<number>().setLabel('Вариант 1').setValue(0),
-            new Variant<number>().setLabel('Вариант 2').setValue(1)
-          )
-        ),
-      new TaskModule()
-        .setTitle('Title radio')
-        .setQuery('Query input')
-        .setTester(
-          new Radio()
-            .setType('checkbox')
-            .addVariants(
-              new Variant<number>().setLabel('Вариант 1').setValue(0),
-              new Variant<number>().setLabel('Вариант 2').setValue(1),
-              new Variant<number>().setLabel('Вариант 3').setValue(1)
-            )
-        )
-    ),
-];
+import { exercises } from './tasks';
 
 export async function loadToDatabase(logger: FastifyBaseLogger) {
   for (const exercise of exercises) {
-    let exerciseEntity = Exercise.create({
-      name: exercise.title,
-      type: exercise.type,
-      tasks: [],
+    let exerciseEntity = await Exercise.findOne({
+      where: {
+        name: exercise.title,
+      },
     });
 
-    exerciseEntity = await exerciseEntity.save();
-
-    logger.info(`Exercise ${exercise.title} created`);
-    logger.info(exerciseEntity);
+    if (!exerciseEntity) {
+      exerciseEntity = Exercise.create({
+        name: exercise.title,
+        type: exercise.type,
+        tasks: [],
+      });
+      exerciseEntity = await exerciseEntity.save();
+      logger.info(`Exercise ${exercise.title} created`);
+    } else {
+      await Exercise.update(
+        {
+          name: exercise.title,
+        },
+        {
+          name: exercise.title,
+          type: exercise.type,
+          tasks: [],
+        }
+      );
+      logger.info(`Exercise ${exercise.title} updated`);
+    }
 
     for (const task of exercise.tasks) {
-      const taskEntity = Task.create({
-        exercise: exerciseEntity,
-        name: task.title,
-        query: task.query,
-        payloads: task.payloads,
-        type: task.tester.constructor.name.toLowerCase(),
-        data: JSON.stringify(task.tester.create()),
+      let taskEntity = await Task.findOne({
+        where: {
+          name: task.title,
+        },
       });
 
-      await taskEntity.save();
-
-      logger.info(`Task ${task.title} created`);
+      if (!taskEntity) {
+        taskEntity = Task.create({
+          exercise: exerciseEntity,
+          name: task.title,
+          type: task.tester.constructor.name.toLowerCase(),
+          query: task.query,
+          data: JSON.stringify(task.tester.create()),
+          payloads: task.payloads,
+        });
+        taskEntity = await taskEntity.save();
+        logger.info(`Task ${task.title} created`);
+      } else {
+        await Task.update(
+          {
+            name: task.title,
+          },
+          {
+            exercise: exerciseEntity,
+            name: task.title,
+            type: task.tester.constructor.name.toLowerCase(),
+            query: task.query,
+            data: JSON.stringify(task.tester.create()),
+            payloads: task.payloads,
+          }
+        );
+        logger.info(`Task ${task.title} updated`);
+      }
     }
   }
 }

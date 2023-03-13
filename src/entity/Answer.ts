@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   Entity,
   JoinColumn,
   OneToMany,
@@ -20,4 +21,7 @@ export class Answer extends BaseEntity {
   @OneToMany(() => User, user => user)
   @JoinColumn()
   user: User;
+
+  @Column()
+  isCorrect: boolean;
 }

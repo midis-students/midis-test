@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exercise } from './Exercise';
@@ -30,7 +31,7 @@ export class Task extends BaseEntity {
   @Column({ type: 'text' })
   data: string;
 
-  @ManyToOne(() => Payload, payload => payload.id)
+  @OneToMany(() => Payload, payload => payload.id)
   @JoinColumn()
   payloads: number[];
 }

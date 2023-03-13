@@ -7,8 +7,15 @@ type ModuleContainer = {
   variants: VariantExt[];
 };
 
-type RadioAcceptBody = {
+export type RadioAcceptBody = {
   list: string[];
+};
+
+type RadioSetData = {
+  list: Array<{
+    id: string;
+    value: number;
+  }>;
 };
 
 export class Radio extends TesterModule<ModuleContainer> {
@@ -23,6 +30,13 @@ export class Radio extends TesterModule<ModuleContainer> {
 
   create(): ModuleContainer {
     return this.container;
+  }
+
+  setData(body: RadioSetData) {
+    this.container.variants = body.list.map(variant => {
+      return new Variant<number>(variant.id).setValue(variant.value);
+    });
+    return this;
   }
 
   setType(type: 'radio' | 'checkbox') {
