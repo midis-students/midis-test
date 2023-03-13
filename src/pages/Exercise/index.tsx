@@ -45,9 +45,10 @@ export default function ExercisePage() {
       >
         <Paper
           sx={{
-            width: `${(1 - size) * 100}%`,
+            width: `${(1 - size - 0.01) * 100}%`,
             p: 1,
-            overflow: 'auto',
+            overflowY: 'auto',
+            overflowX: 'hidden',
           }}
         >
           <TaskView id={currentTask} />

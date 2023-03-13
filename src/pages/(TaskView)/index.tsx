@@ -5,6 +5,8 @@ import { useSettings } from '@/store/settings';
 import { Box, Typography, Button, Stack, Divider } from '@mui/material';
 import ViewPayload from '@/components/PayloadView';
 import { TaskResponse } from './response';
+import { useState } from 'react';
+import { TaskViewContext, TaskViewResponse } from './context';
 
 type TaskViewId = {
   id: number;
@@ -12,6 +14,11 @@ type TaskViewId = {
 
 export default function TaskView(props: TaskViewId) {
   const { data, isLoading, isSuccess } = useTaskQuery(props.id);
+  const [response, setResponse] = useState<TaskViewResponse>({});
+
+  const clickResponse = () => {
+    console.log(response);
+  };
 
   const Payloads = () => {
     if (!isSuccess) return null;
@@ -22,7 +29,7 @@ export default function TaskView(props: TaskViewId) {
         {data.data.payloads.map((payload) => (
           <>
             <ViewPayload
-              key={payload}
+              key={'payload-'+payload}
               payload={payload}
               width={(1 / data.data.payloads.length) * 100 + '%'}
               height="auto"
@@ -34,26 +41,39 @@ export default function TaskView(props: TaskViewId) {
   };
 
   return (
-    <Box sx={{ p: 1, whiteSpace: 'pre-wrap', overflow: 'auto' }}>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        isSuccess && (
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="h4" color="primary">
-              {data.name}
-            </Typography>
-            <Typography>{data.query}</Typography>
-            <Payloads />
-            <TaskResponse task={data} />
-            <Button variant="contained" color="success">
-              Проверить
-            </Button>
-            <RawTask task={data} />
-          </Box>
-        )
-      )}
-    </Box>
+    <TaskViewContext.Provider value={{ response, setResponse }}>
+      <Box
+        sx={{
+          p: 1,
+          whiteSpace: 'pre-wrap',
+          overflow: 'auto',
+          minHeight: '10vh',
+        }}
+      >
+        {isLoading ? (
+          <Loader />
+        ) : (
+          isSuccess && (
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography variant="h4" color="primary">
+                {data.name}
+              </Typography>
+              <Typography>{data.query}</Typography>
+              <Payloads />
+              <TaskResponse task={data} />
+              <Button
+                variant="contained"
+                color="success"
+                onClick={clickResponse}
+              >
+                Проверить
+              </Button>
+              <RawTask task={data} />
+            </Box>
+          )
+        )}
+      </Box>
+    </TaskViewContext.Provider>
   );
 }
 

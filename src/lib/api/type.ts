@@ -1,4 +1,5 @@
 import { Modules } from '@/modules';
+import { ReactNode } from 'react';
 
 export enum Roles {
   Student = 'STUDENTS',
@@ -30,6 +31,7 @@ export interface Task {
 }
 
 export interface TaskData {
+  placeholder: ReactNode;
   objects: Record<string, any>;
   subtype: 'radio';
   options: Array<{ text: string; score: number }>;
