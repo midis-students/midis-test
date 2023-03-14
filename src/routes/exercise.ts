@@ -22,7 +22,7 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
     { onRequest: administratorOnly },
     async req => {
       const { name } = req.body;
-      const exercise = await Exercise.create({ name, tasks: [] });
+      const exercise = Exercise.create({ name, tasks: [] });
       await exercise.save();
 
       return instanceToPlain(exercise);
