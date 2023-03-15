@@ -1,23 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import CssBaseline from '@mui/material/CssBaseline';
 import { BrowserRouter } from 'react-router-dom';
-import { store } from './store';
-import { Provider } from 'react-redux';
+import { SnackbarProvider } from 'notistack';
+import CssBaseLine from '@mui/material/CssBaseline';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ThemeProvider } from '@mui/material';
+import { themeOptions } from './theme';
+import App from './App';
 import './global.css';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+    },
+  },
+});
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <>
-    <CssBaseline />
-    <Provider store={store}>
+  <React.StrictMode>
+    <CssBaseLine />
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <DndProvider backend={HTML5Backend}>
-          <App />
-        </DndProvider>
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+        >
+          <ThemeProvider theme={themeOptions}>
+            <App />
+          </ThemeProvider>
+        </SnackbarProvider>
       </BrowserRouter>
-    </Provider>
-  </>
+    </QueryClientProvider>
+  </React.StrictMode>
 );

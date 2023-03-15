@@ -1,14 +1,23 @@
-import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import EditPage from './pages/Edit';
+import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { AuthOutlet } from '@/components/Outlets';
+import LoginPage from '@/pages/Login';
+import MainPage from '@/pages/Main';
+import TaskPage from './pages/Task';
 import ExercisePage from './pages/Exercise';
-import LoginPage from './pages/Login';
-import MainPage from './pages/Main';
-import { AuthOutlet, PrivateOutlet } from '@/components/Outlets';
 import Settings from './components/Settings';
+import { useAuth } from './store/authorization';
+import { Api } from './lib/api';
 
 function App() {
   const navigate = useNavigate();
+  const token = useAuth((select) => select.token);
+
+  useEffect(() => {
+    if (token) {
+      Api.instance.profile.get();
+    }
+  }, [token]);
 
   return (
     <Routes>
@@ -19,10 +28,8 @@ function App() {
       />
       <Route path="/" element={<AuthOutlet />}>
         <Route index element={<MainPage />} />
-        <Route path="/exercise/:id" element={<ExercisePage />} />
-        <Route path="/" element={<PrivateOutlet />}>
-          <Route path="edit/:id" element={<EditPage />} />
-        </Route>
+        <Route path="task/:id" element={<TaskPage />} />
+        <Route path="exercise/:exercise" element={<ExercisePage />} />
       </Route>
     </Routes>
   );

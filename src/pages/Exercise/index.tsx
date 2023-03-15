@@ -1,19 +1,36 @@
 import Header from '@/components/Header';
-import Task from '@/components/Task';
-import { Paper, Typography, Stack, Link } from '@mui/material';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import CheckIcon from '@mui/icons-material/Check';
 import Page from '@/components/Page';
+import { useExerciseQuery } from '@/hooks/query/exercise';
+import { Paper, Typography, Stack, Link } from '@mui/material';
+import { useEffect } from 'react';
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
+import TaskView from '../(TaskView)';
 
-const tasks = Array.from({ length: 50 }).map((_, i) => ({
-  name: Math.random().toString(36),
-  completed: Math.random() > 0.5,
-}));
+const size = 1 / 4;
 
 export default function ExercisePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const id = searchParams.get('task') || 0;
+  const { exercise } = useParams();
+  const currentTask = Number(searchParams.get('task')) || 1;
+  if (!exercise) {
+    return <Navigate to="/" />;
+  }
+  const { data, isLoading, isSuccess } = useExerciseQuery(+exercise);
+
+  useEffect(() => {
+    if (isSuccess && currentTask == 0) {
+      const firstTask = data.tasks.at(0);
+      if (firstTask) {
+        navigate('?task=' + firstTask.id);
+      }
+    }
+  }, [isLoading]);
 
   return (
     <>
@@ -28,46 +45,47 @@ export default function ExercisePage() {
       >
         <Paper
           sx={{
-            width: '80%',
+            width: `${(1 - size) * 100}%`,
             p: 1,
+            overflow: 'auto',
           }}
         >
-          <Task />
+          <TaskView id={currentTask} />
         </Paper>
         <Paper
           sx={{
             marginLeft: 'auto',
-            width: '20%',
+            width: `${size * 100}%`,
             p: 1,
             overflowY: 'auto',
           }}
         >
           <Typography>Список задач</Typography>
-          <Stack
-            sx={{
-              p: 1,
-            }}
-            spacing={1}
-          >
-            {tasks.map((task, i) => (
-              <Link
-                key={i}
-                underline="hover"
-                onClick={() => navigate('?task=' + i)}
-                sx={{
-                  cursor: 'pointer',
-                  alignItems: 'center',
-                  display: 'flex',
-                  gap: 1,
-                }}
-                color={
-                  id == i ? '#9c27b0' : task.completed ? '#2e7d32' : 'primary'
-                }
-              >
-                {task.name} {task.completed && <CheckIcon />}
-              </Link>
-            ))}
-          </Stack>
+          {isSuccess && data && (
+            <Stack
+              sx={{
+                p: 1,
+              }}
+              spacing={1}
+            >
+              {data.tasks.map((task, i) => (
+                <Link
+                  key={i}
+                  underline="hover"
+                  onClick={() => navigate('?task=' + task.id)}
+                  sx={{
+                    cursor: 'pointer',
+                    alignItems: 'center',
+                    display: 'flex',
+                    gap: 1,
+                  }}
+                  color={currentTask == task.id ? '#9c27b0' : 'primary'}
+                >
+                  {task.name} {/*task.completed && <CheckIcon />*/}
+                </Link>
+              ))}
+            </Stack>
+          )}
         </Paper>
       </Page>
     </>
