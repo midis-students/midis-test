@@ -3,6 +3,7 @@ import { instanceToPlain } from 'class-transformer';
 import { Exercise } from '@/entity/Exercise';
 import { Task } from '@/entity/Task';
 import Modules from '@/modules';
+import { DeepRemove } from '@/lib/Utils';
 
 export const autoPrefix = '/task';
 
@@ -73,7 +74,7 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
     const task = await Task.findOne({ where: { id } });
 
     if (!task) return fastify.httpErrors.notFound('Task not found');
-    const data = JSON.parse(task.data);
+    const data = DeepRemove(JSON.parse(task.data), 'value');
     return instanceToPlain({ ...task, data }, { enableCircularCheck: true });
   });
 

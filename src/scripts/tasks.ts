@@ -10,12 +10,14 @@ export const exercises = [
     .setTitle('Ветвления')
     .setType('Практика')
     .addTasks(
+      //input
       new TaskModule()
         .setTitle('1.	Выполните линейный алгоритм')
         .setQuery(
           `Выполните линейный алгоритм\n1. Дано число 74.\n2. Умножь на 2.\n3. Прибавь 14.\n4. Умножь на 4.\n5. Отними 46.`
         )
         .setTester(new Input().setValue('602')),
+      //dnd
       new TaskModule()
         .setTitle('2.	Алгоритм посадки дерева')
         .setQuery('Алгоритм посадки дерева')
@@ -31,6 +33,7 @@ export const exercises = [
             new Variant<number>().setLabel('Выкопать в земле ямку').setValue(0),
           ])
         ),
+      //radio
       new TaskModule()
         .setTitle('3.	Определите, возможно ли выполнить алгоритм')
         .setQuery(
@@ -42,6 +45,7 @@ export const exercises = [
             new Variant<number>().setLabel('Невозможно').setValue(1)
           )
         ),
+      //input
       new TaskModule()
         .setTitle(
           '4.	Какое значение получит переменная y после выполнения алгоритма?'
@@ -50,6 +54,7 @@ export const exercises = [
           `Какое значение получит переменная y после выполнения алгоритма?\nx: = 2\ny: = 4 * x\ny: = y + 7\ny: = y * x\ny: = y + 9\ny: = y + 4\ny: = y * x`
         )
         .setTester(new Input().setValue('86')),
+      //radio
       new TaskModule()
         .setTitle('5.	Выберите подходящую блок-схему')
         .setQuery(

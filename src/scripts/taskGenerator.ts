@@ -23,10 +23,9 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
     } else {
       await Exercise.update(
         {
-          name: exercise.title,
+          id: exerciseEntity.id,
         },
         {
-          name: exercise.title,
           type: exercise.type,
           tasks: [],
         }

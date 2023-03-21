@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Exercise } from './Exercise';
 import { Payload } from '@/entity/Payload';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -28,6 +29,7 @@ export class Task extends BaseEntity {
   @Column({ default: '' })
   query: string;
 
+  @Exclude()
   @Column({ type: 'text' })
   data: string;
 
