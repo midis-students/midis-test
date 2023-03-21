@@ -23,14 +23,12 @@ export const exercises = [
         .setQuery('Алгоритм посадки дерева')
         .setTester(
           new DnDList().setData([
-            new Variant<number>()
-              .setLabel('Опустить в ямку саженец')
-              .setValue(1),
-            new Variant<number>().setLabel('Полить саженец водой').setValue(3),
-            new Variant<number>()
+            new Variant().setLabel('Опустить в ямку саженец').setValue(1),
+            new Variant().setLabel('Полить саженец водой').setValue(3),
+            new Variant()
               .setLabel('Засыпать ямку с саженцем землёй')
               .setValue(2),
-            new Variant<number>().setLabel('Выкопать в земле ямку').setValue(0),
+            new Variant().setLabel('Выкопать в земле ямку').setValue(0),
           ])
         ),
       //radio
@@ -41,8 +39,8 @@ export const exercises = [
         )
         .setTester(
           new Radio().addVariants(
-            new Variant<number>().setLabel('Возможно').setValue(0),
-            new Variant<number>().setLabel('Невозможно').setValue(1)
+            new Variant().setLabel('Возможно').setValue(0),
+            new Variant().setLabel('Невозможно').setValue(1)
           )
         ),
       //input
@@ -62,9 +60,9 @@ export const exercises = [
         )
         .setTester(
           new Radio().addVariants(
-            new Variant<number>().setLabel('1').setValue(1),
-            new Variant<number>().setLabel('2').setValue(0),
-            new Variant<number>().setLabel('3').setValue(0)
+            new Variant().setLabel('1').setValue(1),
+            new Variant().setLabel('2').setValue(0),
+            new Variant().setLabel('3').setValue(0)
           )
         )
       // new TaskModule()
@@ -74,9 +72,9 @@ export const exercises = [
       //     new Radio()
       //       .setType('checkbox')
       //       .addVariants(
-      //         new Variant<number>().setLabel('Вариант 1').setValue(0),
-      //         new Variant<number>().setLabel('Вариант 2').setValue(1),
-      //         new Variant<number>().setLabel('Вариант 3').setValue(1)
+      //         new Variant().setLabel('Вариант 1').setValue(0),
+      //         new Variant().setLabel('Вариант 2').setValue(1),
+      //         new Variant().setLabel('Вариант 3').setValue(1)
       //       )
       //   )
     ),
