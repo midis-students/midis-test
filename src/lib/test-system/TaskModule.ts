@@ -23,12 +23,12 @@ export class TaskModule<T> {
   }
 
   addPayload(...payloads: number[]) {
-    this.payloads.push(...(payloads as unknown as Payload[]));
-    //this.resolvePayloads(...payloads).then(res => this.payloads.push(...res));
+    //this.payloads.push(...(payloads as unknown as Payload[]));
+    this.resolvePayloads(payloads).then(res => this.payloads.push(...res));
     return this;
   }
 
-  async resolvePayloads(...payloads: number[]) {
+  async resolvePayloads(payloads: number[]) {
     const ids: Payload[] = [];
     for (const payload of payloads) {
       const p = await Payload.findOne({ where: { id: payload } });

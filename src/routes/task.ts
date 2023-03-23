@@ -10,7 +10,7 @@ export const autoPrefix = '/task';
 const TaskRoute: FastifyPluginAsync = async fastify => {
   const { authorize, administratorOnly } = fastify;
 
-  fastify.addHook('onRequest', authorize);
+  //fastify.addHook('onRequest', authorize);
 
   // ===================================
 

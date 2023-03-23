@@ -51,6 +51,8 @@ const DatabasePlugin: FastifyPluginAsync = async fastify => {
       );
     }
 
+    console.log('Hi');
+
     await loadToDatabase(logger.child({ name: 'Script' })).catch(e =>
       logger.error(e)
     );
