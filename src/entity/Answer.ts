@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Task } from './Task';
@@ -14,11 +14,11 @@ export class Answer extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Task, task => task)
+  @ManyToOne(() => Task, task => task, { onDelete: 'CASCADE' })
   @JoinColumn()
   task: Task;
 
-  @OneToMany(() => User, user => user)
+  @ManyToOne(() => User, user => user, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 

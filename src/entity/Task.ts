@@ -5,7 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  JoinTable,
   PrimaryGeneratedColumn,
+  ManyToMany,
 } from 'typeorm';
 import { Exercise } from './Exercise';
 import { Payload } from '@/entity/Payload';
@@ -16,7 +18,9 @@ export class Task extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Exercise, exercise => exercise.tasks)
+  @ManyToOne(() => Exercise, exercise => exercise.tasks, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   exercise: Exercise;
 
@@ -33,7 +37,7 @@ export class Task extends BaseEntity {
   @Column({ type: 'text' })
   data: string;
 
-  @OneToMany(() => Payload, payload => payload.id)
-  @JoinColumn()
-  payloads: number[];
+  @ManyToMany(() => Payload, payload => payload.id)
+  @JoinTable()
+  payloads: Payload[];
 }

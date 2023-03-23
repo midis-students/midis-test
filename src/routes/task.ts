@@ -71,7 +71,12 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   fastify.get<GetTaskDto>('/', async req => {
     const { id } = req.query;
 
-    const task = await Task.findOne({ where: { id } });
+    const task = await Task.findOne({
+      where: { id },
+      relations: ['payloads'],
+    });
+
+    console.log(task);
 
     if (!task) return fastify.httpErrors.notFound('Task not found');
     const data = DeepRemove(JSON.parse(task.data), 'value');

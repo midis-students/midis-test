@@ -1,4 +1,5 @@
 import { Exercise } from '@/entity/Exercise';
+import { Payload } from '@/entity/Payload';
 import { Task } from '@/entity/Task';
 import { FastifyBaseLogger } from 'fastify';
 
@@ -12,26 +13,19 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
       },
     });
 
-    if (!exerciseEntity) {
-      exerciseEntity = Exercise.create({
-        name: exercise.title,
-        type: exercise.type,
-        tasks: [],
+    if (exerciseEntity) {
+      await Exercise.delete({
+        id: exerciseEntity.id,
       });
-      exerciseEntity = await exerciseEntity.save();
-      logger.info(`Exercise ${exercise.title} created`);
-    } else {
-      await Exercise.update(
-        {
-          id: exerciseEntity.id,
-        },
-        {
-          type: exercise.type,
-          tasks: [],
-        }
-      );
-      logger.info(`Exercise ${exercise.title} updated`);
     }
+
+    exerciseEntity = Exercise.create({
+      name: exercise.title,
+      type: exercise.type,
+      tasks: [],
+    });
+    exerciseEntity = await exerciseEntity.save();
+    logger.info(`Exercise ${exercise.title} created`);
 
     for (const task of exercise.tasks) {
       let taskEntity = await Task.findOne({

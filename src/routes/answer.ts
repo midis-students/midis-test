@@ -15,25 +15,22 @@ const ProfileRoute: FastifyPluginAsync = async fastify => {
 
   type CreateAnswerDto = {
     Body: {
-      task_id: number;
-      type: keyof typeof Modules;
       answer: unknown;
+    };
+    Params: {
+      task_id: number;
     };
   };
 
-  fastify.post<CreateAnswerDto>('/', async req => {
-    const { task_id, type } = req.body;
-
-    if (!(type in Modules))
-      throw fastify.httpErrors.badRequest(`Type ${type} not recognized`);
-
+  fastify.post<CreateAnswerDto>('/:task_id', async req => {
     const task = await Task.findOne({
-      where: { id: task_id },
+      where: { id: req.params.task_id },
     });
 
     if (!task) throw fastify.httpErrors.badRequest(`Task not found`);
 
-    const testModule: TesterModuleUnknown = Modules[type];
+    const testModule: TesterModuleUnknown =
+      Modules[task.type as keyof typeof Modules];
 
     const isCorrect = new testModule()
       .setData(JSON.parse(task.data))

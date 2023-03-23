@@ -1,10 +1,11 @@
+import { Payload } from '@/entity/Payload';
 import { TesterModule } from './module';
 
 export class TaskModule<T> {
   title = '';
   query = '';
   tester: TesterModule<T>;
-  payloads: number[] = [];
+  payloads: Payload[] = [];
 
   setTitle(title: string) {
     this.title = title;
@@ -21,8 +22,18 @@ export class TaskModule<T> {
     return this;
   }
 
-  addPayload(...payload: number[]) {
-    this.payloads.push(...payload);
+  addPayload(...payloads: number[]) {
+    this.payloads.push(...(payloads as unknown as Payload[]));
+    //this.resolvePayloads(...payloads).then(res => this.payloads.push(...res));
     return this;
+  }
+
+  async resolvePayloads(...payloads: number[]) {
+    const ids: Payload[] = [];
+    for (const payload of payloads) {
+      const p = await Payload.findOne({ where: { id: payload } });
+      if (p) ids.push(p);
+    }
+    return ids;
   }
 }

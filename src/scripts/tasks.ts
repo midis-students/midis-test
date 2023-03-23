@@ -65,6 +65,7 @@ export const exercises = [
             new Variant().setLabel('3').setValue(0)
           )
         )
+        .addPayload(2)
       // new TaskModule()
       //   .setTitle('Title radio')
       //   .setQuery('Query input')
