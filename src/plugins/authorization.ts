@@ -1,13 +1,10 @@
 import fp from 'fastify-plugin';
 import JWT from '@fastify/jwt';
 import { FastifyPluginAsync, FastifyRequest } from 'fastify';
-import { MidisAPI, MidisMockAPI } from '@/lib/midis';
 import { Role, User } from '@/entity/User';
-import { MidisAPIBase } from '@/lib/midis/types';
 
 declare module 'fastify' {
   interface FastifyInstance {
-    midis: MidisAPIBase;
     authorize: FastifyAsyncHandler;
     administratorOnly: FastifyAsyncHandler;
   }
@@ -20,12 +17,8 @@ declare module '@fastify/jwt' {
   }
 }
 
-const useMock = true;
-
 const authorization: FastifyPluginAsync = async fastify => {
   const { httpErrors } = fastify;
-
-  fastify.decorate('midis', useMock ? new MidisMockAPI() : new MidisAPI());
 
   fastify.register(JWT, {
     secret: process.env.SECRET,

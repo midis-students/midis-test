@@ -1,10 +1,12 @@
 import { FastifyPluginAsync } from 'fastify';
 import { User } from '@/entity/User';
+import { MidisClient } from '@/lib/midis';
 
 export const autoPrefix = '/login';
 
 const LoginRoutes: FastifyPluginAsync = async fastify => {
-  const { midis, jwt } = fastify;
+  const { jwt } = fastify;
+  const logger = fastify.log.child({ name: 'Midis' });
 
   type PostLoginBody = { Body: { login: string; password: string } };
 
@@ -13,18 +15,21 @@ const LoginRoutes: FastifyPluginAsync = async fastify => {
       const { login, password } = req.body;
 
       try {
-        const midisUser = await midis.login(login, password);
+        logger.info('Try login to: ' + login);
+        const midisClient = await MidisClient.Login(login, password);
+        const profile = await midisClient.getProfile();
+        logger.info('Success login to: ' + profile.name);
 
-        let user = await User.findOne({ where: { id: midisUser.id } });
+        let user = await User.findOne({ where: { id: profile.id } });
 
         if (!user) {
           user = User.create({
-            id: midisUser.id,
+            id: profile.id,
           });
         }
 
-        user.name = midisUser.name;
-        user.group = midisUser.group;
+        user.name = profile.name;
+        user.group = profile.group;
 
         await user.save();
 
