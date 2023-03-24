@@ -38,7 +38,7 @@ export default function Response({ data }: ResponseProps) {
     }
   };
 
-  const control = <Radio />;
+  const control = <Checkbox />;
 
   return (
     <FormControl>

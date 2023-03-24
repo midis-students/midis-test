@@ -1,11 +1,12 @@
 import { useForm } from '@/hooks/useForm';
-import { TaskData } from '@/lib/api/type';
 import { useTaskView } from '@/pages/(TaskView)/context';
 import { FormControl, TextField } from '@mui/material';
 import { useEffect } from 'react';
 
 type ResponseProps = {
-  data: TaskData;
+  data: {
+    value: string;
+  };
 };
 
 export default function Response({ data }: ResponseProps) {
@@ -20,7 +21,6 @@ export default function Response({ data }: ResponseProps) {
   return (
     <FormControl>
       <TextField
-        label={data.placeholder}
         value={response.value}
         onChange={(e) => setResponse({ value: e.target.value })}
       />

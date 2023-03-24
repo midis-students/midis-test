@@ -22,20 +22,19 @@ export interface Exercise {
 }
 
 export interface Task {
+  data: Record<string, unknown>;
   id: number;
   name: string;
-  exercise: Exercise;
-  type: keyof typeof Modules;
   query: string;
-  data: TaskData;
+  payloads: number[];
+  type: keyof typeof Modules;
 }
 
-export interface TaskData {
-  placeholder: ReactNode;
-  objects: Record<string, any>;
-  subtype: 'radio';
-  options: Array<{ text: string; score: number }>;
-  payloads: number[];
+export interface TaskContainer {}
+
+export interface Variant<T = number> {
+  value: T;
+  label: string;
 }
 
 export interface Payload {

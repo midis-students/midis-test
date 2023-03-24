@@ -22,16 +22,16 @@ export default function TaskView(props: TaskViewId) {
 
   const Payloads = () => {
     if (!isSuccess) return null;
-    if (data.data.payloads.length === 0) return null;
+    if (data.payloads?.length === 0) return null;
 
     return (
       <Stack direction="row" spacing={1} sx={{ maxHeight: '64vh' }}>
-        {data.data.payloads.map((payload) => (
+        {data.payloads?.map((payload) => (
           <>
             <ViewPayload
-              key={'payload-'+payload}
+              key={'payload-' + payload}
               payload={payload}
-              width={(1 / data.data.payloads.length) * 100 + '%'}
+              width={(1 / data.payloads.length) * 100 + '%'}
               height="auto"
             />
           </>

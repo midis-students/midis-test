@@ -73,7 +73,8 @@ function ExerciseCard({ item }: ExerciseCardProps) {
 
   const onClick = () => {
     const url = isAdmin ? '/edit/' : '/exercise/';
-    navigate(url + item.id);
+    const taskId = item.tasks.at(0)?.id;
+    navigate(url + item.id + '?task=' + taskId);
   };
 
   return (

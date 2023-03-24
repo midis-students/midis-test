@@ -17,11 +17,11 @@ export default function ExercisePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { exercise } = useParams();
-  const currentTask = Number(searchParams.get('task')) || 1;
+  const currentTask = Number(searchParams.get('task')) ?? 1;
   if (!exercise) {
     return <Navigate to="/" />;
   }
-  const { data, isLoading, isSuccess } = useExerciseQuery(+exercise);
+  const { data, isLoading, isSuccess, isError } = useExerciseQuery(+exercise);
 
   useEffect(() => {
     if (isSuccess && currentTask == 0) {
@@ -29,6 +29,8 @@ export default function ExercisePage() {
       if (firstTask) {
         navigate('?task=' + firstTask.id);
       }
+    } else {
+      if (isError) navigate('/');
     }
   }, [isLoading]);
 
