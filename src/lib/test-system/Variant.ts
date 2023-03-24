@@ -6,7 +6,9 @@ export class Variant<T = number> {
   value: T;
   label = '';
 
-  constructor(public id = Math.floor(Math.random() * 0xffff).toString(36)) {}
+  constructor(
+    public id = Math.floor(Date.now() + Math.random() * 0xffff).toString(36)
+  ) {}
 
   setValue(value: T) {
     this.value = value;
