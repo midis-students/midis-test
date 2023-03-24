@@ -4,7 +4,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   JoinTable,
   PrimaryGeneratedColumn,
   ManyToMany,
@@ -37,7 +36,7 @@ export class Task extends BaseEntity {
   @Column({ type: 'text' })
   data: string;
 
-  @ManyToMany(() => Payload, payload => payload.id)
+  @ManyToMany(() => Payload, payload => payload.id, { cascade: true })
   @JoinTable()
   payloads: Payload[];
 }
