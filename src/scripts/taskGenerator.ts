@@ -1,5 +1,4 @@
 import { Exercise } from '@/entity/Exercise';
-import { Payload } from '@/entity/Payload';
 import { Task } from '@/entity/Task';
 import { FastifyBaseLogger } from 'fastify';
 
@@ -41,7 +40,7 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
           type: task.tester.constructor.name.toLowerCase(),
           query: task.query,
           data: JSON.stringify(task.tester.create()),
-          payloads: task.payloads,
+          payloads: await task.resolvePayloads(),
         });
         taskEntity = await taskEntity.save();
         logger.info(`Task ${task.title} created`);
@@ -56,7 +55,7 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
             type: task.tester.constructor.name.toLowerCase(),
             query: task.query,
             data: JSON.stringify(task.tester.create()),
-            payloads: task.payloads,
+            payloads: await task.resolvePayloads(),
           }
         );
         logger.info(`Task ${task.title} updated`);

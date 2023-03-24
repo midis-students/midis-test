@@ -5,7 +5,7 @@ export class TaskModule<T> {
   title = '';
   query = '';
   tester: TesterModule<T>;
-  payloads: Payload[] = [];
+  payloads: number[] = [];
 
   setTitle(title: string) {
     this.title = title;
@@ -23,14 +23,13 @@ export class TaskModule<T> {
   }
 
   addPayload(...payloads: number[]) {
-    //this.payloads.push(...(payloads as unknown as Payload[]));
-    this.resolvePayloads(payloads).then(res => this.payloads.push(...res));
+    this.payloads.push(...payloads);
     return this;
   }
 
-  async resolvePayloads(payloads: number[]) {
+  async resolvePayloads() {
     const ids: Payload[] = [];
-    for (const payload of payloads) {
+    for (const payload of this.payloads) {
       const p = await Payload.findOne({ where: { id: payload } });
       if (p) ids.push(p);
     }
