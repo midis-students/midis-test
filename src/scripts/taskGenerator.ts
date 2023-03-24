@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { exercises } from './tasks';
 
-const tempFile = 'generator-temp.json';
+const tempFile = 'generator-task.json';
 const tempPath = path.resolve(tempFile);
 
 function LocalStorage<Storage extends Record<string, unknown>>() {
@@ -37,7 +37,9 @@ type Storage = {
   [exercise: string]: {
     id: number;
     tasks: {
-      [task: string]: number;
+      [task: string]: {
+        id: number;
+      };
     };
   };
 };
@@ -85,16 +87,20 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
         type: task.tester.constructor.name.toLowerCase(),
         query: task.query,
         data: JSON.stringify(task.tester.create()),
+        payloads: await task.resolvePayloads(),
       };
 
       if (taskStorage) {
-        await Task.update(
-          {
-            id: taskStorage,
+        const taskEntity = await Task.findOne({
+          where: {
+            id: taskStorage.id,
           },
-          taskData
-        );
-        logger.info(`Task ${task.id} updated`);
+        });
+        if (taskEntity) {
+          Object.assign(taskEntity, taskData);
+          await taskEntity.save();
+          logger.info(`Task ${task.id} updated`);
+        }
       } else {
         const taskEntity = Task.create({
           exercise: { id: storageExercise.id },
@@ -102,7 +108,7 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
         });
         await taskEntity.save();
 
-        storageExercise.tasks[task.id] = taskEntity.id;
+        storageExercise.tasks[task.id] = { id: taskEntity.id };
         logger.info(`Task ${task.id} created`);
       }
     }

@@ -76,8 +76,6 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
       relations: ['payloads'],
     });
 
-    console.log(task);
-
     if (!task) return fastify.httpErrors.notFound('Task not found');
     const data = DeepRemove(JSON.parse(task.data), 'value');
     return instanceToPlain({ ...task, data }, { enableCircularCheck: true });
