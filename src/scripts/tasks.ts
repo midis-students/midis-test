@@ -7,11 +7,13 @@ import { DnDList } from '@/modules/dndlist';
 
 export const exercises = [
   new ExerciseModule()
+    .setId('if_practice')
     .setTitle('Ветвления')
     .setType('Практика')
     .addTasks(
       //input
       new TaskModule()
+        .setId('linear_1')
         .setTitle('1. Выполните линейный алгоритм')
         .setQuery(
           `Выполните линейный алгоритм\n1. Дано число 74.\n2. Умножь на 2.\n3. Прибавь 14.\n4. Умножь на 4.\n5. Отними 46.`
@@ -19,6 +21,7 @@ export const exercises = [
         .setTester(new Input().setValue('602')),
       //dnd
       new TaskModule()
+        .setId('algorithm_tree')
         .setTitle('2. Алгоритм посадки дерева')
         .setQuery('Алгоритм посадки дерева')
         .setTester(
@@ -33,6 +36,7 @@ export const exercises = [
         ),
       //radio
       new TaskModule()
+        .setId('check_can_execute')
         .setTitle('3. Определите, возможно ли выполнить алгоритм')
         .setQuery(
           'Определите, возможно ли выполнить алгоритм\n1.	Прийти из университета.\n2.	Приготовить обед.\n3.	Посмотреть сериал.\n4.	Пойти в магазин.\nИсполнитель: студент.'
@@ -45,6 +49,7 @@ export const exercises = [
         ),
       //input
       new TaskModule()
+        .setId('check_variable')
         .setTitle(
           '4. Какое значение получит переменная y после выполнения алгоритма?'
         )
@@ -54,6 +59,7 @@ export const exercises = [
         .setTester(new Input().setValue('86')),
       //radio
       new TaskModule()
+        .setId('choose_schema')
         .setTitle('5. Выберите подходящую блок-схему')
         .setQuery(
           'Выберите подходящую блок-схему\nПосле работы мама зайдет к подруге, затем заедет в магазин и вернётся домой вечером.'

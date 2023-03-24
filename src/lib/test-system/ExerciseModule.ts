@@ -1,9 +1,16 @@
 import { TaskModule } from './TaskModule';
 
-export class ExerciseModule<T> {
+export class ExerciseModule {
   title = '';
   type = '';
   tasks: TaskModule<unknown>[] = [];
+
+  id = '';
+
+  setId(id: string) {
+    this.id = id;
+    return this;
+  }
 
   setTitle(title: string) {
     this.title = title;

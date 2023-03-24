@@ -7,6 +7,13 @@ export class TaskModule<T> {
   tester: TesterModule<T>;
   payloads: number[] = [];
 
+  id = '';
+
+  setId(id: string) {
+    this.id = id;
+    return this;
+  }
+
   setTitle(title: string) {
     this.title = title;
     return this;

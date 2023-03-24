@@ -34,10 +34,10 @@ function LocalStorage<Storage extends Record<string, unknown>>() {
 
 /// Storage Format
 type Storage = {
-  [exercise_title: string]: {
+  [exercise: string]: {
     id: number;
     tasks: {
-      [task_title: string]: number;
+      [task: string]: number;
     };
   };
 };
@@ -46,7 +46,7 @@ const storage = LocalStorage<Storage>();
 
 export async function loadToDatabase(logger: FastifyBaseLogger) {
   for (const exercise of exercises) {
-    let storageExercise = storage.get(exercise.title);
+    let storageExercise = storage.get(exercise.id);
     if (storageExercise) {
       await Exercise.update(
         {
@@ -58,7 +58,7 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
         }
       );
 
-      logger.info('Exercise ${exercise.title} updated');
+      logger.info(`Exercise ${exercise.id} updated`);
     } else {
       const exerciseEntity = Exercise.create({
         name: exercise.title,
@@ -72,13 +72,13 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
         tasks: {},
       };
 
-      storage.set(exercise.title, storageExercise);
+      storage.set(exercise.id, storageExercise);
 
-      logger.info(`Exercise ${exercise.title} created`);
+      logger.info(`Exercise ${exercise.id} created`);
     }
 
     for (const task of exercise.tasks) {
-      const taskStorage = storageExercise.tasks[task.title];
+      const taskStorage = storageExercise.tasks[task.id];
 
       const taskData = {
         name: task.title,
@@ -94,7 +94,7 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
           },
           taskData
         );
-        logger.info(`Task ${task.title} updated`);
+        logger.info(`Task ${task.id} updated`);
       } else {
         const taskEntity = Task.create({
           exercise: { id: storageExercise.id },
@@ -102,8 +102,8 @@ export async function loadToDatabase(logger: FastifyBaseLogger) {
         });
         await taskEntity.save();
 
-        storageExercise.tasks[task.title] = taskEntity.id;
-        logger.info(`Task ${task.title} created`);
+        storageExercise.tasks[task.id] = taskEntity.id;
+        logger.info(`Task ${task.id} created`);
       }
     }
 
