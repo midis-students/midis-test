@@ -37,7 +37,7 @@ const LoginRoutes: FastifyPluginAsync = async fastify => {
         return reply.send({ status: 'ok', token });
       } catch (error: unknown) {
         if (error instanceof Error)
-          throw fastify.httpErrors.unauthorized(error.message);
+          throw fastify.httpErrors.unauthorized('Login or password is wrong');
       }
     }
     throw fastify.httpErrors.badRequest('login or password not specified');
