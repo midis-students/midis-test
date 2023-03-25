@@ -1,5 +1,4 @@
 import { Modules } from '@/modules';
-import { ReactNode } from 'react';
 
 export enum Roles {
   Student = 'STUDENTS',
@@ -22,7 +21,7 @@ export interface Exercise {
 }
 
 export interface Task {
-  data: Record<string, unknown>;
+  data: any;
   id: number;
   name: string;
   query: string;
@@ -33,6 +32,7 @@ export interface Task {
 export interface TaskContainer {}
 
 export interface Variant<T = number> {
+  id: string;
   value: T;
   label: string;
 }
