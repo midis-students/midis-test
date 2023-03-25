@@ -35,13 +35,13 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   // ===================================
 
   type ReadPayloadDto = {
-    Querystring: {
+    Params: {
       id: number;
     };
   };
 
-  fastify.get<ReadPayloadDto>('/', async (req, res) => {
-    const { id } = req.query;
+  fastify.get<ReadPayloadDto>('/:id', async (req, res) => {
+    const { id } = req.params;
 
     const payload: Payload | null = await Payload.findOne({
       where: { id },
@@ -55,17 +55,20 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   // ===================================
 
   type UpdatePayloadDto = {
-    Body: {
+    Params: {
       id: number;
+    };
+    Body: {
       blob: string;
     };
   };
 
   fastify.patch<UpdatePayloadDto>(
-    '/',
+    '/:id',
     { onRequest: administratorOnly },
     async req => {
-      const { id, blob } = req.body;
+      const { id } = req.params;
+      const { blob } = req.body;
 
       const payload = await Payload.update(
         {
@@ -83,16 +86,16 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   // ===================================
 
   type DeletePayloadDto = {
-    Body: {
+    Params: {
       id: number;
     };
   };
 
   fastify.delete<DeletePayloadDto>(
-    '/',
+    '/:id',
     { onRequest: administratorOnly },
     async req => {
-      const { id } = req.body;
+      const { id } = req.params;
 
       const payload = await Payload.delete({
         id,
