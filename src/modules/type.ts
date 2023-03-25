@@ -1,3 +1,3 @@
 export type ResponseProps<T> = {
-    data: T;
-}
+  data: T;
+};

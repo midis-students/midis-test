@@ -29,7 +29,7 @@ function App() {
       <Route path="/" element={<AuthOutlet />}>
         <Route index element={<MainPage />} />
         <Route path="task/:id" element={<TaskPage />} />
-        <Route path="exercise/:exercise" element={<ExercisePage />} />
+        <Route path="exercise/:exercise/:task" element={<ExercisePage />} />
       </Route>
     </Routes>
   );

@@ -1,23 +1,19 @@
-
-import {useTaskView} from '@/pages/(TaskView)/context';
-import {FormControl, TextField} from '@mui/material';
-import {useEffect} from 'react';
+import { useTaskView } from '@/pages/(TaskView)/context';
+import { FormControl, FormLabel, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 export default function Response() {
-    const {response, setResponse} = useTaskView();
+  const {  setResponse } = useTaskView();
+  const [value, setValue] = useState('');
 
-    useEffect(() => {
-        if (!('value' in response)) {
-            setResponse({value: ''});
-        }
-    }, []);
+  useEffect(() => {
+    setResponse({ value });
+  }, [value]);
 
-    return (
-        <FormControl>
-            <TextField
-                value={response.value}
-                onChange={(e) => setResponse({value: e.target.value})}
-            />
-        </FormControl>
-    );
+  return (
+    <FormControl>
+      <FormLabel>Введите ответ</FormLabel>
+      <TextField value={value} onChange={(e) => setValue(e.target.value)} />
+    </FormControl>
+  );
 }

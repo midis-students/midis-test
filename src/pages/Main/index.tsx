@@ -1,11 +1,10 @@
 import Header from '@/components/Header';
 import Page from '@/components/Page';
 import TabsWrapper from '@/components/TabsWrapper';
-import { useUser } from '@/store/user';
 import Exercises from './Exercises';
 
 export default function MainPage() {
-  const isAdmin = useUser((select) => select.isAdmin());
+  //const isAdmin = useUser((select) => select.isAdmin());
 
   const tabs = [
     {

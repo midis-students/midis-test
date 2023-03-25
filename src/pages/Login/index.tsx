@@ -59,7 +59,7 @@ export default function LoginPage() {
           width: '33%',
         }}
       >
-        <img src="./MIDIS.svg" alt="баннер" />
+        <img src="/MIDIS.svg" alt="баннер" />
         {error != '' ? <Typography color="red">{error}</Typography> : null}
         <TextField label="Логин" name="midis-login" onChange={onInput} />
         <TextField

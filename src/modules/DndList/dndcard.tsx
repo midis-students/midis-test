@@ -1,29 +1,32 @@
-import { FC, useRef } from "react";
-import type { Identifier, XYCoord } from "dnd-core";
-import { useDrag, useDrop } from "react-dnd";
-import { Card } from "@mui/material";
+import { FC, useRef } from 'react';
+import type { Identifier, XYCoord } from 'dnd-core';
+import { useDrag, useDrop } from 'react-dnd';
+import { Card } from '@mui/material';
 
 type DndCardProps = {
   id: string;
   text: string;
   index: number;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
-}
+};
 
 type DragItem = {
   index: number;
   id: string;
   type: string;
-}
+};
 
-const DndCardType = "DND-LIST";
+const DndCardType = 'DND-LIST';
 
 export const DndCard: FC<DndCardProps> = ({ id, text, index, moveCard }) => {
-
   const ref = useRef<HTMLDivElement | null>(null);
-  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
+  const [{ handlerId }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: Identifier | null }
+  >({
     accept: DndCardType,
-    collect: monitor => ({ handlerId: monitor.getHandlerId() }),
+    collect: (monitor) => ({ handlerId: monitor.getHandlerId() }),
     hover: (item, monitor) => {
       if (!ref.current) {
         return;
@@ -71,24 +74,31 @@ export const DndCard: FC<DndCardProps> = ({ id, text, index, moveCard }) => {
       // but it's good here for the sake of performance
       // to avoid expensive index searches.
       item.index = hoverIndex;
-    }
+    },
   });
 
   const [{ isDragging }, drag] = useDrag({
     type: DndCardType,
     item: () => ({ id, index }),
-    collect: (monitor) => ({ isDragging: monitor.isDragging() })
+    collect: (monitor) => ({ isDragging: monitor.isDragging() }),
   });
 
   const opacity = isDragging ? 0 : 1;
 
   drag(drop(ref));
 
-  return <Card ref={ref} sx={{
-    opacity, padding: "0.5em 1em", cursor: "move"
-  }} data-handler-id={handlerId}
-               variant="outlined">
-    {text}
-  </Card>;
-
+  return (
+    <Card
+      ref={ref}
+      sx={{
+        opacity,
+        padding: '0.5em 1em',
+        cursor: 'move',
+      }}
+      data-handler-id={handlerId}
+      variant="outlined"
+    >
+      {text}
+    </Card>
+  );
 };
