@@ -29,7 +29,7 @@ export class Task extends BaseEntity {
   @Column()
   type: string;
 
-  @Column({ default: '' })
+  @Column({ default: '', type: 'text' })
   query: string;
 
   @Exclude()

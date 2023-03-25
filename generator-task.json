@@ -30,6 +30,37 @@
     "tasks": {
       "vetvlenie_practic_2": {
         "id": 8
+      },
+      "vetvlenie_practic_4": {
+        "id": 9
+      }
+    }
+  },
+  "for_practic": {
+    "id": 4,
+    "tasks": {
+      "for_practic_3": {
+        "id": 11
+      },
+      "for_practic_5": {
+        "id": 12
+      },
+      "for_practic_6": {
+        "id": 13
+      }
+    }
+  },
+  "arrays_practic": {
+    "id": 5,
+    "tasks": {
+      "arrays_practic_2": {
+        "id": 14
+      },
+      "arrays_practic_3": {
+        "id": 15
+      },
+      "arrays_practic_5": {
+        "id": 16
       }
     }
   }
