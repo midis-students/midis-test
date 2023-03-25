@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { useIsAuth } from '@/store/authorization';
 import { useNavigate } from 'react-router-dom';
 import { Api } from '@/lib/api';
@@ -11,7 +11,7 @@ export default function LoginPage() {
     password: '',
   });
   const [error, setError] = useState('');
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const isAuth = useIsAuth();
   const navigate = useNavigate();
 
@@ -30,8 +30,7 @@ export default function LoginPage() {
       if (e instanceof Error) {
         setError(e.message);
       }
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -74,7 +73,7 @@ export default function LoginPage() {
           onChange={onInput}
         />
         <Divider />
-        <Button variant="contained" disabled={loading} onClick={onClick} >
+        <Button variant="contained" disabled={loading} onClick={onClick}>
           Войти
         </Button>
       </Box>

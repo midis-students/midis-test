@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { AuthOutlet } from "@/components/Outlets";
-import LoginPage from "@/pages/Login";
-import MainPage from "@/pages/Main";
-import TaskPage from "./pages/Task";
-import ExercisePage from "./pages/Exercise";
-import Settings from "./components/Settings";
-import { useAuth } from "./store/authorization";
-import { Api } from "./lib/api";
-import TestPage from "@/pages/Test";
+import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { AuthOutlet } from '@/components/Outlets';
+import LoginPage from '@/pages/Login';
+import MainPage from '@/pages/Main';
+import TaskPage from './pages/Task';
+import ExercisePage from './pages/Exercise';
+import Settings from './components/Settings';
+import { useAuth } from './store/authorization';
+import { Api } from './lib/api';
+import TestPage from '@/pages/Test';
 
 function App() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/settings"
-        element={<Settings open={true} onClose={() => navigate("/")} />}
+        element={<Settings open={true} onClose={() => navigate('/')} />}
       />
       <Route path="/" element={<AuthOutlet />}>
         <Route index element={<MainPage />} />

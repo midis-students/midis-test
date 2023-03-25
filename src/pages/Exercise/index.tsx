@@ -1,14 +1,10 @@
-import Header from "@/components/Header";
-import Page from "@/components/Page";
-import { useExerciseQuery } from "@/hooks/query/exercise";
-import { Paper, Typography, Stack, Link } from "@mui/material";
-import { useEffect } from "react";
-import {
-  Navigate,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import TaskView from "../(TaskView)";
+import Header from '@/components/Header';
+import Page from '@/components/Page';
+import { useExerciseQuery } from '@/hooks/query/exercise';
+import { Paper, Typography, Stack, Link } from '@mui/material';
+import { useEffect } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import TaskView from '../(TaskView)';
 
 const size = 1 / 4;
 
@@ -30,7 +26,7 @@ export default function ExercisePage() {
         navigate(baseUrl + firstTask.id);
       }
     } else {
-      if (isError) navigate("/");
+      if (isError) navigate('/');
     }
   }, [isLoading]);
 
@@ -39,35 +35,35 @@ export default function ExercisePage() {
       <Header />
       <Page
         sx={{
-          display: "flex",
+          display: 'flex',
           p: 1,
           gap: 1,
-          flexDirection: "row"
+          flexDirection: 'row',
         }}
       >
         <Paper
           sx={{
             width: `${(1 - size - 0.01) * 100}%`,
             p: 1,
-            overflowY: "auto",
-            overflowX: "hidden"
+            overflowY: 'auto',
+            overflowX: 'hidden',
           }}
         >
           <TaskView id={currentTask} />
         </Paper>
         <Paper
           sx={{
-            marginLeft: "auto",
+            marginLeft: 'auto',
             width: `${size * 100}%`,
             p: 1,
-            overflowY: "auto"
+            overflowY: 'auto',
           }}
         >
           <Typography>Список задач</Typography>
           {isSuccess && data && (
             <Stack
               sx={{
-                p: 1
+                p: 1,
               }}
               spacing={1}
             >
@@ -77,12 +73,12 @@ export default function ExercisePage() {
                   underline="hover"
                   onClick={() => navigate(baseUrl + task.id)}
                   sx={{
-                    cursor: "pointer",
-                    alignItems: "center",
-                    display: "flex",
-                    gap: 1
+                    cursor: 'pointer',
+                    alignItems: 'center',
+                    display: 'flex',
+                    gap: 1,
                   }}
-                  color={currentTask == task.id ? "#9c27b0" : "primary"}
+                  color={currentTask == task.id ? '#9c27b0' : 'primary'}
                 >
                   {task.name} {/*task.completed && <CheckIcon />*/}
                 </Link>

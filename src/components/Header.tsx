@@ -1,15 +1,15 @@
-import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Skeleton } from "@mui/material";
-import SettingsDialog from "./Settings";
-import { useUser } from "@/store/user";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Skeleton } from '@mui/material';
+import SettingsDialog from './Settings';
+import { useUser } from '@/store/user';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -20,11 +20,17 @@ export default function Header() {
   const handleSettingsClose = () => setSettingsOpen(false);
 
   return (
-    <Box sx={{ flexGrow: 1, position: "sticky", top: 0, zIndex: 100 }}>
+    <Box sx={{ flexGrow: 1, position: 'sticky', top: 0, zIndex: 100 }}>
       <AppBar position="relative">
         <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}
-                      onClick={() => navigate("/")}>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            onClick={() => navigate('/')}
+          >
             <ArrowBackIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

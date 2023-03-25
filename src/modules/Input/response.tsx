@@ -3,7 +3,7 @@ import { FormControl, FormLabel, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 export default function Response() {
-  const {  setResponse } = useTaskView();
+  const { setResponse } = useTaskView();
   const [value, setValue] = useState('');
 
   useEffect(() => {

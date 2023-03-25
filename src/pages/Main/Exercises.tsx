@@ -1,7 +1,7 @@
-import Loader from "@/components/Loader";
-import { useAllExerciseQuery } from "@/hooks/query/exercise";
-import { Exercise } from "@/lib/api/type";
-import { useUser } from "@/store/user";
+import Loader from '@/components/Loader';
+import { useAllExerciseQuery } from '@/hooks/query/exercise';
+import { Exercise } from '@/lib/api/type';
+import { useUser } from '@/store/user';
 import {
   Box,
   Button,
@@ -10,12 +10,12 @@ import {
   CardContent,
   Divider,
   TextField,
-  Typography
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+  Typography,
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const size = "256px";
+const size = '256px';
 
 export default function ExercisesList() {
   const [taskInput, setTaskInput] = useState<number>();
@@ -23,12 +23,12 @@ export default function ExercisesList() {
   const navigate = useNavigate();
 
   const goToTask = () => {
-    navigate("/task/" + taskInput);
+    navigate('/task/' + taskInput);
   };
 
   return (
     <>
-      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <TextField
           id="outlined-controlled"
           label="К задаче №"
@@ -41,14 +41,14 @@ export default function ExercisesList() {
         <Button onClick={goToTask}>Перейти</Button>
       </Box>
       <Typography variant="h4">Список тем</Typography>
-      <Box sx={{ overflow: "auto", maxHeight: "80vh", p: 1 }}>
+      <Box sx={{ overflow: 'auto', maxHeight: '80vh', p: 1 }}>
         <Box
           sx={{
-            height: "100%",
-            display: "grid",
+            height: '100%',
+            display: 'grid',
             gap: 2,
             gridTemplateColumns: `repeat(auto-fill, ${size})`,
-            gridTemplateRows: `repeat(auto-fill, ${size})`
+            gridTemplateRows: `repeat(auto-fill, ${size})`,
           }}
         >
           {isLoading ? (
@@ -72,7 +72,7 @@ function ExerciseCard({ item }: ExerciseCardProps) {
   const isAdmin = useUser((select) => select.isAdmin());
 
   const onClick = () => {
-    const url = isAdmin ? "/edit" : "/exercise";
+    const url = isAdmin ? '/edit' : '/exercise';
     const taskId = item.tasks.at(-1)?.id;
     navigate(`${url}/${item.id}/${taskId}`);
   };
@@ -81,12 +81,12 @@ function ExerciseCard({ item }: ExerciseCardProps) {
     <Card
       sx={{
         p: 1,
-        position: "relative",
+        position: 'relative',
         width: size,
-        height: size
+        height: size,
       }}
     >
-      <CardContent sx={{ height: "85%" }}>
+      <CardContent sx={{ height: '85%' }}>
         <Typography color="text.secondary" gutterBottom>
           {item.type}
         </Typography>
@@ -96,13 +96,13 @@ function ExerciseCard({ item }: ExerciseCardProps) {
         <Typography>Задач: {item.tasks.length}</Typography>
       </CardContent>
       <Divider />
-      <CardActions sx={{ justifyContent: "end", width: "100%" }}>
+      <CardActions sx={{ justifyContent: 'end', width: '100%' }}>
         <Button
           size="small"
-          color={isAdmin ? "warning" : "primary"}
+          color={isAdmin ? 'warning' : 'primary'}
           onClick={onClick}
         >
-          {isAdmin ? "Редактировать" : "Открыть"}
+          {isAdmin ? 'Редактировать' : 'Открыть'}
         </Button>
       </CardActions>
     </Card>

@@ -1,7 +1,11 @@
-import StartEnd from "./StartEnd";
-import Text from "./Text";
+import StartEnd from './StartEnd';
+import Block from './Block';
+import InputOutput from './InputOutput';
+import If from './If';
 
 export default {
   StartEnd,
-  Text
+  Block,
+  InputOutput,
+  If,
 };
