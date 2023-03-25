@@ -1,5 +1,4 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Blob } from 'buffer';
 
 export enum PayloadType {
   Image = 'IMAGE',
@@ -25,5 +24,5 @@ export class Payload extends BaseEntity {
   @Column({
     type: 'mediumblob',
   })
-  blob: Blob;
+  blob: Buffer;
 }

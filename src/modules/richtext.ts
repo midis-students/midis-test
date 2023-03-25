@@ -27,66 +27,72 @@ import { Variant } from '@/lib/test-system/Variant';
   ]
 */
 
-type VariantExt = Variant<number>;
+// type VariantExt = Variant<number>;
 
-type ModuleContainer = {
-  variants: VariantExt[];
-};
+// type ModuleContainer = {
+//   list: Array<{
+//     id: string;
+//     value: number;
+//   }>;
+// };
 
-export type RadioAcceptBody = {
-  list: string[];
-};
+// export type RichTextAcceptBody = {
+//   list: Array<{
+//     id: string;
+//     value: number;
+//   }>;
+// };
 
-type RadioSetData = {
-  list: Array<{
-    id: string;
-    value: number;
-  }>;
-};
+// type RichTextSetData = {
+//   list: Array<{
+//     id: string;
+//     value: number;
+//   }>;
+// };
 
-export class Radio extends TesterModule<ModuleContainer> {
-  type: 'radio' | 'checkbox';
+// export class RichText extends TesterModule<ModuleContainer> {
+//   type: 'radio' | 'checkbox';
 
-  constructor() {
-    super();
-    this.container = {
-      variants: [],
-    };
-  }
+//   constructor() {
+//     super();
+//     this.container = {
+//       list: [],
+//     };
+//   }
 
-  create(): ModuleContainer {
-    return this.container;
-  }
+//   create(): ModuleContainer {
+//     return this.container;
+//   }
 
-  setData(body: RadioSetData) {
-    this.container.variants = body.list.map(variant => {
-      return new Variant<number>(variant.id).setValue(variant.value);
-    });
-    return this;
-  }
+//   setData(body: RadioSetData) {
+//     this.container.variants = body.list.map(variant => {
+//       return new Variant<number>(variant.id).setValue(variant.value);
+//     });
+//     return this;
+//   }
 
-  setType(type: 'radio' | 'checkbox') {
-    this.type = type;
-    return this;
-  }
+//   setType(type: 'radio' | 'checkbox') {
+//     this.type = type;
+//     return this;
+//   }
 
-  addVariants(...variants: VariantExt[]) {
-    this.container.variants.push(...variants);
-    return this;
-  }
+//   addVariants(...variants: VariantExt[]) {
+//     this.container.variants.push(...variants);
+//     return this;
+//   }
 
-  assert(body: RadioAcceptBody): boolean {
-    let isCorrect = false;
+//   assert(body: RadioAcceptBody): boolean {
+//     let isCorrect = false;
 
-    for (const value of body.list) {
-      const variant = this.container.variants.find(
-        variant => variant.id === value
-      );
-      if (variant && variant.value === 1) {
-        isCorrect = true;
-      }
-    }
+//     for (const value of body.list) {
+//       const variant = this.container.variants.find(
+//         variant => variant.id === value
+//       );
+//       if (variant && variant.value === 1) {
+//         isCorrect = true;
+//       }
+//     }
 
-    return isCorrect;
-  }
-}
+//     return isCorrect;
+//   }
+// }

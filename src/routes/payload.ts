@@ -7,22 +7,26 @@ export const autoPrefix = '/payload';
 const TaskRoute: FastifyPluginAsync = async fastify => {
   const { administratorOnly } = fastify;
 
+  //fastify.addHook('onRequest', authorize);
+
   type CreatePayloadDto = {
     Body: {
       blob: string;
       type: PayloadType;
+      description: string;
     };
   };
 
   fastify.post<CreatePayloadDto>(
     '/',
-    { onRequest: administratorOnly },
-    async req => {
-      const { blob, type } = req.body;
+    //{ onRequest: administratorOnly },
+    async (req, res) => {
+      const { blob, type, description } = req.body;
 
       const payload = Payload.create({
-        blob,
+        blob: Buffer.from(blob, 'base64'),
         type,
+        description,
       });
       await payload.save();
 
@@ -77,7 +81,7 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
           id,
         },
         {
-          blob,
+          blob: Buffer.from(blob, 'base64'),
         }
       );
 
