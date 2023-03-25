@@ -1,9 +1,9 @@
-import { Modules } from '@/modules';
+import { Modules } from "@/modules";
 
 export enum Roles {
-  Student = 'STUDENTS',
-  Teacher = 'TEACHERS',
-  Admin = 'ADMIN',
+  Student = "STUDENTS",
+  Teacher = "TEACHERS",
+  Admin = "ADMIN",
 }
 
 export interface Profile {
@@ -25,11 +25,16 @@ export interface Task {
   id: number;
   name: string;
   query: string;
-  payloads: number[];
+  payloads: Payload[];
   type: keyof typeof Modules;
 }
 
-export interface TaskContainer {}
+
+export interface Payload {
+  id: number;
+  type: "IMAGE";
+  description: string;
+}
 
 export interface Variant<T = number> {
   id: string;
@@ -40,7 +45,7 @@ export interface Variant<T = number> {
 export interface Payload {
   id: number;
   blob: string;
-  type: 'IMAGE';
+  type: "IMAGE";
 }
 
 export interface ApiError {

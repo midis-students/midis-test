@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import { useIsAuth } from '@/store/authorization';
 import { useNavigate } from 'react-router-dom';
 import { Api } from '@/lib/api';
@@ -6,11 +6,12 @@ import { Box, Button, Divider, TextField, Typography } from '@mui/material';
 import Page from '@/components/Page';
 
 export default function LoginPage() {
-  const [form, setForm] = React.useState({
+  const [form, setForm] = useState({
     login: '',
     password: '',
   });
-  const [error, setError] = React.useState('');
+  const [error, setError] = useState('');
+  const [loading,setLoading] = useState(false);
   const isAuth = useIsAuth();
   const navigate = useNavigate();
 
@@ -21,6 +22,7 @@ export default function LoginPage() {
   }, []);
 
   const onClick = async () => {
+    setLoading(true);
     try {
       await Api.instance.login(form.login, form.password);
       navigate('/');
@@ -28,6 +30,9 @@ export default function LoginPage() {
       if (e instanceof Error) {
         setError(e.message);
       }
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +74,7 @@ export default function LoginPage() {
           onChange={onInput}
         />
         <Divider />
-        <Button variant="contained" onClick={onClick}>
+        <Button variant="contained" disabled={loading} onClick={onClick} >
           Войти
         </Button>
       </Box>
