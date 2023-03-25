@@ -4,13 +4,14 @@ import { Exercise } from '@/entity/Exercise';
 import { Task } from '@/entity/Task';
 import Modules from '@/modules';
 import { DeepRemove } from '@/lib/Utils';
+import { Answer } from '@/entity/Answer';
 
 export const autoPrefix = '/task';
 
 const TaskRoute: FastifyPluginAsync = async fastify => {
   const { authorize, administratorOnly } = fastify;
 
-  //fastify.addHook('onRequest', authorize);
+  fastify.addHook('onRequest', authorize);
 
   // ===================================
 
@@ -77,8 +78,22 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
     });
 
     if (!task) return fastify.httpErrors.notFound('Task not found');
+
+    const answer = await Answer.findOne({
+      where: {
+        task: { id: task.id },
+        user: { id: req.user.id },
+      },
+      relations: {
+        task: true,
+      },
+    });
+
     const data = DeepRemove(JSON.parse(task.data), 'value');
-    return instanceToPlain({ ...task, data }, { enableCircularCheck: true });
+    return instanceToPlain(
+      { ...task, data, answer: answer?.isCorrect ?? null },
+      { enableCircularCheck: true }
+    );
   });
 
   // ===================================

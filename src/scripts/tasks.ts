@@ -23,14 +23,14 @@ export const exercises = [
         .setTitle('2. Алгоритм посадки дерева')
         .setQuery('Алгоритм посадки дерева')
         .setTester(
-          new DnDList().setData([
+          new DnDList().addVariants(
             new Variant().setLabel('Опустить в ямку саженец').setValue(1),
             new Variant().setLabel('Полить саженец водой').setValue(3),
             new Variant()
               .setLabel('Засыпать ямку с саженцем землёй')
               .setValue(2),
-            new Variant().setLabel('Выкопать в земле ямку').setValue(0),
-          ])
+            new Variant().setLabel('Выкопать в земле ямку').setValue(0)
+          )
         ),
       new TaskModule()
         .setId('check_can_execute')

@@ -1,8 +1,10 @@
 import { TesterModule } from '@/lib/test-system/module';
 import { Variant } from '@/lib/test-system/Variant';
 
+type VariantExt = Variant<number>;
+
 type ModuleContainer = {
-  variants: Variant<number>[];
+  variants: VariantExt[];
 };
 
 export type AcceptBody = {
@@ -23,8 +25,13 @@ export class DnDList extends TesterModule<ModuleContainer> {
     return this.container;
   }
 
-  setData(body: SetData) {
-    this.container.variants = body;
+  setData(body: ModuleContainer) {
+    this.container = body;
+    return this;
+  }
+
+  addVariants(...variants: VariantExt[]) {
+    this.container.variants.push(...variants);
     return this;
   }
 

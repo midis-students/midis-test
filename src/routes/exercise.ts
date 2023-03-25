@@ -1,6 +1,9 @@
 import { FastifyPluginAsync } from 'fastify';
 import { instanceToPlain } from 'class-transformer';
 import { Exercise } from '@/entity/Exercise';
+import { Answer } from '@/entity/Answer';
+import { In } from 'typeorm';
+import { Task } from '@/entity/Task';
 
 export const autoPrefix = '/exercise';
 
@@ -41,6 +44,10 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
     tasks: number;
   };
 
+  type TaskWithAnswer = Task & {
+    answer?: boolean | null;
+  };
+
   fastify.get<ExerciseGetDTO>('/', async req => {
     const { id } = req.query;
     if (id) {
@@ -49,6 +56,23 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
         relations: {
           tasks: true,
         },
+      });
+
+      if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
+
+      const answers = await Answer.find({
+        where: {
+          task: { id: In(exercise.tasks.map(({ id }) => id)) },
+          user: { id: req.user.id },
+        },
+        relations: {
+          task: true,
+        },
+      });
+      exercise.tasks = exercise.tasks.map((task: TaskWithAnswer) => {
+        const answer = answers.find(answer => answer.task.id == task.id);
+        task.answer = answer?.isCorrect ?? null;
+        return task;
       });
 
       return instanceToPlain(exercise, {
@@ -83,16 +107,14 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
     async req => {
       const { id, ...body } = req.body;
       const exercise = await Exercise.findOne({ where: { id } });
-      if (exercise) {
-        Object.assign(exercise, body);
-        await exercise.save();
+      if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
 
-        return instanceToPlain(exercise, {
-          enableCircularCheck: true,
-        });
-      }
+      Object.assign(exercise, body);
+      await exercise.save();
 
-      throw fastify.httpErrors.badRequest(`Exercise not found`);
+      return instanceToPlain(exercise, {
+        enableCircularCheck: true,
+      });
     }
   );
 

@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum PayloadType {
@@ -21,6 +22,7 @@ export class Payload extends BaseEntity {
   })
   description: string;
 
+  @Exclude()
   @Column({
     type: 'mediumblob',
   })

@@ -37,30 +37,30 @@
     }
   },
   "for_practic": {
-    "id": 4,
+    "id": 3,
     "tasks": {
       "for_practic_3": {
-        "id": 11
+        "id": 10
       },
       "for_practic_5": {
-        "id": 12
+        "id": 11
       },
       "for_practic_6": {
-        "id": 13
+        "id": 12
       }
     }
   },
   "arrays_practic": {
-    "id": 5,
+    "id": 4,
     "tasks": {
       "arrays_practic_2": {
-        "id": 14
+        "id": 13
       },
       "arrays_practic_3": {
-        "id": 15
+        "id": 14
       },
       "arrays_practic_5": {
-        "id": 16
+        "id": 15
       }
     }
   }
