@@ -36,16 +36,40 @@ const ProfileRoute: FastifyPluginAsync = async fastify => {
       .setData(JSON.parse(task.data))
       .assert(req.body.answer);
 
-    const answer = Answer.create({
-      task,
-      user: req.user,
-      isCorrect,
+    const findAnswer = await Answer.findOne({
+      where: {
+        task: { id: task.id },
+        user: { id: req.user.id },
+      },
     });
-    await task.save();
 
-    return instanceToPlain(answer, {
-      enableCircularCheck: true,
-    });
+    if (findAnswer) {
+      if (false) throw fastify.httpErrors.badRequest(`Task not found`); // Блокировать повторный ответ
+      await Answer.update(
+        {
+          id: findAnswer.id,
+        },
+        {
+          isCorrect,
+        }
+      );
+      return instanceToPlain(
+        { id: findAnswer.id, task, isCorrect },
+        {
+          enableCircularCheck: true,
+        }
+      );
+    } else {
+      const answer = Answer.create({
+        task,
+        user: req.user,
+        isCorrect,
+      });
+      await answer.save();
+      return instanceToPlain(answer, {
+        enableCircularCheck: true,
+      });
+    }
   });
 };
 

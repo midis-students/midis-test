@@ -1,6 +1,9 @@
 import { FastifyPluginAsync } from 'fastify';
 import { instanceToPlain } from 'class-transformer';
 import { Exercise } from '@/entity/Exercise';
+import { Answer } from '@/entity/Answer';
+import { In } from 'typeorm';
+import { Task } from '@/entity/Task';
 
 export const autoPrefix = '/exercise';
 
@@ -31,31 +34,7 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
 
   // ===================================
 
-  type ExerciseGetDTO = {
-    Querystring: {
-      id?: number;
-    };
-  };
-
-  type ExerciseOutput = Exercise & {
-    tasks: number;
-  };
-
-  fastify.get<ExerciseGetDTO>('/', async req => {
-    const { id } = req.query;
-    if (id) {
-      const exercise = await Exercise.findOne({
-        where: { id },
-        relations: {
-          tasks: true,
-        },
-      });
-
-      return instanceToPlain(exercise, {
-        enableCircularCheck: true,
-      });
-    }
-
+  fastify.get('/', async req => {
     const list: Exercise[] | ExerciseOutput[] = await Exercise.find({
       relations: {
         tasks: true,
@@ -67,6 +46,99 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
         enableCircularCheck: true,
       })
     );
+  });
+
+  // ===================================
+
+  type ExerciseGetDTO = {
+    Params: {
+      id: number;
+    };
+  };
+
+  type ExerciseOutput = Exercise & {
+    tasks: number;
+  };
+
+  type TaskWithAnswer = Task & {
+    answer?: boolean | null;
+  };
+
+  fastify.get<ExerciseGetDTO>('/:id', async req => {
+    const { id } = req.params;
+
+    const exercise = await Exercise.findOne({
+      where: { id },
+      relations: {
+        tasks: true,
+      },
+    });
+
+    if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
+
+    const answers = await Answer.find({
+      where: {
+        task: { id: In(exercise.tasks.map(({ id }) => id)) },
+        user: { id: req.user.id },
+      },
+      relations: {
+        task: true,
+      },
+    });
+    exercise.tasks = exercise.tasks.map((task: TaskWithAnswer) => {
+      const answer = answers.find(answer => answer.task.id == task.id);
+      task.answer = answer?.isCorrect ?? null;
+      return task;
+    });
+
+    return instanceToPlain(exercise, {
+      enableCircularCheck: true,
+    });
+  });
+
+  // ===================================
+
+  type ExerciseAdminGetDTO = {
+    Params: {
+      id: number;
+    };
+  };
+
+  type AdminTaskWithAnswer = Task & {
+    answer?: Answer[];
+  };
+
+  fastify.get<ExerciseAdminGetDTO>('/:id/result', async req => {
+    const { id } = req.params;
+    if (id) {
+      const exercise = await Exercise.findOne({
+        where: { id },
+        relations: {
+          tasks: true,
+        },
+      });
+
+      if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
+
+      const answers = await Answer.find({
+        where: {
+          task: { id: In(exercise.tasks.map(({ id }) => id)) },
+        },
+        relations: {
+          task: true,
+          user: true,
+        },
+      });
+      exercise.tasks = exercise.tasks.map((task: AdminTaskWithAnswer) => {
+        const answer = answers.filter(answer => answer.task.id == task.id);
+        task.answer = answer;
+        return task;
+      });
+
+      return instanceToPlain(exercise, {
+        enableCircularCheck: true,
+      });
+    }
   });
 
   // ===================================
@@ -83,32 +155,30 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
     async req => {
       const { id, ...body } = req.body;
       const exercise = await Exercise.findOne({ where: { id } });
-      if (exercise) {
-        Object.assign(exercise, body);
-        await exercise.save();
+      if (!exercise) throw fastify.httpErrors.badRequest(`Exercise not found`);
 
-        return instanceToPlain(exercise, {
-          enableCircularCheck: true,
-        });
-      }
+      Object.assign(exercise, body);
+      await exercise.save();
 
-      throw fastify.httpErrors.badRequest(`Exercise not found`);
+      return instanceToPlain(exercise, {
+        enableCircularCheck: true,
+      });
     }
   );
 
   // ===================================
 
   type ExerciseDeleteDTO = {
-    Body: {
+    Params: {
       id: number;
     };
   };
 
   fastify.delete<ExerciseDeleteDTO>(
-    '/',
+    '/:id',
     { onRequest: administratorOnly },
     async req => {
-      const { id } = req.body;
+      const { id } = req.params;
       const exercise = await Exercise.delete({ id });
       return instanceToPlain(exercise, {
         enableCircularCheck: true,

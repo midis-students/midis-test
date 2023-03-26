@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
@@ -18,6 +19,7 @@ export class Answer extends BaseEntity {
   @JoinColumn()
   task: Task;
 
+  @Exclude()
   @ManyToOne(() => User, user => user, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;

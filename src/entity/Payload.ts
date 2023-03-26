@@ -1,5 +1,5 @@
+import { Exclude } from 'class-transformer';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Blob } from 'buffer';
 
 export enum PayloadType {
   Image = 'IMAGE',
@@ -22,8 +22,9 @@ export class Payload extends BaseEntity {
   })
   description: string;
 
+  @Exclude()
   @Column({
     type: 'mediumblob',
   })
-  blob: Blob;
+  blob: Buffer;
 }

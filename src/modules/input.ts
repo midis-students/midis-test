@@ -24,8 +24,8 @@ export class Input extends TesterModule<ModuleContainer> {
     return this.container;
   }
 
-  setData(body: InputSetData) {
-    this.container.value = body.value;
+  setData(body: ModuleContainer) {
+    this.container = body;
     return this;
   }
 

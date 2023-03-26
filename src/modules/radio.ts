@@ -32,10 +32,11 @@ export class Radio extends TesterModule<ModuleContainer> {
     return this.container;
   }
 
-  setData(body: RadioSetData) {
-    this.container.variants = body.list.map(variant => {
-      return new Variant<number>(variant.id).setValue(variant.value);
-    });
+  setData(body: ModuleContainer) {
+    // this.container.variants = body.list.map(variant => {
+    //   return new Variant<number>(variant.id).setValue(variant.value);
+    // });
+    this.container = body;
     return this;
   }
 
@@ -50,16 +51,24 @@ export class Radio extends TesterModule<ModuleContainer> {
   }
 
   assert(body: RadioAcceptBody): boolean {
-    let isCorrect = false;
+    let isCorrect = true,
+      correctCount = 0;
 
-    for (const value of body.list) {
-      const variant = this.container.variants.find(
-        variant => variant.id === value
-      );
-      if (variant && variant.value === 1) {
-        isCorrect = true;
+    const correctLength = this.container.variants.filter(
+      ({ value }) => value === 1
+    ).length;
+
+    for (const variant of this.container.variants) {
+      if (body.list.indexOf(variant.id) != -1) {
+        if (variant.value === 0) {
+          isCorrect = false;
+        } else {
+          correctCount++;
+        }
       }
     }
+
+    if (correctLength !== correctCount) isCorrect = false;
 
     return isCorrect;
   }

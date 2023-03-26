@@ -4,28 +4,32 @@ import { Exercise } from '@/entity/Exercise';
 import { Task } from '@/entity/Task';
 import Modules from '@/modules';
 import { DeepRemove } from '@/lib/Utils';
+import { Answer } from '@/entity/Answer';
 
 export const autoPrefix = '/task';
 
 const TaskRoute: FastifyPluginAsync = async fastify => {
   const { authorize, administratorOnly } = fastify;
 
-  //fastify.addHook('onRequest', authorize);
+  fastify.addHook('onRequest', authorize);
 
   // ===================================
 
   type CreateTaskDto = {
     Body: {
-      exercise_id: number;
       type: keyof typeof Modules;
+    };
+    Params: {
+      exercise_id: number;
     };
   };
 
   fastify.post<CreateTaskDto>(
-    '/',
+    '/:exercise_id',
     { onRequest: administratorOnly },
     async req => {
-      const { exercise_id, type } = req.body;
+      const { exercise_id } = req.params;
+      const { type } = req.body;
 
       const exercise = await Exercise.findOne({
         where: { id: exercise_id },
@@ -63,13 +67,13 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   // ===================================
 
   type GetTaskDto = {
-    Querystring: {
+    Params: {
       id: number;
     };
   };
 
-  fastify.get<GetTaskDto>('/', async req => {
-    const { id } = req.query;
+  fastify.get<GetTaskDto>('/:id', async req => {
+    const { id } = req.params;
 
     const task = await Task.findOne({
       where: { id },
@@ -77,15 +81,31 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
     });
 
     if (!task) return fastify.httpErrors.notFound('Task not found');
+
+    const answer = await Answer.findOne({
+      where: {
+        task: { id: task.id },
+        user: { id: req.user.id },
+      },
+      relations: {
+        task: true,
+      },
+    });
+
     const data = DeepRemove(JSON.parse(task.data), 'value');
-    return instanceToPlain({ ...task, data }, { enableCircularCheck: true });
+    return instanceToPlain(
+      { ...task, data, answer: answer?.isCorrect ?? null },
+      { enableCircularCheck: true }
+    );
   });
 
   // ===================================
 
   type UpdateTaskDto = {
-    Body: {
+    Params: {
       id: number;
+    };
+    Body: {
       name?: string;
       query?: string;
       data?: unknown;
@@ -93,13 +113,13 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   };
 
   fastify.patch<UpdateTaskDto>(
-    '/',
+    '/:id',
     { onRequest: administratorOnly },
     async req => {
-      const { id, ...body } = req.body;
+      const { id } = req.params;
       const task = await Task.findOne({ where: { id } });
       if (task) {
-        Object.assign(task, body);
+        Object.assign(task, req.body);
         await task.save();
         const data = JSON.parse(task.data);
         return instanceToPlain(
@@ -115,16 +135,16 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   // ===================================
 
   type DeleteTaskDto = {
-    Body: {
+    Params: {
       id: number;
     };
   };
 
   fastify.delete<DeleteTaskDto>(
-    '/',
+    '/:id',
     { onRequest: administratorOnly },
     async req => {
-      const { id } = req.body;
+      const { id } = req.params;
 
       const task = await Task.delete({ id });
 
