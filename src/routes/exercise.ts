@@ -4,6 +4,7 @@ import { Exercise } from '@/entity/Exercise';
 import { Answer } from '@/entity/Answer';
 import { In } from 'typeorm';
 import { Task } from '@/entity/Task';
+import { User } from '@/entity/User';
 
 export const autoPrefix = '/exercise';
 
@@ -105,7 +106,7 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
   };
 
   type AdminTaskWithAnswer = Task & {
-    answer?: Answer[];
+    answers?: Pick<Answer, 'user' | 'isCorrect'>[];
   };
 
   fastify.get<ExerciseAdminGetDTO>('/:id/result', async req => {
@@ -130,8 +131,15 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
         },
       });
       exercise.tasks = exercise.tasks.map((task: AdminTaskWithAnswer) => {
-        const answer = answers.filter(answer => answer.task.id == task.id);
-        task.answer = answer;
+        const answerList = answers
+          .filter(answer => answer.task.id == task.id)
+          .map(({ user, isCorrect }) => {
+            return {
+              user,
+              isCorrect,
+            };
+          });
+        task.answers = answerList;
         return task;
       });
 

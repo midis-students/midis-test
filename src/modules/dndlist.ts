@@ -7,9 +7,7 @@ type ModuleContainer = {
   variants: VariantExt[];
 };
 
-export type AcceptBody = {
-  list: number[];
-};
+export type AcceptBody = number[];
 
 type SetData = Variant<number>[];
 
@@ -37,7 +35,7 @@ export class DnDList extends TesterModule<ModuleContainer> {
 
   assert(body: AcceptBody): boolean {
     for (let i = 0; i < this.container.variants.length; i++) {
-      if (this.container.variants[i].value != body.list[i]) {
+      if (this.container.variants[i].value != body[i]) {
         return false;
       }
     }

@@ -7,16 +7,7 @@ type ModuleContainer = {
   variants: VariantExt[];
 };
 
-export type RadioAcceptBody = {
-  list: string[];
-};
-
-type RadioSetData = {
-  list: Array<{
-    id: string;
-    value: number;
-  }>;
-};
+export type RadioAcceptBody = string[];
 
 export class Radio extends TesterModule<ModuleContainer> {
   type: 'radio' | 'checkbox';
@@ -59,7 +50,7 @@ export class Radio extends TesterModule<ModuleContainer> {
     ).length;
 
     for (const variant of this.container.variants) {
-      if (body.list.indexOf(variant.id) != -1) {
+      if (body.indexOf(variant.id) != -1) {
         if (variant.value === 0) {
           isCorrect = false;
         } else {

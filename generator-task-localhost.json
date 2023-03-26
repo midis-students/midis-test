@@ -1,0 +1,67 @@
+{
+  "sledovanie_practic": {
+    "id": 1,
+    "tasks": {
+      "linear_1": {
+        "id": 1
+      },
+      "algorithm_tree": {
+        "id": 2
+      },
+      "check_can_execute": {
+        "id": 3
+      },
+      "check_variable": {
+        "id": 4
+      },
+      "choose_schema": {
+        "id": 5
+      },
+      "sledovanie_6": {
+        "id": 6
+      },
+      "sledovanie_7": {
+        "id": 7
+      }
+    }
+  },
+  "vetvlenie_practic": {
+    "id": 2,
+    "tasks": {
+      "vetvlenie_practic_2": {
+        "id": 8
+      },
+      "vetvlenie_practic_4": {
+        "id": 9
+      }
+    }
+  },
+  "for_practic": {
+    "id": 3,
+    "tasks": {
+      "for_practic_3": {
+        "id": 10
+      },
+      "for_practic_5": {
+        "id": 11
+      },
+      "for_practic_6": {
+        "id": 12
+      }
+    }
+  },
+  "arrays_practic": {
+    "id": 4,
+    "tasks": {
+      "arrays_practic_2": {
+        "id": 13
+      },
+      "arrays_practic_3": {
+        "id": 14
+      },
+      "arrays_practic_5": {
+        "id": 15
+      }
+    }
+  }
+}

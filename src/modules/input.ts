@@ -4,13 +4,7 @@ type ModuleContainer = {
   value: string;
 };
 
-export type InputAcceptBody = {
-  value: string;
-};
-
-type InputSetData = {
-  value: string;
-};
+export type InputAcceptBody = string;
 
 export class Input extends TesterModule<ModuleContainer> {
   constructor() {
@@ -35,6 +29,6 @@ export class Input extends TesterModule<ModuleContainer> {
   }
 
   assert(body: InputAcceptBody): boolean {
-    return this.container.value === body.value;
+    return this.container.value === body;
   }
 }
