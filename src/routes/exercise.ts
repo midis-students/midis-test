@@ -4,7 +4,6 @@ import { Exercise } from '@/entity/Exercise';
 import { Answer } from '@/entity/Answer';
 import { In } from 'typeorm';
 import { Task } from '@/entity/Task';
-import { User } from '@/entity/User';
 
 export const autoPrefix = '/exercise';
 

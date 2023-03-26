@@ -1,10 +1,11 @@
 import { FastifyPluginAsync } from 'fastify';
 import Modules from '@/modules';
 import { Task } from '@/entity/Task';
-export const autoPrefix = 'answer';
 import { TesterModuleUnknown } from '@/lib/test-system/module';
 import { Answer } from '@/entity/Answer';
 import { instanceToPlain } from 'class-transformer';
+
+export const autoPrefix = 'answer';
 
 const ProfileRoute: FastifyPluginAsync = async fastify => {
   const { authorize } = fastify;

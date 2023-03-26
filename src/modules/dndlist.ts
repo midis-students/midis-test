@@ -1,4 +1,3 @@
-import { Answer } from '@/entity/Answer';
 import { TesterModule } from '@/lib/test-system/module';
 import { Variant } from '@/lib/test-system/Variant';
 
@@ -9,8 +8,6 @@ type ModuleContainer = {
 };
 
 export type AcceptBody = string[];
-
-type SetData = Variant<number>[];
 
 export class DnDList extends TesterModule<ModuleContainer> {
   constructor() {

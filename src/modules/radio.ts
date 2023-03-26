@@ -24,9 +24,6 @@ export class Radio extends TesterModule<ModuleContainer> {
   }
 
   setData(body: ModuleContainer) {
-    // this.container.variants = body.list.map(variant => {
-    //   return new Variant<number>(variant.id).setValue(variant.value);
-    // });
     this.container = body;
     return this;
   }

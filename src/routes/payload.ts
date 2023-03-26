@@ -5,7 +5,7 @@ import { Payload, PayloadType } from '@/entity/Payload';
 export const autoPrefix = '/payload';
 
 const TaskRoute: FastifyPluginAsync = async fastify => {
-  const { authorize, administratorOnly } = fastify;
+  const { administratorOnly } = fastify;
 
   type CreatePayloadDto = {
     Body: {
@@ -18,7 +18,7 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
   fastify.post<CreatePayloadDto>(
     '/',
     { onRequest: administratorOnly },
-    async (req, res) => {
+    async req => {
       const { blob, type, description } = req.body;
 
       const payload = Payload.create({
@@ -40,7 +40,7 @@ const TaskRoute: FastifyPluginAsync = async fastify => {
     };
   };
 
-  fastify.get<ReadPayloadDto>('/:id', async (req, res) => {
+  fastify.get<ReadPayloadDto>('/:id', async req => {
     const { id } = req.params;
 
     const payload: Payload | null = await Payload.findOne({
