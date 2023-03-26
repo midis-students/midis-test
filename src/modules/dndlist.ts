@@ -1,3 +1,4 @@
+import { Answer } from '@/entity/Answer';
 import { TesterModule } from '@/lib/test-system/module';
 import { Variant } from '@/lib/test-system/Variant';
 
@@ -7,7 +8,7 @@ type ModuleContainer = {
   variants: VariantExt[];
 };
 
-export type AcceptBody = number[];
+export type AcceptBody = string[];
 
 type SetData = Variant<number>[];
 
@@ -34,10 +35,10 @@ export class DnDList extends TesterModule<ModuleContainer> {
   }
 
   assert(body: AcceptBody): boolean {
+    if (body.length != this.container.variants.length) return false;
     for (let i = 0; i < this.container.variants.length; i++) {
-      if (this.container.variants[i].value != body[i]) {
-        return false;
-      }
+      const answer = this.container.variants.find(({ id }) => id == body[i]);
+      if (!answer || i != answer.value) return false;
     }
 
     return true;

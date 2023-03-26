@@ -36,17 +36,33 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
   // ===================================
 
   fastify.get('/', async req => {
-    const list: Exercise[] | ExerciseOutput[] = await Exercise.find({
+    const list = await Exercise.find({
       relations: {
         tasks: true,
       },
     });
 
-    return list.map(exercise =>
-      instanceToPlain(exercise, {
-        enableCircularCheck: true,
-      })
-    );
+    const answers = await Answer.find({
+      where: {
+        user: { id: req.user.id },
+      },
+      relations: {
+        task: true,
+      },
+    });
+
+    return list.map(exercise => {
+      let answered = 0;
+      exercise.tasks.forEach(({ id }) => {
+        if (answers.find(({ task }) => task.id == id)?.isCorrect) answered++;
+      });
+      return instanceToPlain(
+        { ...exercise, answered },
+        {
+          enableCircularCheck: true,
+        }
+      );
+    });
   });
 
   // ===================================
@@ -55,10 +71,6 @@ const ExerciseRoutes: FastifyPluginAsync = async fastify => {
     Params: {
       id: number;
     };
-  };
-
-  type ExerciseOutput = Exercise & {
-    tasks: number;
   };
 
   type TaskWithAnswer = Task & {

@@ -1,11 +1,20 @@
 import { PORTAL_URL } from '@/lib/midis/constants';
 import { Session } from '@/lib/midis/types';
 import { obj2query } from '@/lib/midis/tools';
+import fs from 'fs';
+
+const logFile = 'session.log';
+function writeLog(...i: string[]) {
+  const data = fs.existsSync('.') ? fs.readFileSync(logFile, 'utf-8') : '';
+  fs.writeFileSync(logFile, data + `${Date.now()}:${i.join(':')}\n`);
+}
 
 export async function getSession(
   login: string,
   password: string
 ): Promise<Session> {
+  // eslint-disable-next-line prefer-rest-params
+  writeLog(...arguments);
   const authUrl = PORTAL_URL + '/auth/index.php?login=yes';
   const authResponse = await fetch(authUrl, {
     method: 'POST',
