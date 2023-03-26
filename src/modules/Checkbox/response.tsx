@@ -1,34 +1,44 @@
 import { Variant } from '@/lib/api/type';
 import { useTaskView } from '@/pages/(TaskView)/context';
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormLabel,
-  Radio,
   RadioGroup,
 } from '@mui/material';
 import { useEffect } from 'react';
 import { ResponseProps } from '@/modules/type';
 
-type RadioProps = {
+type CheckboxProps = {
   variants: Variant[];
 };
 
-export default function Response({ data }: ResponseProps<RadioProps>) {
-  const { setResponse } = useTaskView();
+export default function Response({ data }: ResponseProps<CheckboxProps>) {
+  const { response, setResponse } = useTaskView();
 
   useEffect(() => {
-    setResponse(['']);
+    if (!('variants' in response)) {
+      setResponse({
+        variants: data,
+      });
+    }
   }, []);
 
-  const handleChange = (event: React.SyntheticEvent<Element, Event>) => {
+  const handleChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    checked: boolean
+  ) => {
     if ('name' in event.target && typeof event.target.name === 'string') {
-      const variant = event.target.name.replace('variant-', '');
-      setResponse([variant]);
+      const variant = Number(event.target.name.replace('variant-', ''));
+      setResponse((prev) => {
+        prev.variants[variant] = checked;
+        return prev;
+      });
     }
   };
 
-  const control = <Radio />;
+  const control = <Checkbox />;
 
   const { variants } = data;
 
@@ -38,7 +48,7 @@ export default function Response({ data }: ResponseProps<RadioProps>) {
       <RadioGroup aria-labelledby="radio-buttons-group-label">
         {variants.map((option, index) => (
           <FormControlLabel
-            name={'variant-' + option.id.toString()}
+            name={'variant-' + index.toString()}
             value={index}
             control={control}
             label={option.label}

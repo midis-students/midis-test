@@ -2,33 +2,33 @@ import Header from '@/components/Header';
 import Page from '@/components/Page';
 import { useExerciseQuery } from '@/hooks/query/exercise';
 import { Paper, Typography, Stack, Link } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
-import {
-  Navigate,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import TaskView from '../(TaskView)';
 
 const size = 1 / 4;
 
 export default function ExercisePage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { exercise } = useParams();
-  const currentTask = Number(searchParams.get('task')) || 1;
+  const { exercise, task } = useParams();
+  const currentTask = Number(task);
   if (!exercise) {
     return <Navigate to="/" />;
   }
-  const { data, isLoading, isSuccess } = useExerciseQuery(+exercise);
+  const { data, isLoading, isSuccess, isError } = useExerciseQuery(+exercise);
+
+  const baseUrl = `/exercise/${exercise}/`;
 
   useEffect(() => {
     if (isSuccess && currentTask == 0) {
       const firstTask = data.tasks.at(0);
       if (firstTask) {
-        navigate('?task=' + firstTask.id);
+        navigate(baseUrl + firstTask.id);
       }
+    } else {
+      if (isError) navigate('/');
     }
   }, [isLoading]);
 
@@ -45,9 +45,10 @@ export default function ExercisePage() {
       >
         <Paper
           sx={{
-            width: `${(1 - size) * 100}%`,
+            width: `${(1 - size - 0.01) * 100}%`,
             p: 1,
-            overflow: 'auto',
+            overflowY: 'auto',
+            overflowX: 'hidden',
           }}
         >
           <TaskView id={currentTask} />
@@ -72,7 +73,7 @@ export default function ExercisePage() {
                 <Link
                   key={i}
                   underline="hover"
-                  onClick={() => navigate('?task=' + task.id)}
+                  onClick={() => navigate(baseUrl + task.id)}
                   sx={{
                     cursor: 'pointer',
                     alignItems: 'center',
@@ -81,7 +82,15 @@ export default function ExercisePage() {
                   }}
                   color={currentTask == task.id ? '#9c27b0' : 'primary'}
                 >
-                  {task.name} {/*task.completed && <CheckIcon />*/}
+                  <span>{task.name}</span>
+                  <i>
+                    {task.answer !== null &&
+                      (task.answer ? (
+                        <CheckIcon color="success" />
+                      ) : (
+                        <CloseIcon color="error" />
+                      ))}
+                  </i>
                 </Link>
               ))}
             </Stack>

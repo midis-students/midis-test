@@ -1,11 +1,9 @@
 import Header from '@/components/Header';
 import Page from '@/components/Page';
 import TabsWrapper from '@/components/TabsWrapper';
-import { useUser } from '@/store/user';
 import Exercises from './Exercises';
-
 export default function MainPage() {
-  const isAdmin = useUser((select) => select.isAdmin());
+  //const isAdmin = useUser((select) => select.isAdmin());
 
   const tabs = [
     {
@@ -13,20 +11,20 @@ export default function MainPage() {
       element: <Exercises />,
     },
   ];
-  /*
-  if (isAdmin) {
-    tabs.push(
-      {
-        label: 'Студенты',
-        element: <Students />,
-      },
-      {
-        label: 'Список файлов',
-        element: <Payloads />,
-      }
-    );
-  }
-*/
+
+  // if (isAdmin) {
+  //   tabs.push(
+  //     {
+  //       label: 'Студенты',
+  //       element: <Students />,
+  //     },
+  //     {
+  //       label: 'Список файлов',
+  //       element: <Payloads />,
+  //     }
+  //   );
+  // }
+
   return (
     <>
       <Header />

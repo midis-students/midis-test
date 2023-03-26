@@ -14,7 +14,7 @@ type SettingStore = Settings & {
 
 export const useSettings = create<SettingStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       apiHost: Hosts.primary,
       forceJSONEditor: false,
       viewRawTask: false,

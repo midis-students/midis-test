@@ -18,22 +18,29 @@ export interface Exercise {
   name: string;
   type: string;
   tasks: Task[];
+  answered?: number;
 }
 
 export interface Task {
+  data: any;
   id: number;
   name: string;
-  exercise: Exercise;
-  type: keyof typeof Modules;
   query: string;
-  data: TaskData;
+  payloads: Payload[];
+  type: keyof typeof Modules;
+  answer: boolean | null;
 }
 
-export interface TaskData {
-  objects: Record<string, any>;
-  subtype: 'radio';
-  options: Array<{ text: string; score: number }>;
-  payloads: number[];
+export interface Payload {
+  id: number;
+  type: 'IMAGE';
+  description: string;
+}
+
+export interface Variant<T = number> {
+  id: string;
+  value: T;
+  label: string;
 }
 
 export interface Payload {
@@ -47,3 +54,10 @@ export interface ApiError {
   message: string;
   statusCode: number;
 }
+
+export type TaskWithAnswer = Task & {
+  answers: Array<{
+    isCorrect: boolean;
+    user: Profile;
+  }>;
+};

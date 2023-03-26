@@ -4,11 +4,8 @@ export class TaskModule {
   constructor(private api: Api) {}
 
   get(id: number) {
-    return this.api.request<Task>('task', {
+    return this.api.request<Task>('task/' + id, {
       method: 'GET',
-      query: {
-        id: id.toString(),
-      },
     });
   }
 }

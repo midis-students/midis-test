@@ -1,4 +1,4 @@
-import { Exercise } from '../type';
+import { Exercise, TaskWithAnswer } from '../type';
 import { Api } from '@/lib/api';
 
 export class ExerciseModule {
@@ -11,12 +11,18 @@ export class ExerciseModule {
       method: 'GET',
     });
   }
+
   async get(id: number) {
-    return this.api.request<Exercise>('exercise', {
+    return this.api.request<Exercise>('exercise/' + id, {
       method: 'GET',
-      query: {
-        id: id.toString(),
-      },
+    });
+  }
+
+  async result(id: number) {
+    return this.api.request<
+      Omit<Exercise, 'tasks'> & { tasks: TaskWithAnswer[] }
+    >('exercise/' + id + '/result', {
+      method: 'GET',
     });
   }
 }

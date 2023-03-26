@@ -7,7 +7,7 @@ type AuthState = {
 
 export const useAuth = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (_set) => ({
       token: undefined,
     }),
     {

@@ -8,6 +8,8 @@ import ExercisePage from './pages/Exercise';
 import Settings from './components/Settings';
 import { useAuth } from './store/authorization';
 import { Api } from './lib/api';
+import TestPage from '@/pages/Test';
+import ViewPage from '@/pages/View';
 
 function App() {
   const navigate = useNavigate();
@@ -28,8 +30,10 @@ function App() {
       />
       <Route path="/" element={<AuthOutlet />}>
         <Route index element={<MainPage />} />
+        <Route path="test" element={<TestPage />} />
         <Route path="task/:id" element={<TaskPage />} />
-        <Route path="exercise/:exercise" element={<ExercisePage />} />
+        <Route path="view/:exercise" element={<ViewPage />} />
+        <Route path="exercise/:exercise/:task" element={<ExercisePage />} />
       </Route>
     </Routes>
   );
