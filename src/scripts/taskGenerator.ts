@@ -4,8 +4,9 @@ import { FastifyBaseLogger } from 'fastify';
 import fs from 'fs';
 import path from 'path';
 import { exercises } from './tasks';
+import * as process from 'process';
 
-const tempFile = 'generator-task.json';
+const tempFile = `generator-task-${process.env.MYSQL_HOST}.json`;
 const tempPath = path.resolve(tempFile);
 
 function LocalStorage<Storage extends Record<string, unknown>>() {

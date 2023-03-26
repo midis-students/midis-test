@@ -52,7 +52,9 @@ const DatabasePlugin: FastifyPluginAsync = async fastify => {
     }
 
     const childLogger = logger.child({ name: 'Script' });
-    await loadToDatabase(childLogger).catch(e => logger.error(e));
+    loadToDatabase(childLogger)
+      .catch(e => logger.error(e))
+      .then(() => logger.info('Task loaded'));
   } else {
     throw Error(`Can't connect to MySQL server`);
   }
