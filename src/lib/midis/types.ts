@@ -1,23 +1,16 @@
-export type ApiConfig = {
-  secret: string;
-};
+export interface Session {
+  Cookie: string;
+  sessid: string;
+  user_id: number;
+  time: number;
+}
 
-export type UserToken = { Cookie: string; sessid: string };
-
-export type MidisClient = MidisProfile & {
-  token: UserToken;
-};
-
-export type MidisProfile = {
+export interface MidisProfile {
   id: number;
   name: string;
-  pic: string;
+  avatar: string;
   group: string;
+  type: string;
   online: boolean;
   last_activity: number;
-};
-
-export interface MidisAPIBase {
-  login(login: string, password: string): Promise<MidisClient>;
-  getUser(id: number): Promise<MidisProfile | undefined>;
 }

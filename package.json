@@ -5,15 +5,39 @@
   "main": "index.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
-    "dev": "nodemon"
+    "start": "cross-env NODE_ENV=produnction ts-node ./src/index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "format": "prettier --ignore-path .gitignore --write \"src/**/*.+(ts|json)\"",
+    "prepare": "husky install",
+    "cs": "gh codespace ports visibility 10000:public -c $CODESPACE_NAME && nodemon"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "eslint"
+    ]
+  },
   "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
     "@types/node": "^18.11.17",
-    "prettier": "^2.8.2"
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.2",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^3.14.2",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
     "@fastify/autoload": "^5.6.0",
@@ -21,10 +45,10 @@
     "@fastify/env": "^4.2.0",
     "@fastify/jwt": "^6.5.0",
     "@fastify/sensible": "^5.2.0",
-    "async-request": "^1.2.0",
     "class-transformer": "^0.5.1",
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
+    "file-type": "^18.2.1",
     "fluent-json-schema": "^4.0.0",
     "mysql2": "^2.3.3",
     "pino-pretty": "^9.1.1",

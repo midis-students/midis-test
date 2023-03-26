@@ -1,15 +1,15 @@
-import "reflect-metadata";
-import Fastify from "fastify";
-import App from "./app";
+import 'reflect-metadata';
+import Fastify from 'fastify';
+import App from './app';
 
 async function start() {
   const fastify = Fastify({
     logger: {
       transport: {
-        target: "pino-pretty",
+        target: 'pino-pretty',
         options: {
-          translateTime: "HH:MM:ss",
-          ignore: "pid,hostname,reqId,res",
+          translateTime: 'HH:MM:ss',
+          ignore: 'pid,hostname,reqId,res',
         },
       },
     },
@@ -18,15 +18,16 @@ async function start() {
 
   await fastify.register(App);
 
-  const port = Number(process.env.PORT) || 3000;
-  const host = "0.0.0.0";
+  const port = Number(process.env.PORT || 3000);
+  //Number(process.env.NODE_ENV === 'development');
+  const host = '0.0.0.0';
 
-  fastify.listen({ port, host }, (err) => {
+  fastify.listen({ port, host }, err => {
     if (err) throw err;
   });
 }
 
-start().catch((err) => {
+start().catch(err => {
   console.error(err);
   process.exit(1);
 });

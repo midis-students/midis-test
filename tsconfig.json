@@ -2,7 +2,10 @@
   "compilerOptions": {
     "target": "es2022",
     "module": "commonjs",
-    "lib": ["es6"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "allowJs": true,
     "outDir": "build",
     "rootDir": "src",
@@ -13,10 +16,15 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "exclude": ["node_modules"],
   "ts-node": {
-    "files": true
+    "files": true,
+    "require": ["tsconfig-paths/register"]
   }
 }
