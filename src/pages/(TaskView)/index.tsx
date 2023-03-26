@@ -2,11 +2,13 @@ import Loader from '@/components/Loader';
 import { useTaskQuery } from '@/hooks/query/task';
 import { Task } from '@/lib/api/type';
 import { useSettings } from '@/store/settings';
-import { Box, Typography, Button, Stack, Divider } from '@mui/material';
-import ViewPayload from '@/components/PayloadView';
+import { Box, Typography, Button, Divider } from '@mui/material';
 import { TaskResponse } from './response';
 import { useState } from 'react';
 import { TaskViewContext, TaskViewResponse } from './context';
+import { Api } from '@/lib/api';
+import PayloadList from '@/components/PayloadList';
+import { useSnackbar } from 'notistack';
 
 type TaskViewId = {
   id: number;
@@ -14,30 +16,34 @@ type TaskViewId = {
 
 export default function TaskView(props: TaskViewId) {
   const { data, isLoading, isSuccess } = useTaskQuery(props.id);
+  const { enqueueSnackbar } = useSnackbar();
   const [response, setResponse] = useState<TaskViewResponse>({});
 
-  const clickResponse = () => {
-    console.log(response);
-  };
-
-  const Payloads = () => {
-    if (!isSuccess) return null;
-    if (data.payloads?.length === 0) return null;
-
-    return (
-      <Stack direction="row" spacing={1} sx={{ maxHeight: '64vh' }}>
-        {data.payloads?.map((payload) => (
-          <>
-            <ViewPayload
-              key={'payload-' + payload}
-              payload={payload}
-              width={(1 / data.payloads.length) * 100 + '%'}
-              height="auto"
-            />
-          </>
-        ))}
-      </Stack>
-    );
+  const clickResponse = async () => {
+    try {
+      const { isCorrect } = await Api.instance.request<{ isCorrect: boolean }>(
+        'answer/' + props.id,
+        {
+          method: 'POST',
+          body: {
+            answer: response,
+          },
+        }
+      );
+      if (isCorrect) {
+        enqueueSnackbar('Правильно!', {
+          variant: 'success',
+        });
+      } else {
+        enqueueSnackbar('Не правильно!', {
+          variant: 'warning',
+        });
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        enqueueSnackbar(e.message, { variant: 'error' });
+      }
+    }
   };
 
   return (
@@ -59,7 +65,7 @@ export default function TaskView(props: TaskViewId) {
                 {data.name}
               </Typography>
               <Typography>{data.query}</Typography>
-              <Payloads />
+              <PayloadList payloads={data.payloads} />
               <TaskResponse task={data} />
               <Button
                 variant="contained"

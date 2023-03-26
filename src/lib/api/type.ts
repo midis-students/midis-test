@@ -18,6 +18,7 @@ export interface Exercise {
   name: string;
   type: string;
   tasks: Task[];
+  answered?: number;
 }
 
 export interface Task {
@@ -27,6 +28,7 @@ export interface Task {
   query: string;
   payloads: Payload[];
   type: keyof typeof Modules;
+  answer: boolean | null;
 }
 
 export interface Payload {
@@ -52,3 +54,10 @@ export interface ApiError {
   message: string;
   statusCode: number;
 }
+
+export type TaskWithAnswer = Task & {
+  answers: Array<{
+    isCorrect: boolean;
+    user: Profile;
+  }>;
+};

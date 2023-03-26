@@ -15,7 +15,7 @@ export default function ViewPayload(props: ViewPayloadProps) {
     objectFit: 'contain',
   };
 
-  const src = apiHost + 'payload?id=' + props.payload.id;
+  const src = apiHost + 'payload/' + props.payload.id;
 
   return (
     <img

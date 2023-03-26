@@ -15,14 +15,10 @@ type RadioProps = {
 };
 
 export default function Response({ data }: ResponseProps<RadioProps>) {
-  const { response, setResponse } = useTaskView();
+  const { setResponse } = useTaskView();
 
   useEffect(() => {
-    if (!('variants' in response)) {
-      setResponse({
-        variant: [],
-      });
-    }
+    setResponse(['']);
   }, []);
 
   const handleChange = (event: React.SyntheticEvent<Element, Event>) => {

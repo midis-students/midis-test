@@ -2,6 +2,8 @@ import Header from '@/components/Header';
 import Page from '@/components/Page';
 import { useExerciseQuery } from '@/hooks/query/exercise';
 import { Paper, Typography, Stack, Link } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import TaskView from '../(TaskView)';
@@ -80,7 +82,15 @@ export default function ExercisePage() {
                   }}
                   color={currentTask == task.id ? '#9c27b0' : 'primary'}
                 >
-                  {task.name} {/*task.completed && <CheckIcon />*/}
+                  <span>{task.name}</span>
+                  <i>
+                    {task.answer !== null &&
+                      (task.answer ? (
+                        <CheckIcon color="success" />
+                      ) : (
+                        <CloseIcon color="error" />
+                      ))}
+                  </i>
                 </Link>
               ))}
             </Stack>

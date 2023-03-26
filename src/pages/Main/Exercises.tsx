@@ -72,9 +72,15 @@ function ExerciseCard({ item }: ExerciseCardProps) {
   const isAdmin = useUser((select) => select.isAdmin());
 
   const onClick = () => {
-    const url = isAdmin ? '/edit' : '/exercise';
-    const taskId = item.tasks.at(-1)?.id;
-    navigate(`${url}/${item.id}/${taskId}`);
+    let url = '/exercise/' + item.id;
+    if (isAdmin) {
+      url = '/view/' + item.id;
+    } else {
+      const taskId = item.tasks.at(0)?.id;
+      url += '/' + taskId;
+    }
+
+    navigate(url);
   };
 
   return (
@@ -94,6 +100,9 @@ function ExerciseCard({ item }: ExerciseCardProps) {
           {item.name}
         </Typography>
         <Typography>Задач: {item.tasks.length}</Typography>
+        {!isAdmin && item.answered ? (
+          <Typography>Ответов: {item.answered}</Typography>
+        ) : null}
       </CardContent>
       <Divider />
       <CardActions sx={{ justifyContent: 'end', width: '100%' }}>
@@ -102,7 +111,7 @@ function ExerciseCard({ item }: ExerciseCardProps) {
           color={isAdmin ? 'warning' : 'primary'}
           onClick={onClick}
         >
-          {isAdmin ? 'Редактировать' : 'Открыть'}
+          {isAdmin ? 'Просмотреть' : 'Открыть'}
         </Button>
       </CardActions>
     </Card>

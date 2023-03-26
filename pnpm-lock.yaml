@@ -10,6 +10,7 @@ specifiers:
   '@types/react-dom': ^18.0.10
   '@vitejs/plugin-react-swc': ^3.0.0
   dnd-core: ^16.0.1
+  hoist-non-react-statics: ^3.3.2
   immutability-helper: ^3.1.1
   notistack: ^2.0.8
   prettier: ^2.8.4
@@ -30,6 +31,7 @@ dependencies:
   '@mui/icons-material': 5.11.9_ofpk46txu7v2f5mzrtv4xsczka
   '@mui/material': 5.11.9_xqeqsl5kvjjtyxwyi3jhw3yuli
   dnd-core: 16.0.1
+  hoist-non-react-statics: 3.3.2
   immutability-helper: 3.1.1
   notistack: 2.0.8_s7gt3hmdzws52jopa6grz5igdq
   react: 18.2.0
