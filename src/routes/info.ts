@@ -1,11 +1,11 @@
 import { FastifyPluginAsync } from 'fastify';
 
-export const autoPrefix = '/ping';
+export const autoPrefix = '/info';
 
-const PingRoutes: FastifyPluginAsync = async fastify => {
+const InfoRoutes: FastifyPluginAsync = async fastify => {
   fastify.get('/', async (req, reply) => {
     return { ok: true };
   });
 };
 
-export default PingRoutes;
+export default InfoRoutes;
