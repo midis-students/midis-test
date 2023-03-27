@@ -15,7 +15,7 @@ type SettingStore = Settings & {
 export const useSettings = create<SettingStore>()(
   persist(
     (set) => ({
-      apiHost: Hosts.primary,
+      apiHost: Hosts.ikysu,
       forceJSONEditor: false,
       viewRawTask: false,
       update: (key, value) => set({ [key]: value }),
